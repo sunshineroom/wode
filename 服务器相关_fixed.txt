@@ -1,0 +1,94 @@
+﻿1. 爱球迷代码SVN地址
+	svn://192.168.0.105/aiqiumi/web/code/server_php    data/code/aqm
+
+新的测试服务器密码 !@3NMoJU6j2TIk9$#@qWQ 妥善保管
+
+svn://192.168.0.243/aqm/    更新代码  http://192.168.0.243:88/man/svn.php
+svn://121.43.104.142/aiqiumi/
+
+https://mhh--20160309ke/svn/aiqiumi_html_new
+	密码帐号：
+	huchuang/123456
+测试服务器：
+		Host:
+		121.43.104.142
+		root@NMoJU6j2TIk9
+测试服务器 & 正式服务器代码位置：/data/aiqiumi/footballfan/code/php_version/
+/data/aiqiumi/footballfan/code/php_version_new/app/Application/Race
+3. 代码简单说明：
+	app -- 相关逻辑代码
+		Application -- 应用文件夹
+			Admin -- 后台管理应用
+			Api -- API接口（暂未用）
+			Home -- H5&Web前端访问
+			Shell -- 后台脚本应用
+			Common -- 公共类资源等
+				Conf -- 所有应用通用的配置文件夹
+					-- config.php 一般配置文件
+					-- config_constant.php 常规配置文件
+	www -- 静态资源
+
+	
+	上面的代码基本上下载后即可跑，本地和生产服务器的差异为配置文件：config.php & config_constant.php
+huchuang@cimgroup.cn  ym163.com
+
+
+http://192.168.0.117:9002/home.php/project/projectlist.html
+http://192.168.0.117:9001/index/index#6/8   添加文档
+后台
+	
+15189808701    QrRIcnZjDEXSrzOwfVFtrNrGiHAMdIUqklCinjXk      XEoVrwhUlaKzNCvQzukhYfRMYFPLeZSHNwWfJnqx
+123456
+末班渲染网站
+http://handlebarsjs.com/
+http://192.168.0.117:9001/index/#1/2 
+http://192.168.0.117:9002/doc2/index?id=15
+http://www.open-open.com/lib/view/open1422014502031.html 
+admin  123456
+
+
+流程:
+1.检查当前用户的球队数。  当前用户不能加入或者创建超过30个球队
+2.检查球队用户名是否相同。除了检查team表，还要检查另外一张表。
+SELECT * from spm_leida_team where team_name_zh='"+team_name+"' or team_name='"+team_name+"'
+3.调用存储过程
+
+//phpstudy     http://www.phpstudy.net/
+
+http://121.43.104.142:8080/www/index.php?m=bug&f=browse&productid=23&browseType=assignToMe&param=0  bug地址
+
+http://www.duiba.com.cn/
+developer@cimgroup.cn	cimg200300   
+http://docs.duiba.com.cn/tech_doc_book/server/consume_credits_api.html   兑吧
+
+
+抖动http://semantic-ui.cn/modules/transition.html
+
+/后台 账号 15901326793  密码 123456
+
+15652756354   123456  长春亚泰   http://api.aiqiumi.com:998/admin/public/login
+支付宝：wangyisi@cimgroup.cn    密码：cimg200300
+微信开发者：lipeng@cimgroup.cn    密码：cimg200300
+appsecret : 'caa04dd3e86f6444623f00ca92949cc2'
+商户号
+1231502202  521861
+
+https://github.com/search?utf8=✓&q=支付宝支付
+
+http://www.magicwindow.cn/doc/mlink-h5.html#begin-start/section-title-2  
+15838122724@163.com    123456 磨床
+
+支付宝：wangyisi@cimgroup.cn    密码：cimg200300  支付密码 Cimg400500#
+支付宝错误处理方案 https://openclub.alipay.com/read.php?tid=250
+微信 aqm2016@cimgroup.cn     cimgroup200300
+微信商户平台  
+miyao  huft4589jikdev68ioljftgb56ygtf5e
+网址：http://ym.163.com/
+用户名：huchuang@cimgroup.cn
+http://www.aiqiumi.net/api/pay/traderefund?out_trade_no=1382016101160&uid=268892&type=1
+
+http://www.jianshu.com/p/752931d78630?from=singlemessage&isappinstalled=0
+
+arsenal1912.hk02.user88.com 
+host-59-153-193-118.user88.com
+1C78215E6C044b

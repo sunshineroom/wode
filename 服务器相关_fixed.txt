@@ -92,3 +92,78 @@ http://www.jianshu.com/p/752931d78630?from=singlemessage&isappinstalled=0
 arsenal1912.hk02.user88.com 
 host-59-153-193-118.user88.com
 1C78215E6C044b
+
+BEGIN
+DECLARE createTime TIMESTAMP  DEFAULT NOW();
+DECLARE team_id INTEGER  DEFAULT 0;
+
+DECLARE t_error INTEGER DEFAULT 0;  
+DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET t_error=1;
+
+
+SET createTime=NOW();
+SET @uid=_uid;
+SET @team_name=_team_name;
+SET @team_intro=_team_intro;
+SET @area_id=_area_id;
+SET @logo=_logo;
+SET @home_color=_home_color;
+SET @away_color=_away_color;
+
+
+START TRANSACTION;
+#创建球队
+insert into `team`(`create_uid`,`captain_uid`,`team_name`,`logo`,`intro`,`area_id`,`create_time`,`team_count`,`home_color`,`away_color`) values(@uid,@uid,@team_name,@logo,@team_intro,@area_id,createTime,'1',@home_color,@away_color);	
+#set team_id = @@IDENTITY;
+#添加球员
+#insert into `t_player`(uid,team_id,is_captain,join_time,`status`)value(@uid,team_id,'1',createTime,'1');
+#添加消息
+#insert into `t_message`(team_id,type,from_uid,to_uid,`time`)value(team_id,'1',@uid,@uid,createTime);
+#添加推送消息
+#insert into `pomelo_push_message`(team_id,type,`create_time`)value(team_id,'1',createTime);
+
+IF t_error = 1 THEN  
+	ROLLBACK;  
+ELSE  
+	COMMIT; 
+END IF;
+
+select t_error;
+
+#Routine body goes here...
+
+END
+
+BEGIN
+DECLARE createTime TIMESTAMP;
+
+DECLARE t_error INTEGER DEFAULT 0;  
+DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET t_error=1;
+
+SET createTime=NOW();
+SET @uid=_uid;
+SET @captain_uid=_captain_uid;
+SET @team_id=_team_id;
+SET @content=_content;
+SET @status=_status;
+
+START TRANSACTION;
+SET autocommit = 0;
+#删除旧的数据
+delete from `t_player` where `team_id`=@team_id and `uid` = @uid;	
+#添加数据
+insert into `t_player`(uid,team_id,is_captain,join_time,`status`,`desc`)value(@uid,@team_id,'0',createTime,@status,@content);
+#添加消息
+insert into `t_message`(team_id,type,from_uid,to_uid,`time`)value(@team_id,'2',@uid,@captain_uid,createTime);
+#添加推送消息
+insert into `pomelo_push_message`(team_id,type,`create_time`)value(@team_id,'1',createTime);
+
+
+IF t_error = 1 THEN  
+	ROLLBACK;  
+ELSE  
+	COMMIT; 
+END IF;
+select t_error;
+SET autocommit = 1;
+END

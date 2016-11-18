@@ -1,7 +1,7 @@
 ﻿1. 爱球迷代码SVN地址
 	svn://192.168.0.105/aiqiumi/web/code/server_php    data/code/aqm
 
-新的测试服务器密码 !@3NMoJU6j2TIk9$#@qWQ 妥善保管
+新的测试服务器密码 !3NMoJU6j2TIk9$#@qWQ 妥善保管
 
 svn://192.168.0.243/aqm/    更新代码  http://192.168.0.243:88/man/svn.php
 svn://121.43.104.142/aiqiumi/
@@ -167,3 +167,4 @@ END IF;
 select t_error;
 SET autocommit = 1;
 END
+http://wenku.baidu.com/link?url=unCcA8lC1XhJiZcZ2l7YPrxgIw0REXdMCtcXv7xlWg3yLJExe_kODNpNUxB_cTZ0RFUNq_6Q2RKjNKpKWaYW-s-ManVVLuWSgwubob3mpwq

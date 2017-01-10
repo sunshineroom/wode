@@ -1,0 +1,82 @@
+/* pages/league/info.wxss */
+.banner{
+    height: 300rpx;
+    width: 100%;
+}
+
+.name{
+    margin-left: 20rpx;
+    margin-top: 10rpx;
+    height: 30rpx;
+    line-height: 30px;
+    font-size: 30rpx;
+}
+
+.sub_info{
+    display: inline-block;
+    margin-left: 20rpx;
+    height: 32rpx;
+    border-radius:12rpx;
+    font-size: 26rpx;
+    color: #00a7f2;
+    padding-top: 10rpx;
+    border: solid  1rpx #00a7f2;
+    white-space:pre;
+}
+
+.data{
+    margin-top: 30rpx;
+}
+
+.tab{
+    float: left;
+    display: block;
+    width: 33%;
+    text-align: center;
+
+    font-size: 30rpx;
+}
+
+.tab-no-select{
+    color: #808992;
+}
+
+.tab-select{
+    color: #00a7f2;
+    border: solid  1rpx #00a7f2;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.item-team{
+    height:100rpx;
+
+    border: solid  1rpx #e0e0e0;
+	border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.item-team image{
+    float: left;
+    width:80rpx;
+    height:80rpx;
+
+    margin-left: 20rpx;
+    margin-top: 10rpx;
+}
+
+.item-team text{
+
+    display: inline-block;
+    height: 80rpx;
+    line-height: 80rpx;
+
+    margin-left: 20rpx;
+    margin-top: 10rpx;
+    
+    color: #333;
+    font-size: 30rpx;
+
+}

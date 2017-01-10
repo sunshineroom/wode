@@ -1,0 +1,89 @@
+<template name="tab-template-1">
+    <label id="tab-1" class="tab-button tab-select" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-select" style="line-height:{{tab_view.height}}px">榜单</text>
+    </label>
+    <label id="tab-2" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">赛程</text>
+    </label>
+    <label id="tab-3" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">动态</text>
+    </label>
+    <label id="tab-4" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">信息</text>
+    </label>
+    <label id="tab-5" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">客服</text>
+    </label>
+</template>
+
+<template name="tab-template-2">
+    <label id="tab-1" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">榜单</text>
+    </label>
+    <label id="tab-2" class="tab-button tab-select" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-select" style="line-height:{{tab_view.height}}px">赛程</text>
+    </label>
+    <label id="tab-3" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">动态</text>
+    </label>
+    <label id="tab-4" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">信息</text>
+    </label>
+    <label id="tab-5" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">客服</text>
+    </label>
+</template>
+
+<template name="tab-template-3">
+    <label id="tab-1" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">榜单</text>
+    </label>
+    <label id="tab-2" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">赛程</text>
+    </label>
+    <label id="tab-3" class="tab-button tab-select" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-select" style="line-height:{{tab_view.height}}px">动态</text>
+    </label>
+    <label id="tab-4" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">信息</text>
+    </label>
+    <label id="tab-5" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">客服</text>
+    </label>
+</template>
+
+<template name="tab-template-4">
+    <label id="tab-1" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">榜单</text>
+    </label>
+    <label id="tab-2" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">赛程</text>
+    </label>
+    <label id="tab-3" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">动态</text>
+    </label>
+    <label id="tab-4" class="tab-button tab-select" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-select" style="line-height:{{tab_view.height}}px">信息</text>
+    </label>
+    <label id="tab-5" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">客服</text>
+    </label>
+</template>
+
+<template name="tab-template-5">
+    <label id="tab-1" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">榜单</text>
+    </label>
+    <label id="tab-2" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">赛程</text>
+    </label>
+    <label id="tab-3" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">动态</text>
+    </label>
+    <label id="tab-4" class="tab-button" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-no-select" style="line-height:{{tab_view.height}}px">信息</text>
+    </label>
+    <label id="tab-5" class="tab-button tab-select" bindtap="clickTabLabel">
+        <text class="tab-text tab-text-select" style="line-height:{{tab_view.height}}px">客服</text>
+    </label>
+</template>

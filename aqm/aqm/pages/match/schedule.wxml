@@ -1,0 +1,26 @@
+<view style="width:100%;background: white;height:{{content_view.height}}px">
+    <!--轮次-->
+    <view class="schedule_round">
+        <picker bindchange="bindRoundChange" value="{{schedule_data.current_round}}" range="{{schedule_data.round_list}}" range-key="title">
+            <view class="schedule_round_label">{{schedule_data.current_round_title}}</view>
+        </picker>
+    </view>
+    <view class="schedule-list-view" style="height:{{content_view.sub_height}}px">
+        <view id="{{index}}" class="schedule-item-view" wx:for="{{schedule_data.current_list}}" >
+            <view class="schedule-item-left">
+                <image class="team_logo" src="{{item.home_team.logo}}" />
+                <text class="team_name">{{item.home_team.team_name}}</text>
+            </view>
+            <view class="schedule-item-center">
+                <text class="place">{{item.detail.place}}</text>
+                <text class="result">{{item.detail.result}}</text>
+                <text class="match_time">{{item.detail.match_startime}}</text>
+            </view>
+            <view class="schedule-item-right">
+                <image class="team_logo" src="{{item.away_team.logo}}" />
+                <text class="team_name">{{item.away_team.team_name}}</text>
+            </view>
+
+        </view>
+    </view>
+</view>

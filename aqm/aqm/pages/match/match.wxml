@@ -1,0 +1,47 @@
+<!--pages/match/info.wxml-->
+<view class="container" style="width:{{view.width}}px;height:{{view.height}}px">
+    <!--content-->
+    <view class="content-view" style="height:{{content_view.height}}px">
+        <view class="top">
+            <image class="league-logo" src="{{info.league_logo}}"></image>
+            <view class="league-right" style="width: {{top_view.right_width}}px;">
+                <text class="league-name" >{{info.league_name}}</text>
+                <view class="league-info" >
+                    <label class="league-info-label">
+                        <text>  {{info.league_city_name}}  </text>
+                    </label>
+                     <label class="league-info-label">
+                        <text>  {{info.league_main_players}}人制  </text>
+                    </label>
+                     <label class="league-info-label">
+                        <text>  {{info.league_type_name}}  </text>
+                    </label>
+                </view>
+            </view>
+        </view>
+
+        <view class="content" style="height:{{content_view.height}}px">
+            <!--榜单-->
+            <view wx:if="{{tab_view.select_index == 1}}" class="ranking-view" style="height:{{content_view.height}}px">
+                <include src="ranking.wxml"/>
+            </view>
+
+            <!--赛程-->
+            <view wx:if="{{tab_view.select_index == 2}}" class="ranking-view" style="height:{{content_view.height}}px">
+                <include src="schedule.wxml"/>
+            </view>
+
+            <!--客服-->
+            <view wx:if="{{tab_view.select_index == 5}}" class="contact-view" style="height:{{content_view.height}}px">
+                <include src="contact.wxml"/>
+            </view>
+        </view>
+    </view>
+
+    <!--tab-->
+    <view class="tab-view" style="top:{{tab_view.top}}px;height:{{tab_view.height}}px">
+        <import src="tab.wxml"/>
+        <template is="tab-template-{{tab_view.select_index}}" data="{{tab_view}}"/>
+    </view>
+
+</view>

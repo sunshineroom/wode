@@ -1,0 +1,306 @@
+/* pages/match/info.wxss */
+
+.content-view{
+    position:fixed;
+    width: 100%;
+    
+}
+
+/*顶部*/
+.top{
+    width:100%;
+    height: 100px;
+
+    background: white;   
+
+    border: solid  1rpx lightgray;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.league-logo{
+    float: left;
+    width: 70px;
+    height:70px;
+
+    margin-left: 50rpx;
+    margin-top: 20px;
+}
+
+.league-right{
+    float: left;
+    margin-top: 40px;
+}
+
+.league-name{
+    display: block;
+    float: left;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.league-info{
+    margin-top: 25px;
+    height:25px;
+}
+
+.league-info-label{
+    display: inline-block;
+    margin-left: 10px;
+    height: 20px;
+    line-height: 20px;
+
+    border: solid  1rpx #00a7f2;
+    border-radius:12rpx;
+}
+
+.league-info-label text{
+    display: inline-block;
+
+    white-space:pre;
+    color:#00a7f2;
+    font-size: 12px;
+
+}
+
+.content{
+    width:100%;
+}
+
+/*榜单界面*/
+.ranking-view{
+    width: 100%;
+    height: 100%;
+}
+
+.ranking-tab{
+    height: 30px;
+    background: white;
+
+    border: solid  1px lightgray;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.ranking-tab-label{
+    float: left;
+    width: 25%;
+}
+
+.ranking-tab-label text{
+    display: inline-block;
+    width: 100%;
+    font-size: 26rpx;
+    text-align: center;
+
+    line-height: 30px;
+}
+
+.ranking-tab-line{
+    width: 1px;
+    height: 20px;
+    
+    background: gray;
+
+    margin-top: -25px;
+}
+
+.ranking-tab-select{
+    color:#00a7f2;
+}
+
+.ranking-score{
+    width: 100%;
+    overflow:auto;
+}
+
+.ranking-goal{
+    width: 100%;
+    overflow:auto;
+}
+
+.ranking-assist{
+    width: 100%;
+    overflow:auto;
+}
+
+.ranking-card{
+    width: 100%;
+    overflow:auto;
+}
+
+.ranking-item-view{
+    height: 88rpx;
+
+    border: solid  1rpx lightgray;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.ranking-item-value{
+    float: left;
+    display: block;
+    height:88rpx;
+    line-height: 88rpx;
+
+    font-size: 30rpx;
+    white-space:pre;
+}
+
+/*底下tab*/
+.tab-view{
+    position:fixed;
+    background: white;
+
+    width:100%;
+}
+
+.tab-button{
+    float:left;
+    width:20%;
+    height: 98%;
+    text-align: center;
+}
+
+.tab-select{
+    border: solid  2px #00a7f2;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+
+.tab-text{
+    display: inline-block;
+    height: 100%;
+    font-size: 26rpx;
+
+}
+
+.tab-text-no-select{
+    color:grey;
+}
+
+.tab-text-select{
+    color:#00a7f2;
+}
+
+
+/*赛程*/
+.schedule_round{
+    height:30px;
+    width:750rpx;
+}
+
+.schedule_round_label{
+    display: inline-block;
+    height: 30px;
+    width:750rpx;
+    
+    line-height: 30px;
+    text-align: center;
+
+    font-size: 30rpx;
+
+    border: solid  1px #00a7f2;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.schedule-list-view{
+    overflow:auto;
+}
+.schedule-item-view{
+    height: 180rpx;
+
+    border: solid  1rpx lightgray;
+    border-left-width: 0px;
+	border-right-width:0px;
+    border-top-width: 0px;
+}
+
+.schedule-item-left{
+    float:left;
+    height:100%;
+    width: 35%;
+
+    text-align: center;
+}
+
+.schedule-item-left .team_logo{
+    height:100rpx;
+    width: 100rpx;
+    margin-top: 20rpx;
+}
+
+.schedule-item-left .team_name{
+    display: inline-block;
+    margin-top: 10rpx;
+    height: 20rpx;
+    
+    font-size: 26rpx;
+}
+
+.schedule-item-center{
+    float:left;
+    height:100%;
+    width: 30%;
+
+    text-align: center;
+}
+
+.schedule-item-center .match_time{
+    display: inline-block;
+    margin-top: 20rpx;
+    height: 20rpx;
+    
+    font-size: 22rpx;
+}
+
+.schedule-item-center .result{
+    display: inline-block;
+    margin-top: 30rpx;
+    height: 36rpx;
+    width: 100%;
+    font-size: 36rpx;
+}
+
+.schedule-item-center .place{
+    display: inline-block;
+    margin-top: 20rpx;
+    height: 20rpx;
+    
+    font-size: 22rpx;
+}
+
+.schedule-item-right{
+    float:left;
+    height:100%;
+    width: 35%;
+
+    text-align: center;
+}
+
+.schedule-item-right .team_logo{
+    height:100rpx;
+    width: 100rpx;
+    margin-top: 20rpx;
+}
+
+.schedule-item-right .team_name{
+    display: inline-block;
+    margin-top: 10rpx;
+    height: 20rpx;
+    
+    font-size: 26rpx;
+}
+
+/*客服*/
+.contact-view{
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,71 @@
+<template name="ranking-tab-template-1">
+    <label id="ranking-tab-1" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="ranking-tab-select" >积分榜</text>
+    </label>
+    <label id="ranking-tab-2" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >射手榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-3" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >助攻榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-4" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >红黄牌榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+</template>
+
+<template name="ranking-tab-template-2">
+    <label id="ranking-tab-1" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >积分榜</text>
+    </label>
+    <label id="ranking-tab-2" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="ranking-tab-select" >射手榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-3" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >助攻榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-4" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >红黄牌榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+</template>
+
+<template name="ranking-tab-template-3">
+    <label id="ranking-tab-1" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >积分榜</text>
+    </label>
+    <label id="ranking-tab-2" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >射手榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-3" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="ranking-tab-select" >助攻榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-4" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >红黄牌榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+</template>
+
+<template name="ranking-tab-template-4">
+    <label id="ranking-tab-1" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >积分榜</text>
+    </label>
+    <label id="ranking-tab-2" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >射手榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-3" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="" >助攻榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+    <label id="ranking-tab-4" class="ranking-tab-label" bindtap="clickRankingTab">
+        <text class="ranking-tab-select" >红黄牌榜</text>
+        <view class="ranking-tab-line"></view>
+    </label>
+</template>

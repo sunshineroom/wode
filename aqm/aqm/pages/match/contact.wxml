@@ -1,0 +1,5 @@
+<view style="width:100%;background: white;height:{{content_view.height}}px">
+    <contact-button bindtap="clickContact" styple="margin-left:50px;" type="default-dark"  size="27" session-from="aiqiumi-app" >
+
+    </contact-button>
+</view>

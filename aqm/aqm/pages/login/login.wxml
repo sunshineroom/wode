@@ -1,0 +1,11 @@
+<!--pages/loing/login.wxml-->
+<form bindsubmit="formSubmit" bindreset="formReset">
+    <view class="section">
+        <input name="phone" placeholder="手机号码" maxlength="11" />
+        <input name="password" class="in-pwd" password='true' placeholder="密码" />
+    </view>
+
+  <view class="btn-area section">
+    <button formType="submit">登录</button>
+  </view>
+</form>

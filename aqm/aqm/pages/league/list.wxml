@@ -1,0 +1,21 @@
+<!--pages/league/list.wxml-->
+<scroll-view scroll-y="true" style="height: 100%;" bindscrolltolower="loadMore" bindscrolltoupper="refesh">
+    <view id="{{index}}" class="item-view" wx:for="{{list}}" wx:key="*this" bindtap="clickLeague">
+        <view class="logo">
+            <image src="{{item.league_logo}}" />
+            <text class="status">{{item.status_str}}</text>
+        </view>
+        <view style="position:relative">
+            <text class="name">{{item.league_name}}</text>
+            <text class="city">{{item.league_city_name?item.league_city_name:''}}</text>
+            <text class="player">{{item.league_main_players}}人制</text>
+        </view>
+        <view class="time">
+            <image src="../../../Resource/Images/clock.png" />
+            <text>{{item.time_str}}{{item.time_count}}{{item.time_title}}</text>
+
+            <text style="float:right;margin-right:10rpx;width:70rpx;height:30rpx;line-height:30rpx;margin-top:0rpx;color:#00a7f2">{{item.hot}}</text>
+            <image style="float:right;margin-right:10rpx;width:30rpx;height:30rpx;" src="../../../Resource/Images/fire.png" />
+        </view>
+    </view>
+</scroll-view>

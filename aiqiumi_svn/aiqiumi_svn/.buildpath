@@ -3,3 +3,13 @@
 	<buildpathentry kind="src" path=""/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 </buildpath>
+if(user != 1){
+	$('.hbYiQiang').find('p i').html(user['money']);
+	$('.hbYiQiang .user_photo').css({'background':user['photo']});
+	$('.hbYiQiang .user_nick').html(user['nickname']);console.log(user);
+	if(user['position'] != '' && user['position'] != null){
+		$('.hbYiQiang').find('.hb-use-sex-wz span').html(user['position']);
+	}else{
+		$('.hbYiQiang').find('.hb-use-sex-wz span').hide();
+	}
+}

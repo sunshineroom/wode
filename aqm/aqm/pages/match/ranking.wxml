@@ -1,0 +1,83 @@
+<!--pages/match/ranking.wxml-->
+<view style="width:100%;background: white;">
+    <!--tab-->
+    <view class="ranking-tab">
+        <import src="ranking-tab.wxml"/>
+        <template is="ranking-tab-template-{{ranking_view.select_index}}" data="{{ranking_view}}"/>
+    </view>
+    <!-- 积分榜 -->
+    <view wx:if="{{ranking_view.select_index == 1}}" class="ranking-score" style="height:{{content_view.sub_height}}px">
+        <view class="ranking-item-view">
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">  </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">  </text>
+            <text class="ranking-item-value" style="color:gray;width:300rpx;">球队</text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">赛 </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">胜 </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">平 </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">负 </text>
+            <text class="ranking-item-value" style="color:gray;width:100rpx;">进/失 </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">积分 </text>
+        </view>
+        <view id="{{index}}" class="ranking-item-view" wx:for="{{ranking_score_list}}" wx:key="*this">
+            <text class="ranking-item-value" style="color:gray;width:50rpx;"> {{item.ord}}</text>
+            <label class="ranking-item-value" style="color:gray;width:50rpx;">
+                <image src="{{item.logo}}" style="width:40rpx;height:40rpx;margin-top:26rpx;"/>
+            </label>
+            <text class="ranking-item-value" style="color:gray;width:300rpx;">{{item.team_name}}</text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">{{item.num}} </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">{{item.win}} </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">{{item.draw}} </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">{{item.lose}} </text>
+            <text class="ranking-item-value" style="color:gray;width:100rpx;">{{item.in_goal}}/{{item.out_goal}} </text>
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">{{item.score}} </text>
+        </view>
+    </view>
+
+    <!-- 射手榜 -->
+    <view wx:if="{{ranking_view.select_index == 2}}" class="ranking-goal" style="height:{{content_view.sub_height}}px">
+        <view class="ranking-item-view">
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">  </text>
+            <text class="ranking-item-value" style="color:gray;width:200rpx;">球员</text>
+            <text class="ranking-item-value" style="color:gray;width:400rpx;">球队</text>
+            <text class="ranking-item-value" style="color:gray;width:100rpx;">进球数 </text>
+        </view>
+        <view id="{{index}}" class="ranking-item-view" wx:for="{{ranking_goal_list}}" wx:key="*this">
+            <text class="ranking-item-value" style="color:#333;width:50rpx;"> {{index+1}}</text>
+            <text class="ranking-item-value" style="color:#333;width:200rpx;">{{item.realname}}</text>
+            <text class="ranking-item-value" style="color:#333;width:400rpx;">{{item.team_name}}</text>
+            <text class="ranking-item-value" style="color:#333;width:100rpx;">{{item.count}}</text>
+        </view>
+    </view>
+
+    <!-- 助攻榜 -->
+    <view wx:if="{{ranking_view.select_index == 3}}" class="ranking-assist" style="height:{{content_view.sub_height}}px">
+        <view class="ranking-item-view">
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">  </text>
+            <text class="ranking-item-value" style="color:gray;width:200rpx;">球员</text>
+            <text class="ranking-item-value" style="color:gray;width:400rpx;">球队</text>
+            <text class="ranking-item-value" style="color:gray;width:100rpx;">助攻数 </text>
+        </view>
+        <view id="{{index}}" class="ranking-item-view" wx:for="{{ranking_assist_list}}" wx:key="*this">
+            <text class="ranking-item-value" style="color:#333;width:50rpx;"> {{index+1}}</text>
+            <text class="ranking-item-value" style="color:#333;width:200rpx;">{{item.realname}}</text>
+            <text class="ranking-item-value" style="color:#333;width:400rpx;">{{item.team_name}}</text>
+            <text class="ranking-item-value" style="color:#333;width:100rpx;">{{item.count}}</text>
+        </view>
+    </view>
+
+    <!-- 红黄牌榜 -->
+    <view wx:if="{{ranking_view.select_index == 4}}" class="ranking-card" style="height:{{content_view.sub_height}}px">
+        <view class="ranking-item-view">
+            <text class="ranking-item-value" style="color:gray;width:50rpx;">  </text>
+            <text class="ranking-item-value" style="color:gray;width:200rpx;">球员</text>
+            <text class="ranking-item-value" style="color:gray;width:400rpx;">球队</text>
+            <text class="ranking-item-value" style="color:gray;width:100rpx;">红/黄 </text>
+        </view>
+        <view id="{{index}}" class="ranking-item-view" wx:for="{{ranking_card_list}}" wx:key="*this">
+            <text class="ranking-item-value" style="color:#333;width:50rpx;"> {{index+1}}</text>
+            <text class="ranking-item-value" style="color:#333;width:200rpx;">{{item.realname}}</text>
+            <text class="ranking-item-value" style="color:#333;width:400rpx;">{{item.team_name}}</text>
+            <text class="ranking-item-value" style="color:#333;width:100rpx;">{{item.red_count}}/{{item.yellow_count}}</text>
+        </view>
+    </view>
+</view>

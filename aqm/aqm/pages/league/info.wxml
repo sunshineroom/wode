@@ -1,0 +1,40 @@
+<!--pages/league/info.wxml-->
+<image class="banner" src="{{info.league_banner}}" mode="aspectFill" />
+<text class="name">{{info.league_name}}</text>
+<view>
+    <text class="sub_info">  {{info.league_city_name}}  </text>
+    <text class="sub_info">  {{info.league_main_players}}人制  </text>
+    <text class="sub_info">  {{info.league_type_name}}  </text>
+</view>
+
+<view class="data">
+    <!--赛程-->
+    <block wx:if="{{select_tab_index==1}}">
+        <text name="tab" id="1" class="tab tab-select" bindtap="clickDataTab">赛程</text>
+        <text name="tab" id="2" class="tab tab-no-select" bindtap="clickDataTab">数据</text>
+        <text name="tab" id="3" class="tab tab-no-select" bindtap="clickDataTab">球队</text>
+    </block>
+    <!--榜单-->
+    <block wx:if="{{select_tab_index==2}}">
+        <text name="tab" id="1" class="tab tab-no-select" bindtap="clickDataTab">赛程</text>
+        <text name="tab" id="2" class="tab tab-select" bindtap="clickDataTab">数据</text>
+        <text name="tab" id="3" class="tab tab-no-select" bindtap="clickDataTab">球队</text>
+    </block>
+    <!--球队数据-->
+    <block wx:if="{{select_tab_index==3}}">
+        <view>
+            <text name="tab" id="1" class="tab tab-no-select" bindtap="clickDataTab">赛程</text>
+            <text name="tab" id="2" class="tab tab-no-select" bindtap="clickDataTab">数据</text>
+            <text name="tab" id="3" class="tab tab-select" bindtap="clickDataTab">球队</text>
+        </view>
+        <view style="height:50rpx;">
+        </view>
+        <scroll-view scroll-y="true" style="height: 750rpx;">
+            <view id="{{index}}" class="item-team" wx:for="{{team}}" wx:key="*this" bindtap="">
+                <image src="{{item.team_logo}}" />
+                <text>{{item.team_name}}</text>
+            </view>
+        </scroll-view>
+    </block>
+
+</view>

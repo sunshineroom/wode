@@ -1,0 +1,10 @@
+/* pages/loing/login.wxss */
+.section{
+    margin-top: 10px;
+    width:90%;
+    margin-left: 5%;
+}
+
+.in-pwd{
+    margin-top: 10px;
+}

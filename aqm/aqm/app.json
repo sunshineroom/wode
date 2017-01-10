@@ -1,0 +1,11 @@
+{
+  "pages":[
+    "pages/match/match"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "black",
+    "navigationBarTitleText": "",
+    "navigationBarTextStyle":"white"
+  }
+}

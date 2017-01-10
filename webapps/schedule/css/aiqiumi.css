@@ -1,0 +1,56 @@
+/*通用*/
+.aiqiumi_photo{width: 50px;height: 50px;border-radius:50px;}
+
+/*新闻*/
+.aiqiumi_news_ul{list-style:none;margin:0;padding:0;padding-top: 1px;background: #FFFFFF;}
+.aiqiumi_news_ul li{height: 92px;border: solid 0.5px #e0e0e0;border-left-width: 0px;border-right-width: 0px;border-top-width: 0px;}
+.aiqiumi_news_ul li .img_div{width: 25%;height: 100%;float: left;}
+.aiqiumi_news_ul li .img_div img{width: 80%;height: 80%;margin-top: 10%;margin-bottom: 10%;margin-right: 10%;margin-left: 10%;}
+.aiqiumi_news_ul li .title_div{height: 100%;width: 75%;float: left;}
+.aiqiumi_news_ul li .title_div .title_span{display:block;height: 18px;margin-top: 5%;margin-left: 5px; font-size:0.95em;color: #333333;overflow:hidden;}
+.aiqiumi_news_ul li .title_div .sub_title_span{display:block;height: 40px;margin-left: 5px; margin-top: -13px;margin-right: 10px;font-size:0.8em;color: #afb3bf;overflow:hidden;}
+
+/*新闻详情*/
+.aiqiumi_news_detail_div{margin-top: 20px;}
+.aiqiumi_news_detail_title{color: #333333;font-size: 0.95em;display:block; margin-left: 10px;margin-right: 10px}
+.aiqiumi_news_detail_time{color: #afb3bf;font-size: 0.75em;display:block;margin-left: 10px;margin-top: 5px}
+.aiqiumi_news_detail_content{font-size: 0.8em;display:block;margin-left: 1em;margin-right: 1.2em;margin-top: 15px}
+.aiqiumi_news_detail_content img{width: 100%}
+.aiqiumi_news_detail_content p{font-size: 1.0em;margin-right: -10px;}
+
+.aiqiumi_news_detail_control_div{margin-top: 0.1em;width: 100%;height: 26px;}
+.aiqiumi_news_button_zan{height: 100%;width: 66px;float: right;margin-right:0.5em;background:url(../images/news/news_icon_good_normal.png);background-size:100% auto;background-repeat: no-repeat; border-style:none}
+.aiqiumi_news_button_zan_sel{height: 100%;width: 66px;float: right;margin-right:0.5em;background:url(../images/news/news_icon_good_sel.png);background-size:100% auto;background-repeat: no-repeat; border-style:none}
+.aiqiumi_news_button_comment{height: 100%;width: 66px;float: right;margin-right:0.5em;background:url(../images/news/news_icon_comment_sel.png);background-size:100% auto;background-repeat: no-repeat;border-style:none}
+
+.aiqiumi_news_zan_div{width: 100%;margin-top: 5px;border: solid 0.5px #e0e0e0;border-left-width: 0px;border-right-width: 0px;border-bottom-width: 0px;}
+.aiqiumi_news_zan_logo_div{height: 16px;width: 10%;margin-top: 0px;float: left}
+.aiqiumi_news_zan_logo {float: right;margin-right: 1px;margin-top: 10px;height: 16px;width: 16px;background:url(../images/news/icon_good.png);background-size:100% auto;background-repeat: no-repeat;border-style:none}
+
+.aiqiumi_news_zan_photo_div{margin-top: 0px;float: left;width: 90%}
+.aiqiumi_news_zan_photo_div ul{margin-top: 10px;list-style:none;padding-left: 0px}
+.aiqiumi_news_zan_photo_div li{margin-top: 0px;float: left;margin-left: 10px;}
+
+/*比赛直播*/
+.aiqiumi_match_ul{height: 115px;list-style:none;margin:0;padding:0;background: #FFFFFF;}
+.aiqiumi_match_ul li{width: 100%;height: 100%;float:left;margin-left:0px;text-align:center;border: solid 0.5px #e0e0e0;border-left-width: 0px;border-right-width: 0px;border-top-width: 0px;}
+.aiqiumi_match_ul li .result_div {width: 34%;height: 100%;float:left;} 
+.aiqiumi_match_ul li .result_div .tournament_span {overflow:hidden;display:block;height:17px;margin-top: 15px; color: #999999;font-size: 0.75em}
+.aiqiumi_match_ul li .result_div .result_span {overflow:hidden;display:block;height:20px;margin-top: -15px; color: #333333;font-size: 1em}
+.aiqiumi_match_ul li .result_div .time_span {overflow:hidden;display:block;height:17px;margin-top: -18px; color: #999999;font-size: 0.75em}
+.aiqiumi_match_ul li .result_div .code_span {overflow:hidden;display:block;height:17px;margin-top: -18px; color: #999999;font-size: 0.75em}
+.aiqiumi_match_ul li .team_div {width: 33%;height: 100%;float:left;} 
+.aiqiumi_match_ul li .team_div .team_logo{width: 50px;height: 50px;margin-top: 15px;}
+.aiqiumi_match_ul li .team_div span{color: #333333;font-size: 0.875em;display:block;margin-top: 1px;}
+
+
+
+/*分享下载*/
+.yq_download{ display:block;width:100%; height:49px; background:url(../images/down_bg.jpg); background-size:100%  2.45rem ;position:fixed; top:0; left:0; z-index:999999;}
+.yq_download .yq_logo{ float:left;height:35px;width: 65%; margin-left:10px;margin-top:7px;}
+.yq_download .yq_logo div.logo-m{ float:left;border-radius:10px;background:#fff;width:30px;height:30px;text-align:center;}
+.yq_download .yq_logo div.logo-m img{width:35px;height:35px; display:block;}
+.yq_download .yq_logo span{ float:left;height:35px; font-size:14px; line-height:18px; color:#333333; margin-left:15px;}
+.yq_download .yq_logo span em{font-size:11px; color:#666666; font-style:normal;}
+.down_aqm{ font-weight:bold;background: url(../images/fx-down.png) no-repeat center;background-size:128px 38px;width:140px;color:#41a1f4; right:1%;height:38px;top: 5px;line-height: 38px;text-align:left;text-indent:20px; font-size:13px; position: absolute; display: block}
+.down_aqm:hover{color:#41a1f4;}

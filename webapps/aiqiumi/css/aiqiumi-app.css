@@ -1,0 +1,154 @@
+*{margin:0;padding:0;}
+
+.a-bottom-tool{
+	background: white;
+	height: 48px;
+	width: 100%;
+	bottom: 0px;
+	position:fixed;
+}
+.a-bottom-tool:before{
+	content: '';
+	position:absolute;
+	top:0;
+	left:0;
+	width: 100%;
+	height:1px;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center top;
+	transform-origin: center top;
+}
+
+.a-bottom-tool .tool-button{
+	position: relative;
+
+	width: 100%;
+	height: 100%;
+	text-align: center;
+
+	font-size: 15px;
+	color: #3b9ff7;
+	border:none;
+	top:1px;
+}
+
+.a-space{
+	background-color: white;
+	width: 100%;
+	position:relative;
+	overflow: hidden;
+	/*border: solid 0.5px #e0e0e0;*/
+	/*border-left-width: 0px;*/
+	/*border-right-width:0px;*/
+}
+.a-space:after{
+	content: '';
+	position:absolute;
+	bottom:0;
+	left:0;
+	width: 100%;
+	height:1px;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center top;
+	transform-origin: center top;
+}
+.a-space:before{
+	content: '';
+	position:absolute;
+	top:0;
+	left:0;
+	width: 100%;
+	height:1px;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center top;
+	transform-origin: center top;
+	z-index: 9;
+}
+.a-big-photo{
+	width: 75px;
+	height: 75px;
+}
+
+.a-black-color{
+	color:#333333;
+}
+
+.a-blue-color{
+	color:#00a7f2;
+}
+
+.a-gray-color{
+	color:#808992
+}
+
+.a-team-color-0{
+	background:url(../images/icon-color-no.png)
+}
+
+.a-team-color-1{
+	background: #ffffff
+}
+
+.a-team-color-2{
+	background: #e1e1e1
+}
+
+.a-team-color-3{
+	background: #68360e
+}
+
+.a-team-color-4{
+	background: #000000
+}
+
+.a-team-color-5{
+	background: #e9e731
+}
+
+.a-team-color-6{
+	background: #fe961f
+}
+
+.a-team-color-7{
+	background: #eb3a37
+}
+
+.a-team-color-8{
+	background: #bf46bb
+}
+
+.a-team-color-9{
+	background: #6c1dd0
+}
+
+.a-team-color-10{
+	background: #2a5ce1
+}
+
+.a-team-color-11{
+	background: #33b8c3
+}
+
+.a-team-color-12{
+	background: #2ab740
+}
+
+
+/*分享下载*/
+.yq_download{ display:block;width:100%; height:49px; background:url(../images/down_bg.jpg); background-size:100%  2.45rem ;position:fixed; top:0; left:0; z-index:999999;}
+.yq_download .yq_logo{ float:left;height:35px;width: 65%; margin-left:10px;margin-top:7px;}
+.yq_download .yq_logo div.logo-m{ float:left;border-radius:10px;background:#fff;width:30px;height:30px;text-align:center;}
+.yq_download .yq_logo div.logo-m img{width:35px;height:35px; display:block;}
+.yq_download .yq_logo span{ float:left;height:35px; font-size:14px; line-height:18px; color:#333333; margin-left:15px;}
+.yq_download .yq_logo span em{font-size:11px; color:#666666; font-style:normal;}
+.down_aqm{ font-weight:bold;background: url(../images/fx-down.png) no-repeat center;background-size:128px 38px;width:140px;color:#41a1f4; right:1%;height:38px;top: 5px;line-height: 38px;text-align:left;text-indent:20px; font-size:13px; position: absolute; display: block}
+.down_aqm:hover{color:#41a1f4;}
+
+
+

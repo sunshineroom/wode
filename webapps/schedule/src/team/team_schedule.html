@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi_schedule.css" />
+
+    <script src="../../js/jquery.min.js"></script>
+
+    <script src="../../libs/mui/js/mui.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <script src="js/schedule_tab.js"></script>
+    <script src="js/teamScheduleHttp.js"></script>
+    <link rel="stylesheet" href="css/dropload.css"/>
+    <script src="js/dropload/dropload.min.js"></script>
+    <script src="js/dropload/dropload_init.js"></script>
+
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">日程</h1>
+    <a class="mui-icon mui-icon-plus mui-pull-right" onclick="addSchedule();"></a>
+</header>
+<div class="mui-content">
+    <div class="tab_div">
+        <section id="tab_section" class="tabHead">
+            <div class="tab_active">
+                <span>当前</span>
+
+            </div>
+            <div class="tab_no_active">
+                <span>历史</span>
+            </div>
+            <b class="border"></b>
+        </section>
+        <div>
+
+            <div class="schedule_content khfxWarp">
+                <div id="now_list_div" class="schedule_list khfxPane">
+                    <ul class="aiqiumi_schedule_ul">
+                    </ul>
+                </div>
+                <div id="history_list_div" class="schedule_list khfxPane">
+                    <ul class="aiqiumi_schedule_ul">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--模板脚本-->
+<script id="list_content_template" type="text/x-handlebars-template">
+
+    {{#each list}}
+    {{#if is_league}}
+    <li>
+        <div id="top">
+            <span class="aiqiumi_schedule_type" style="background: #fc4c7a">赛事</span>
+            <span class="aiqiumi_schedule_title">{{league_name}}</span>
+        </div>
+        <div id="middle" onclick='openLeagueDetail("{{url}}");'>
+            <div id="middle_left">
+                <img class="aiqiumi_schedule_team_logo" src='{{home_team_logo}}'/>
+                <span class="aiqiumi_schedule_team_name">{{home_team_name}}</span>
+                <span class="team-cloth">
+                    {{{showTeamClothesColor  home_team_color_id}}}
+                </span>
+            </div>
+            <div id="middle_center">
+                <span class="aiqiumi_schedule_address" style="margin-top:10px;">
+                    {{#if place}}
+                            {{place}}
+                    {{else}}
+                            地点待定
+                    {{/if}}
+                </span>
+                <span class="aiqiumi_schedule_result">{{{showVsResult result}}}</span>
+                <span class="aiqiumi_schedule_tree">{{tree_title}}</span>
+                <span class="aiqiumi_schedule_time">{{{showScheduleTime match_startime 3 }}}</span>
+            </div>
+            <div id="middle_right">
+                <img class="aiqiumi_schedule_team_logo" src='{{away_team_logo}}'/>
+                <span class="aiqiumi_schedule_team_name">{{away_team_name}}</span>
+                 <span class="team-cloth">
+                     {{{showTeamClothesColor  away_team_color_id}}}
+                </span>
+            </div>
+        </div>
+
+        {{#if desc}}
+        {{#compare desc '!=' ''}}
+        <div id="bottom" style="">
+            <div id="icon">
+                 <span id="desc">{{desc}}</span>
+            </div
+        </div>
+        {{/compare}}
+        {{/if}}
+    </li>
+    {{/if}}
+    {{#if is_match}}
+    <li>
+        <div id="top">
+            <span class="aiqiumi_schedule_type" style="background: #00a8ef">比赛</span>
+            <span class="aiqiumi_schedule_title">{{title}}</span>
+        </div>
+        <div id="middle" onclick="openMatchDetail({{id}})";>
+            <div id="middle_left">
+                <img class="aiqiumi_schedule_team_logo" src='{{team_logo}}'/>
+                <span class="aiqiumi_schedule_team_name">{{team_name}}</span>
+            </div>
+            <div id="middle_center">
+                <span class="aiqiumi_schedule_address">
+                     {{#if place}}
+                            {{place}}
+                    {{else}}
+                            地点待定
+                    {{/if}}
+                </span>
+                <span class="aiqiumi_schedule_result">{{{showMatchResult start_time team_score team_point_score target_team_score target_team_point_score}}}</span>
+                <span class="aiqiumi_schedule_time">{{{showScheduleTime start_time 1}}}</span>
+            </div>
+            <div id="middle_right">
+                <img class="aiqiumi_schedule_team_logo" src='{{target_team_logo}}'/>
+                <span class="aiqiumi_schedule_team_name">{{target_team_name}}</span>
+            </div>
+        </div>
+        <div id="bottom">
+            <div id="bottom_left" onclick="join(this,'{{id}}',1,2);">
+                <span id="bottom_number">{{enroll_count}}</span>
+                <span id="bottom_flag">报名</span>
+            </div>
+            <div id="bottom_center" onclick="join(this,'{{id}}',2,2);">
+                <span id="bottom_number">{{off_count}}</span>
+                <span id="bottom_flag">请假</span>
+            </div>
+            <div id="bottom_right" onclick="join(this,'{{id}}',3,2);">
+                <span id="bottom_number">{{pending_count}}</span>
+                <span id="bottom_flag">待定</span>
+            </div>
+        </div>
+    </li>
+    {{/if}}
+    {{#if is_active}}
+    <li>
+        <div id="top">
+            <span class="aiqiumi_schedule_type" style="background: #4bcf99">活动</span>
+            <span class="aiqiumi_schedule_title">{{title}}</span>
+        </div>
+        <div id="middle" onclick="openActiveDetail({{id}});">
+            <div id="middle_left">
+                <img class="aiqiumi_schedule_team_logo" src='{{team_logo}}'/>
+                <span class="aiqiumi_schedule_team_name">{{team_name}}</span>
+            </div>
+            <div id="middle_center_1">
+                <span class="aiqiumi_schedule_active_address">
+                     {{#if place}}
+                            {{place}}
+                    {{else}}
+                            地点待定
+                    {{/if}}
+                </span>
+                <span class="aiqiumi_schedule_active_result">{{{showScheduleTime start_time 2}}}</span>
+            </div>
+        </div>
+        <div id="bottom">
+            <div id="bottom_left" onclick="join(this,'{{id}}',1,3);">
+                <span id="bottom_number">{{enroll_count}}</span>
+                <span id="bottom_flag">报名</span>
+            </div>
+            <div id="bottom_center" onclick="join(this,'{{id}}',2,3);">
+                <span id="bottom_number">{{off_count}}</span>
+                <span id="bottom_flag">请假</span>
+            </div>
+            <div id="bottom_right" onclick="join(this,'{{id}}',3,3);">
+                <span id="bottom_number">{{pending_count}}</span>
+                <span id="bottom_flag">待定</span>
+            </div>
+        </div>
+    </li>
+    {{/if}}
+    {{/each}}
+</script>
+
+<script>
+    var view=new View();
+    view.init();
+
+    var com=new Com();
+    var userStore=new UserStore();
+    var token=view.data.token;
+    var isCaptain = Number(view.data.isCaptain);
+    userStore.save({token:view.data.token});
+    var teamScheduleHttp=new TeamScheduleHttp();
+    var team_id=view.data.team_id;
+    var nowList = [];
+    var historyList = [];
+    var is_nowload=false;
+    var is_historyload=false;
+    var tabIndex = 0;
+    var currentScheduleListPage = 1;
+    var historyScheduleListPage = 1;
+    var list_content_template = $("#list_content_template").html();
+    var list_template =Handlebars.compile(list_content_template);
+
+    initData();
+
+    //初始化界面
+    function initData(){
+        var height=$(window).height()-$(".schedule_content").offset().top;
+        $(".schedule_content").height(height);
+    }
+
+    //加载当前日程列表
+    function loadNowData(obj) {
+        teamScheduleHttp.getEventByNow(currentScheduleListPage, team_id, function (code, message, info) {
+            if (code != 200) {
+                obj.resetload();
+                return;
+            }
+            if (info.list && info.list.length > 0) {
+                $.merge(nowList, info.list);
+                console.log(nowList);
+                currentScheduleListPage++;
+                var appendHtml = list_template({list: info.list});
+                $("#now_list_div .aiqiumi_schedule_ul").append(appendHtml);
+            } else {
+                obj.resetload();
+                obj.lock();
+                obj.noData();
+                obj.resetload();
+            }
+            obj.resetload();
+        });
+    }
+
+    //加载历史数据列表
+    function loadHistoryData(obj){
+        teamScheduleHttp.getEventByHistory(historyScheduleListPage,team_id,function(code,message,info){
+            if(code != 200){
+                obj.resetload();
+                return;
+            }
+            if(info.list && info.list.length > 0){
+                $.merge(historyList,info.list);
+                is_historyload=false;
+                console.log(historyList);
+                historyScheduleListPage++;
+                var appendHtml = list_template({list:info.list});
+                $("#history_list_div .aiqiumi_schedule_ul").append(appendHtml);
+            }else{
+                obj.resetload();
+                obj.lock();
+                obj.noData();
+                obj.resetload();
+            }
+            obj.resetload();
+        });
+    }
+
+    //新建日程
+    function addSchedule(){
+        com.openNewHtml(view.device,"add_schedule.html","title=新建日程&team_id="+team_id +"&token="+token);
+    }
+
+    //签到
+    function join(objElement,id,type,sub_type){
+
+        for(var i=0;i<nowList.length;i++){
+            var obj=nowList[i];
+            if(obj.id==id){
+
+                //判断截止时间
+                if(obj["enroll_time"]){
+                    var nowDate = new Date();
+                    var enroll_Time = new Date(obj["enroll_time"].replace(/-/g, '/'));
+                    if(nowDate > enroll_Time){
+                        mui.toast("该日程已停止报名");
+                        return;
+                    }
+                }
+
+                teamScheduleHttp.join(id,team_id,type,sub_type,function(code,message,info){
+                    if(code != 200) return;
+                    console.log(info);
+                    obj["off_count"]=info["off_count"];
+                    obj["enroll_count"]=info["enroll_count"];
+                    obj["pending_count"]=info["pending_count"];
+                    var neighbor = $(objElement).parent().children();
+                    $(neighbor[0]).find("#bottom_number").text(obj["enroll_count"]);
+                    $(neighbor[1]).find("#bottom_number").text(obj["off_count"]);
+                    $(neighbor[2]).find("#bottom_number").text(obj["pending_count"]);
+                });
+                return;
+            }
+        }
+    }
+
+    //打开活动详情
+    function openActiveDetail(id){
+        console.log(id);
+        com.openNewHtml(view.device,"schedule_active_detail.html","title=活动详情&team_id="+team_id+"&token="+token+"&id="+id+"&isCaptain="+isCaptain);
+    }
+
+    //打开活动详情
+    function openMatchDetail(id){
+        console.log(id);
+        com.openNewHtml(view.device,"schedule_match_detail.html","title=比赛详情&team_id="+team_id+"&token="+token+"&id="+id+"&isCaptain="+isCaptain);
+    }
+    
+    //wzh 打开赛事详情
+    function openLeagueDetail(url){
+    	    com.openWebViewWithURL(view.device, url);
+    }
+
+
+    //显示赛事比分
+    Handlebars.registerHelper('showVsResult', function(result) {
+        var html = "VS";
+
+        if(!result) return html;
+        if(result.length==0) return html;
+
+        if(result.length==1){
+            var obj=result[0];
+            html=obj.home_team_goal+':'+obj.away_team_goal;
+        }
+
+        if(result.length==2){
+            var obj=result[0];
+            var obj1=result[1];
+            html=obj.home_team_goal+'('+obj1.home_team_goal+'):('+obj1.away_team_goal+')'+obj.away_team_goal;
+        }
+        return html;
+    });
+
+    //type = 1 显示 年月日  =2 显示 年月日 周 时间   =3 显示年月日 时间
+    Handlebars.registerHelper("showScheduleTime",function (time, type){
+        if(!time) return "时间待定";
+        var show_day=new Array('周日','周一','周二','周三','周四','周五','周六');
+        var date=new Date(time.replace(/-/g, '/'));
+        var day=date.getDay();
+        var hour=date.getHours()+"";
+        var minutes=date.getMinutes()+"";
+        if(hour.length==1) hour="0"+hour+"";
+        if(minutes.length==1) minutes="0"+minutes+"";
+        var html;
+        switch (Number(type)) {
+            case 1:
+                    html = time.split(" ")[0];
+                break;
+            case 2:
+                    html = time.split(" ")[0] + " " + show_day[day]+" "+hour+":"+minutes;
+                break;
+            case 3:
+                    html = time.split(" ")[0] + " "+hour+":"+minutes;
+                break;
+        }
+        return html;
+    });
+
+
+    //显示比赛的结果日期还是比分
+    Handlebars.registerHelper('showMatchResult', function(time,team_score,team_point_score,target_team_score,target_team_point_score) {
+        var show_day=new Array('周日','周一','周二','周三','周四','周五','周六');
+        var date=new Date(time.replace(/-/g, '/'));
+        
+        var day=date.getDay();
+                              
+        var hour=date.getHours()+"";
+        var minutes=date.getMinutes()+"";
+                             
+        if(hour.length==1) hour="0"+hour+"";
+                              
+        if(minutes.length==1) minutes="0"+minutes+"";
+        
+        var html=show_day[day]+" "+hour+":"+minutes;
+                              
+                              
+        if(!team_score) return html;
+        if(!target_team_score) return html;
+
+        if(team_point_score!=0 || target_team_point_score!=0){
+            return team_score+"("+team_point_score+") : "+target_team_score+"("+target_team_point_score+")";
+        }else{
+            return team_score+" : "+target_team_score;
+        }
+    });
+
+//    Handlebars.registerHelper('showLeagueBottom', function(l_vs_status_id,status_name) {
+//        var html='';
+//        if(l_vs_status_id==4){
+//            html='<div id="bottom" style="">'+
+//                    '<div id="icon" />'+
+//                    '<span id="desc">'+status_name+'</span>'+
+//                    '</div>';
+//        }
+//        return html;
+//    });
+
+    //显示球队衣服
+    Handlebars.registerHelper('showTeamClothesColor', function (colorIndex) {
+        var html = '<img src="images/no_cloth.png" >';
+        var colors_dict = {
+            "1": "rgb(235,58,55)",
+            "2": "rgb(255,150,31)",
+            "3": "rgb(233,231,49)",
+            "4": "rgb(42,183,64)",
+            "5": "rgb(51,184,195)",
+            "6": "rgb(42,92,225)",
+            "7": "rgb(108,29,208)",
+            "8": "rgb(191,70,187)",
+            "9": "rgb(255,255,255)",
+            "10": "rgb(225,225,225)",
+            "11": "rgb(0,0,0)",
+            "12": "rgb(104,54,14)"
+        };
+
+        if ( !colorIndex && Number(colorIndex) ==0 ) {
+            return html;
+        }else{
+
+            if(Number(colorIndex) == 9){
+                html ='<img src="images/white-cloth.png">';
+            }else{
+                html  =  '<img src="images/cloth.png" style="background: '+colors_dict[colorIndex]+'">';
+            }
+            return html;
+        }
+    });
+
+    function setRightButton() {
+        if(isCaptain){
+            var rightBtnsArray  = [{title:"添加",action:"addSchedule()",type:"add"}];
+            var data=JSON.stringify(rightBtnsArray);
+            return data;
+        }
+        return "";
+    }
+
+
+    //新建日程
+    function addSchedule(){
+        com.openNewHtml(view.device, "add_schedule.html","title=新建日程&team_id=" + team_id + "&token="+token + "&isCaptain=" + isCaptain);
+    }
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+        window.schedulecontent.setRightButton(setRightButton());
+    };
+</script>
+</body>
+</html>

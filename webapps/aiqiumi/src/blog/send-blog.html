@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" class="feedback">
+	<head>
+		<meta charset="utf-8">
+	    <title></title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" type="text/css" href="css/editor.css" />
+	</head>
+	<body>
+		<div class="content_vue">
+			<div class="row_wrap" >
+				<input id="rice_title" type="text" class="rice_title" name="rice_title" placeholder="输入动态标题" />
+			</div>
+
+			<div class="row_wrap rice_content_wrap" >
+				<div id='rice_content' class="rice_content" contenteditable="true" ><p><br/></p></div>
+			</div>
+		</div>
+		
+		<!-- debug box -->
+<!-- 		<div class="row_wrap" >
+			<button type="button" id="rice_insert" style="padding:0.1rem;margin:0.05rem;">测试插入图片</button>
+			<button type="button" id="rice_submit" style="padding:0.1rem;;margin:0.05rem 0 0.05rem 0.05rem;float:right">模拟提交</button>
+			<button type="button" id="rice_get_format" style="padding:0.1rem;;margin:0.05rem;float:right">获取内容(格式化)</button>
+			<button type="button" id="rice_get_html" style="padding:0.1rem;;margin:0.05rem;float:right">获取内容(一般)</button>
+		</div> -->
+		<script src="js/jquery.3.1.1.min.js"></script>
+		<script src="js/jquery.editor.js"></script>
+		<script src="../../libs/vue/vue.js"></script>
+		<script src="../../libs/vue/vue-resource.js"></script>
+		<script src="../../config/config.js"></script>
+		<script src="../../libs/crypto/base64.js"></script>
+		<script src="../controller/viewController.js"></script>
+		<script src="controller/blogController.js"></script>
+
+		<script>//eyJ0b2tlbiI6InBSTmFXQ2dYYlB4Y0hid2NMRmx4UHd1WWdLaHp2ZkNVak56b0dBWmQiLCJ2YWx1ZSI6InZ2dnZ2dnYiLCJodHRwX3VybCI6Imh0dHA6XC9cL25qLmFpcWl1bWkuY25cL2FwaVwvdjIiLCJmcm9tX2lkIjoiMSIsInRlYW1faWQiOiIyOTE5Iiwic2hvd19pZCI6IjEifQ==
+			var blogController=new BlogController();
+    		blogController.init();
+
+    		function submitImg(img_list){	//客户端发起 传递图片
+
+    			//alert(img_list);
+
+    			blogController.insertImg(img_list);
+		         
+            }
+
+
+
+		</script>
+	</body>
+
+</html>

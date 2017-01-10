@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日程详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+    <link rel="stylesheet" type="text/css" href="./css/team_schedule_detail.css" />
+
+
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+
+</head>
+<body>
+
+    <!-- 分享按钮 -->
+    <a id="btnOpenApp" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.zhengdianfang.AiQiuMi" class="yq_download" style="display: none;">
+        <div class="yq_logo">
+            <div class="logo-m"><img src="../../images/logo-m.png"></div>
+            <span>爱球迷<br/><em>最会踢球的球迷都在这里</em></span>
+        </div>
+
+        <span class="down_aqm" >真球迷 下载APP</span>
+    </a>
+
+
+    <div class="mui-content " id="active_schedule">
+
+        <!-- 活动头部信息-->
+        <div class="detail_base_info">
+            <div class="detail_base_team mui-clearfix">
+                <img  id="team_logo" :src="activeTeamLogo" alt=""/>
+                <p>
+                    <span class="active_name">{{ activeName }}</span>
+                    <span class="team_name">{{ activeTeamName }}</span>
+                </p>
+
+            </div>
+        </div>
+
+        <!-- 信息-->
+        <div class="detail_schedule_info ">
+            <!-- 时间-->
+            <div class="detail_base_list">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_time.png">
+                </div>
+                <div class="right" >
+                    <span id="left"> {{ activeBeginTime }}  </span>
+                    <span id="right"> {{ activeApplyEndTime }} </span>
+                </div>
+            </div>
+
+            <!-- 地点-->
+            <div class="detail_base_list" v-if="activePlaceName&&activePlaceName.length>0" >
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_place.png">
+                </div>
+                <div class="right" id="active_place">
+                    <span id="left">{{ activePlaceName  }}</span>
+                    <span v-show="activePlaceLat > 0 && activePlaceLng > 0" @tap="locationNavigaition(activePlaceLat, activePlaceLng)" class="place_right" >导航</span>
+                </div>
+            </div>
+            <!-- 人数上限-->
+            <div class="detail_base_list" v-if="activeMaxPeople&&activeMaxPeople>0">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_toplimit.png">
+                </div>
+                <div class="right" id="active_maxPlayers">
+                    <span id="left">{{ activeMaxPeople }}人</span>
+                </div>
+            </div>
+            <!-- 备注-->
+            <div class="detail_base_list detail_base_bei mui-clearfix" v-if="activeDesc&&activeDesc.length>0">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_text.png">
+                </div>
+                <div class="right">
+                    <span id="content"> {{ activeDesc }} </span>
+                </div>
+            </div>
+        </div>
+        <!-- ****************************** 参加活动详情人员统计 ****************************** -->
+        <div class="detail_base_join">
+            <div id="bottom_left" >
+                <span class="bottom_number">{{ enroll_count }}</span>
+                <span class="bottom_flag "> 报名 </span>
+                <em  v-show="max_player > 0 " class="limit" id="max_player">上限{{ max_player }}人</em>
+            </div>
+            <div id="bottom_center" >
+                <span class="bottom_number">{{ off_count }}</span>
+                <span class="bottom_flag">请假</span>
+            </div>
+            <div id="bottom_right">
+                <span class="bottom_number">{{ pending_count }}</span>
+                <span class="bottom_flag">待定</span>
+            </div>
+        </div>
+
+
+        <!-- ****************************** 参加活动详情人员名单 ****************************** -->
+        <div>
+            <ul class="detail_player_list">
+                <li>
+                    <div class="detail_player_div" style="margin-top: 10px;" @tap="tapEnrollAction" >
+                        <span>报名  ({{ enroll_count }})</span>
+                        <img id="enroll_icon" src="../../images/right-arrow.png" />
+                    </div>
+                    <div id="enroll_list_div" class="detail_list" v-show="showEnrollList">
+                        <!-- 人员列表 -->
+                        <div class="detail_player_info" v-for="player in enroll_list">
+                            <span class="detail_player_img">
+                                <img class="icon" :src="player.photo" />
+                                <img class="sex" :src="sexImage(player.sex)" />
+                            </span>
+                            <div style="float: left;">
+                                <span class="name">{{ player.nickname }}</span>
+                                <br />
+                                <span class="position">{{ player.position }}</span>
+                            </div>
+                            <span class="time">{{player.time }}</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="detail_player_div" @tap="tapOffAction">
+                        <span>请假    ({{off_count}})</span>
+                        <img id="off_icon" src="../../images/right-arrow.png" />
+                    </div>
+                    <div id="off_list_div" class="detail_list" v-show="showOffList">
+                        <!-- 人员列表 -->
+                        <div class="detail_player_info" v-for="player in off_list">
+                            <span class="detail_player_img">
+                                <img class="icon" :src="player.photo" />
+                                <img class="sex" :src="sexImage(player.sex)" />
+                            </span>
+                            <div style="float: left;">
+                                <span class="name">{{player.nickname}}</span>
+                                <br />
+                                <span class="position">{{player.position}}</span>
+                            </div>
+                            <span class="time">{{player.time}}</span>
+                        </div>
+
+                    </div>
+                </li>
+                <li>
+                    <div class="detail_player_div"  @tap="tapPendingAction">
+                        <span>待定    ({{pending_count}})</span>
+                        <img id="pending_icon" src="../../images/right-arrow.png" />
+                    </div>
+                    <!-- 显示 -->
+                    <div id="pending_list_div" class="detail_list" v-show="showPendingList">
+                        <!-- 人员列表 -->
+                        <div class="detail_player_info" v-for="player in pending_list">
+                            <span class="detail_player_img">
+                                <img class="icon" :src="player.photo" />
+                                <img class="sex" :src="sexImage(player.sex)" />
+                            </span>
+                            <div style="float: left;">
+                                <span class="name">{{player.nickname}}</span>
+                                <br />
+                                <span class="position">{{ player.position }}</span>
+                            </div>
+                            <span class="time">{{ player.time }}</span>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--点击邀请-->
+        <div class="invite_box" v-if="isShareState">
+            <span class="invite_hd">邀请球友参与</span>
+            <div class="other-app">
+                <div>
+                    <a class="wx-app" @click="wxShareAction" > </a>
+                    <span class="title" >微信好友</span>
+                </div>
+                <div>
+                    <a class="wb-app" @click="wbShareAction" > </a>
+                    <span class="title">微信朋友圈</span>
+                </div>
+                <div>
+                    <a class = "message-app" @click="messsageShareAction"></a>
+                    <span title="title">短信</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ****************************** 参赛按钮 ****************************** -->
+        <div class="detail_bottom" v-if="isShareState">
+            <div  @tap = "joinSchedule(owner_join,1)">
+                <span :style="owner_join_style(owner_join,1)">报名</span>
+            </div>
+
+            <div @tap = "joinSchedule(owner_join,2)">
+                <span :style="owner_join_style(owner_join,2)">请假</span>
+
+            </div>
+            <div @tap = "joinSchedule(owner_join,3)">
+                <span :style="owner_join_style(owner_join,3)">待定</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--loading-->
+    <div id="loading">
+        <div class="loading_img">
+            <img src="../../images/loading.gif" />
+        </div>
+    </div>
+
+
+    <script src="../../libs/vue/vue.js"></script>
+    <script src="../../libs/vue/vue-resource.js"></script>
+    <script src="../../libs/jquery/jquery.min.js"></script>
+
+    <script src="../../config/config.js"></script>
+    <script src="../../libs/crypto/base64.js"></script>
+    <script src="../controller/viewController.js"></script>
+    <!--组件-->
+    <script src="../../libs/mui/js/mui.min.js"></script>
+
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+    <script src="./controller/activeScheduleDetailController.js"></script>
+
+    <script>
+
+        var activeScheduleDetailController = new ActiveScheduleDetailController();
+        activeScheduleDetailController.init();
+
+        var reloadHttp = function () {
+            activeScheduleDetailController.reloadHttp();
+        };
+
+        //eyJodHRwX3VybCI6Imh0dHA6Ly9uai5haXFpdW1pLmNuL2FwaS92MSIsInRlYW1faWQiOjMwMjksInRva2VuIjoiempxSWJGSFdMWXBRWHlEZ1Zpa1NNSUxwS1dsQ29kaG1yandIQk1OaSIsImlkIjoyMzN9Cg==
+        //{http_url: "http://nj.aiqiumi.cn/api/v1", team_id: 3029, token: "zjqIbFHWLYpQXyDgVikSMILpKWlCodhmrjwHBMNi", id: 233}
+
+    </script>
+</body>
+</html>

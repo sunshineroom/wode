@@ -1,0 +1,41 @@
+.honor-item{
+	height: 90px;
+	padding:0;
+}
+
+.honor-item img{
+	height: 80px;
+	width: 80px;
+	margin-top: 5px;
+	margin-left: 15px;
+
+	float: left;
+}
+.honor-div{
+	display: table;
+}
+.honor-item span{
+	word-break:break-all;
+	width:auto;
+	white-space:pre-wrap;
+	word-wrap : break-word ;
+	overflow: hidden ;
+
+	height:90px;
+	
+	line-height: 30px;
+	padding-left: 30px;
+	display: table-cell;
+	vertical-align: middle;
+
+}
+.add_icon{
+	position:fixed;
+	z-index: 9999;
+	bottom:0;
+	right: 0;
+	width: 50px;
+	height: 50px;
+	background: url(../images/add_icon.png) no-repeat;
+	background-size:50px 50px;
+}

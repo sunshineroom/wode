@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="css/ranking.css" />
+    <link href="css/mui.picker.css" rel="stylesheet" />
+    <link href="css/mui.poppicker.css" rel="stylesheet" />
+
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/handlebars/handlebars.min.js"></script>
+
+    <script src="libs/mui.min.js"></script>
+    <script src="libs/mui.picker.js"></script>
+    <script src="libs/mui.poppicker.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/http.js"></script>
+    <script src="js/com.js"></script>
+
+    <script src="js/view.class.js"></script>
+    <script src="js/userStore.class.js"></script>
+
+    <script src="js/ballHttp.js"></script>
+
+
+
+
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+</head>
+
+<body>
+
+<div class="mui-content ranking">
+    <section id="fifa_club_table">
+    </section>
+</div>
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="images/loading.gif" width="32" height="32"/>
+</div>
+
+
+<!--fifa国家队-->
+<script id="fifa_club_template" type="text/x-handlebars-template">
+    {{#if list}}
+    <div class="group-box">
+        <table class="ui-table ui-border-tb fifa-table">
+            <thead>
+            <tr>
+                <th>0</th>
+                <th>球员</th>
+                <th>球队</th>
+                <th>身价(万欧元)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each list}}
+            <tr>
+                <td>
+                    {{rank}}
+                </td>
+                <td>
+                    <span class="team-tit">{{name}}</span></td>
+                <td>{{teamName}}</td>
+                <td>{{price}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <div class="none">
+        <img src="images/shujuNone.png"/>
+        <span>还没有数据</span>
+    </div>
+    {{/if}}
+</script>
+<script>
+    $(document).ready(function() {
+        //注册一个Handlebars Helper,用来将索引+1，因为默认是从0开始的
+        Handlebars.registerHelper("addOne",function(index,options){
+            return parseInt(index)+1;
+        });
+    });
+</script>
+<script>
+
+    var view = new View();
+    view.init();
+
+    var id = view.data.id;
+
+    var ballHttp = new BallHttp();
+
+    getRankList();
+
+    //排行榜
+    function getRankList(){
+        var id = -997;
+        $("#loading").show();
+        ballHttp.getFifaList(id, function (code, message, info) {
+            if(code==200){
+                $("#loading").hide();
+                console.log(info);
+                showFifaList(info);
+            }
+        });
+    }
+
+    //显示排行榜
+    function showFifaList(list){
+        var list_template = $("#fifa_club_template").html();
+        var template =Handlebars.compile(list_template);
+        var html = template({"list":list});
+        $("#fifa_club_table").html(html);
+    }
+</script>
+
+</body>
+</html>

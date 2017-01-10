@@ -1,0 +1,306 @@
+/*球队信息*/
+.mui-content{background: #ecf1f5;}
+/*球队头部信息*/
+.head{
+    padding:0 4%;
+    height: 5.5rem;
+    position:relative;
+}
+.head span{
+    display:block;
+}
+.head .team-logo{
+    margin:0.5rem auto 0 auto;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+.head .team-logo img{
+    width: 3.5rem;
+    height: 3.5rem;
+}
+.head .team-tit{
+    height:1.35rem;
+    line-height: 1.35rem;
+    color:#333333;
+    font-size:0.6rem;
+    text-align: center;
+}
+.head:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom
+}
+/*tab切换*/
+.team-tab {
+    height:40px;
+    line-height: 40px;
+    background: #fff;
+}
+
+.team-tab:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center top;
+    transform-origin: center top
+}
+
+.team-tab.mui-segmented-control.mui-segmented-control-inverted .mui-control-item span{
+    margin:0 30%;
+    height: 100%;
+    display: block;
+    font-size:0.7rem;
+}
+.team-tab.mui-segmented-control.mui-segmented-control-inverted .mui-control-item{
+    color:#808992;
+    width: 33.33%;
+}
+.mui-slider .team-tab.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item{
+    border:none;
+    background: #ecf1f5;
+}
+.team-tab.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active span{
+    color:#354052;
+    border-bottom:2px solid #354052;
+    line-height: 2rem;
+}
+.mui-slider .mui-slider-group .mui-slider-item{
+    margin-top:5px;
+}
+/*赛程*/
+.match-box{
+    /*background: #fff;*/
+    position:relative;
+}
+
+.match-box .match-date{
+    width: 100%;
+    height: 1.25rem;
+    line-height: 1.25rem;
+    text-align:center;
+    font-size:0.55rem;
+    color:#00a8ef;
+    margin-top:5px;
+    background: #fff;
+    position:relative;
+    display: block;
+    float: left;
+}
+.match-box .match-date:before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    top:0;
+    background-color:#e0e0e0 ;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center top;
+    transform-origin: center top;
+}
+.match-box .match-date:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center top;
+    transform-origin: center top;
+}
+.match-box .match-ul{
+    padding:0!important;
+    margin:0!important;
+}
+.match-box .match-ul li{
+    background: #fff;
+}
+.match-ul li:after{
+    background:#e0e0e0;
+}
+.match-ul li .result_div{
+     margin:15px 0 0 0;
+}
+.match-ul li .result_div .match_tit{
+    overflow:hidden;
+    display:block;
+    height:20px;
+    line-height: 20px;
+    color: #808992;
+    font-size: 0.5rem;
+}
+/*新闻列表*/
+.news-box{margin-top:5px;}
+.news-box .news-list{
+    background: #fff;
+}
+.news-box .news-list li{
+    height: 4.55rem;
+    position:relative;
+    padding:0.625rem;
+
+}
+.news-box .news-list li:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center top;
+    transform-origin: center top;
+}
+.news-box .news-list li .news-img{
+    float: left;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-right: 0.625rem;
+}
+.news-box .news-list li .news-right{
+    float: left;
+    width: 13.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.news-box .news-list li .news-right .news-tit{
+    display: block;
+    height: 1rem;
+    line-height: 1rem;
+    font-size: 0.7rem;
+    color:#333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.news-box .news-list li .news-right .news-content{
+    color:#808992;
+    line-height: 1rem;
+    height: 2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size:0.7rem;
+    margin:5px 0 0 0;
+}
+/*球员*/
+.players-box {}
+.players-box .players-h{
+    height: 1rem;
+    padding:0 4%;
+    background: #ecf1f5;
+    font-size:0.55rem;
+    color:#808992;
+}
+.players-box .players-list{
+    float: left;
+    background: #fff;
+    position:relative;
+    width: 100%;
+}
+.players-box .players-list:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    right:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+}
+.players-box .players-list li{
+    background: #fff;
+    width: 50%;
+    position:relative;
+    float:left;
+    padding:0.75rem 0 0.75rem 4%;
+}
+.players-box .players-list li:nth-child(2n-1):after{
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    right:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(.5,1);
+    transform: scale(.5,1);
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+}
+.players-box .players-list li:before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    right:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center top;
+    transform-origin: center top;
+}
+.players-box .players-list li:last-child:before{
+    height: 0;
+}
+.mui-slider .mui-slider-group .mui-slider-item .players-box .players-list li img{
+    display: block;
+    float: left;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    margin-right: 0.5rem;
+}
+.players-box .players-list li .players-right{
+    float: left;
+    width: 6rem;
+}
+.players-box .players-list li .players-right .players-name{
+    display: block;
+    height: 0.875rem;
+    line-height: 0.875rem;
+    color:#333333;
+    font-size:0.7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.players-box .players-list li .players-right .players-sf{
+    display: block;
+    height: 0.875rem;
+    line-height: 0.875rem;
+    font-size:0.55rem;
+    color:#808992;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top:0.25rem;
+}
+.match-ul li .team_div span{
+    font-size:0.6rem;
+}
+.match-ul li .result_div .time_span{font-size:0.5rem;}

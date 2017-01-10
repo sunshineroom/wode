@@ -1,0 +1,85 @@
+*{padding: 0;margin:0;font-size:62.5%;font-family: 微软雅黑}
+body{background: #f1f5f6}
+ul,li{ list-style: none;}
+img{border:0}
+a{ text-decoration: none; color: #333}
+p{ color:#333;}
+.fl{ float: left;}
+.fr{  float: right;}
+.clearfix:after {content: " "; display: block;clear: both;height: 0;}
+.clearfix {zoom: 1;}
+
+.head{ width: 100%; height:130px; background: #fff; padding-top:10px; overflow: hidden; }
+.head p{height:30px; line-height: 30px; text-align: center; color: #1bacf8; font-size:0.8rem; overflow: hidden;margin:0; }
+.t_name{ width: 100%; height: 90px; overflow: hidden; }
+.t_info{ width: 38%; height:90px; padding: 0 2%; overflow: hidden;}
+
+.t_logo{ display: block;width: 80%; height: 60px; margin: 0 auto; overflow: hidden;}
+.t_tit{ display: block; height: 30px; line-height: 30px; font-size: 0.6rem; color: #333; text-align: center; }
+.head .t_score{ width: 24%; height: 90px;text-align: center; }
+.blue{ display: block; height:40px; line-height: 40px; font-size: 1.6rem;color: #1bacf8;}
+.gary{ display:block;color: #737272; height: 20px; line-height: 20px; font-size: 0.875rem;}
+.t_score .blue,.t_score .gary,.t_score .team-vs { display:block;font-size:0.6rem; height: 30px; line-height: 30px;}
+.t_score .team-vs{ font-size:0.8rem;}
+.t_score .team-vs.f72{ font-size:0.8rem;}
+
+.main{width: 100%;}
+.tab{ background: #ffffff; color:#a3a3a3; height: 30px; border-top:1px solid #e5e5e5; }
+.tab li{ width: 33%;float: left; text-align: center;}
+
+.tab li span{font-size: 0.875rem; line-height: 28px;}
+.tab .currt span{ display:block; color: #50abf2; border-bottom: 2px solid #50abf2; margin: 0  38%;}
+
+.content{ width: 100%; margin-top: 10px; background: #ffffff;}
+
+
+/*事件*/
+.icon{background: url(../images/icon.png) no-repeat; background-size:25px 200px;}
+.content_sj{position: relative; margin:15px 0;background: url(../images/sj_line.png) repeat-y center;}
+.circle_blue{  position:absolute; top:0;left:50%;  z-index:2;margin-left:-6px; width: 12px; height: 12px;background-position: center 0; }
+.circle_r{position:absolute; bottom: 0;left:50%; z-index:2;margin-left:-6px; width: 12px; height: 12px;background-position: center -183px; }
+.content_sj ul{padding-top: 95px;padding-bottom:10px ;position: relative; z-index: 2;}
+.content_sj li{ width: 100%;height: 80px; margin: 0 auto;  color: #000000;font-size:0.875rem;position: relative;}
+.sj_left{ width: 40%; text-align: right; font-size: 0.6rem;  overflow: hidden;}
+.sj_right{ width: 40%;font-size: 0.6rem;}
+
+.sj_icon{position:absolute; top:0; left:50%; margin-left:-10%;display: block;width: 20%; height: 30px; background: url(../images/icon.png) no-repeat ;background-size:25px 200px;}
+
+/*阵容*/
+
+.team_first{ background: #fff;}
+.team_h{width: 100%; height: 25px;line-height: 25px; color: #333; font-size: 0.6rem; text-align: center; }
+.team_first li{ width: 50%;height: 40px;float:left;border-bottom: 1px solid #ddd;-webkit-box-sizing:border-box; box-sizing: border-box;-moz-box-sizing:border-box; overflow: hidden;}
+.team_first li:nth-child(2n-1){ border-right: 1px solid #e0e0e0;}
+.team_first li p{ padding-right: 15%; width: 100%; display: table; font-size: 0.875rem; }
+.team_first li:nth-child(2n-1) p{padding-left: 15%; padding-right: 0}
+.team_first li span{height: 35px; line-height: 35px;overflow: hidden; font-size: 0.6rem; color:#333; display: table-cell; vertical-align: middle;}
+.team_first li span.teamer_name{ width:60%; text-align: center; }
+.team_first li span.teamer_score{ width: 20%; text-align:center;}
+.teamer_ph{ display:block; width:20%; height: 25px;}
+
+.content_tj{ width: 100%;  overflow: hidden;}
+.content_tj li{ width:100%;height: 15px; position: relative;  color: #000;font-size: 0.875rem; padding: 15px 0;}
+
+.score{ width: 100%; height: auto;min-height: 40px; background: #fff; border-top:1px solid #e5e5e5; overflow: hidden; padding:10px  0; position: relative;}
+.score span{ display:block;height: 20px; line-height: 20px; font-size: 0.6rem;color: #4b4949; overflow: hidden;}
+
+#sliderSegmentedControl  a.mui-control-item{ font-size:0.6rem;}
+/*球员奖惩*/
+.teamer_jc{display: block; height: 35px; width: 10px; position: absolute;top: 0;}
+.teamer_jcl{ left:10%;}
+.teamer_jcr{ right: 10%;}
+
+/*统计*/
+.content_tj li{ width: 100%; height: 50px; padding: 0; }
+.content_tj li .tj_class{ display:block; width:100%;height: 20px; line-height: 20px; text-align:center;font-size: 0.6rem;color: #000; }
+.tjsj{ height: 20px; line-height: 20px;}
+.tjsj_l{ width: 50%; height: 20px;}
+.tjsj_l i{width:10%;font-size: 0.6rem; height: 20px; line-height: 20px; text-align: center;font-style: normal;}
+.tjsj_l span{ display:block;width: 84%;  height: 5px;  margin:8px 3% 0 3%;background: #d8d5d5; border-radius:2px;}
+.tjsj_l span em{ display: block; height: 5px; background: #1bacf8; float: right; border-radius: 2px;}
+
+.tjsj_r{ width: 50%; height: 20px;}
+.tjsj_r i{width:10%;font-size: 0.6rem; height: 20px; line-height: 20px; text-align: center;font-style: normal;}
+.tjsj_r span{ display:block;width: 84%;  height: 5px; margin:8px 3% 0 3%;background: #d8d5d5; border-radius:2px;}
+.tjsj_r span em{ display: block; height: 5px; background: #1bacf8; float: left; border-radius: 2px;}

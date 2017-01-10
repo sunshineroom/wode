@@ -1,0 +1,73 @@
+/*球衣颜色*/
+.color-btn{
+    float: left;
+    display: inline-block;
+    width:30px;
+    height: 16px;
+    margin-top:13px;
+    border-radius: 3px;
+    background-size:30px 16px!important;
+}
+.color-back{
+    position:fixed;
+    z-index:998;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    background-color:rgba(0, 0, 0, .3)
+}
+.bg-color{
+    width: 280px;
+    background: #fff;
+    border-radius: 10px;
+    position:fixed;
+    top:50%;
+    left:50%;
+    z-index: 999;
+    margin:-140px auto 0 -140px;
+}
+.color-header{
+    width: 90%;
+    height: 55px;
+    margin:0 auto;
+    line-height: 55px;
+    text-align: center;
+    font-size:1em;
+    border-bottom: 1px solid #cecece;
+}
+.color-list{
+    width: 90%;
+    list-style: none;
+    margin:0 5%;
+    padding:0;
+}
+.color-list li{
+    width: 35px;
+    height: 30px;
+    border-radius: 2px;
+    float: left;
+    margin-left:20px;
+    margin-top:20px;
+}
+.bg-color ul li.color1{background: #ffffff}
+.bg-color ul li.color2{background: #e1e1e1}
+.bg-color ul li.color3{background: #68360e}
+.bg-color ul li.color4{background: #000000}
+.bg-color ul li.color5{background: #e9e731}
+.bg-color ul li.color6{background: #fe961f}
+.bg-color ul li.color7{background: #eb3a37}
+.bg-color ul li.color8{background: #bf46bb}
+.bg-color ul li.color9{background: #6c1dd0}
+.bg-color ul li.color10{background: #2a5ce1}
+.bg-color ul li.color11{background: #33b8c3}
+.bg-color ul li.color12{background: #2ab740}
+.bg-color ul li.color-mr{background:url(../images/pop_colour_no.png) no-repeat; background-size:200px 28px;}
+.bg-color ul li:last-child{width: 200px;border:1px solid #999;margin-bottom:20px;}
+
+.select-color{ width: 100%;padding:0 2%;background: #fff;}
+.select-color .color-h{
+    display: block;
+    height:30px;
+    line-height: 30px;
+}

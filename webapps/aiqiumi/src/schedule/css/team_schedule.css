@@ -1,0 +1,476 @@
+.aiqiumi_schedule_ul{
+	display: block;
+	overflow:auto;
+	list-style:none;
+	margin:0;
+	padding:0;
+	padding-top:0px;
+	
+}
+.aiqiumi_schedule_ul li:first-child{
+	margin-top:0;
+}
+.aiqiumi_schedule_ul li{
+	background: white;
+	width: 100%;
+	
+	margin-top: 5px;
+	position:relative;
+}
+.aiqiumi_schedule_ul li:after{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left:0;
+	bottom:0;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center bottom;
+	transform-origin: center bottom
+}
+.aiqiumi_schedule_ul #top{
+	display: block;
+	background: #6e7c97;
+	width: 100%;
+	height: 30px;
+}
+
+.aiqiumi_schedule_type{
+	display: block;
+	margin-top: 7px;
+	margin-left: 15px;
+	width: 40px;
+	height: 17px;
+	line-height: 17px;
+	
+	float: left;
+	color: white;
+	font-size: 0.6em;
+	border-radius:13px;
+}
+
+.aiqiumi_schedule_title{
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	color: white;
+	font-size: 0.725em;
+	float: left;
+	margin-left: 10px;
+}
+
+.aiqiumi_schedule_ul #middle{
+	display: block;
+	width: 100%;
+	height: 109px;
+}
+
+.aiqiumi_schedule_ul #middle_left{
+	display: block;
+	width: 30%;
+	height: 100%;
+	float: left;
+	position:relative;
+}
+.aiqiumi_schedule_ul .team-cloth{
+	position:absolute;
+	top:35px;
+	right:0;
+	width: 15px;
+	height: 12px;
+	display: block;
+}
+.aiqiumi_schedule_ul #middle_left  .team-cloth{
+	right: -12px;
+}
+.aiqiumi_schedule_ul  .team-cloth img{
+	width:15px;
+	height: 12px;
+}
+.aiqiumi_schedule_ul #middle_center{
+	display: block;
+	width: 40%;
+	height: 100%;
+	float: left;
+}
+
+.aiqiumi_schedule_ul #middle_center_1{
+	display: block;
+	width: 70%;
+	height: 100%;
+	float: left;
+}
+.aiqiumi_schedule_ul #middle_center_1 .aiqiumi_schedule_active_address{
+	height: 25px;
+	line-height: 25px;
+}
+.aiqiumi_schedule_ul #middle_center_1 .aiqiumi_schedule_active_result{
+	height: 25px;
+	line-height: 25px;
+	margin-top:0;
+}
+.aiqiumi_schedule_ul #middle_right{
+	display: block;
+	width: 30%;
+	height: 100%;
+	float: left;
+	position:relative;
+}
+.aiqiumi_schedule_ul #middle_right  .team-cloth{
+	left:-12px;
+}
+.aiqiumi_schedule_ul #bottom{
+	display: block;
+	width: 100%;
+	height: 41px;
+	position:relative;
+}
+.aiqiumi_schedule_ul #bottom #icon{
+	background: url(../images/icon_cancel.jpg) no-repeat 0 center;
+	background-size:14px 14px;
+	margin:0 15px;
+	text-align: left;
+	padding-left:20px;
+}
+.aiqiumi_schedule_ul #bottom #icon span{
+	display: block;
+	height: 41px;
+	line-height: 41px;
+	font-size:0.75em;
+	color:#808992;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.aiqiumi_schedule_ul #bottom:before{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left:0;
+	top:0;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center bottom;
+	transform-origin: center bottom
+}
+
+.aiqiumi_schedule_ul .bottom_left{
+	display: block;
+	width: 30%;
+	height: 100%;
+	float: left;
+
+}
+.aiqiumi_schedule_ul .bottom_center{
+	display: block;
+	width: 40%;
+	height: 100%;
+	float: left;
+}
+
+.aiqiumi_schedule_ul .bottom_right{
+	display: block;
+	width: 30%;
+	height: 100%;
+	float: left;
+}
+
+.bottom_number{
+	display: inline-block;
+	margin-top: 10px;
+
+	color: #00a8ef;
+	font-size: 1.0em;
+}
+
+.bottom_flag{
+	color: #333333;
+	font-size: 0.725em;
+}
+
+.aiqiumi_schedule_address{
+	width: 100%;
+	height: 19px;
+	margin-top:20px;
+	display: inline-block;
+	/*//margin-top: 10px;*/
+	color: #808992;
+	font-size: 0.625em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	line-height: 19px;
+}
+
+.aiqiumi_schedule_result{
+	display: block;
+	color: #333333;
+	font-size: 1.0em;
+	height: 22px;
+	line-height:22px;
+	font-weight: bold;
+}
+
+.aiqiumi_schedule_tree{
+	display: block;
+	/*margin-top: 10px;*/
+	color: #00a8ef;
+	font-size: 0.725em;
+	height: 18px;
+	line-height: 18px;
+}
+
+.aiqiumi_schedule_time{
+	display: block;
+	color: #808992;
+	font-size: 0.625em;
+	height: 22px;
+	line-height:22px;
+}
+
+.aiqiumi_schedule_team_logo{
+	width: 60px;
+	height: 60px;
+	display:block;
+	margin: 15px auto 0 auto;
+}
+
+.aiqiumi_schedule_team_name{
+	display: block;
+	margin: 0 8px;
+	color: #333333;
+	font-size: 0.725em;
+	overflow: hidden;
+	/*width: 60px;*/
+	height: 30px;
+	line-height: 30px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+.aiqiumi_schedule_active_address{
+	display: block;
+	margin-top: 18px;
+	color: #333333;
+	font-size: 0.825em;
+	text-align: left;
+}
+
+.aiqiumi_schedule_active_result{
+	display: block;
+	margin-top: 3px;
+	color: #333333;
+	font-size: 0.825em;
+	height: 13px;
+	line-height: 13px;
+
+	text-align: left;
+}
+
+
+
+.schedule_content{
+	width: 100%;
+	text-align:center;
+	position: relative;
+}
+
+/*日程列表*/
+.schedule_ul{
+	list-style:none;
+	margin:0;
+	padding:0;
+	overflow:auto;
+}
+
+.schedule_ul li{
+	background: #ffffff;
+	margin-top: 10px;
+	border: solid 0.5px #e0e0e0;
+}
+
+/*新建日程*/
+.add_schedule_ul{
+	list-style:none;
+	margin:0;
+	padding:0;
+	/*overflow:auto;*/
+	margin-top: 10px;
+	/*border-top:0.5px solid #e0e0e0;*/
+	/*border-bottom:0.5px solid #e0e0e0;*/
+	position:relative;
+	padding-bottom:50px;
+}
+.add_schedule_ul:after{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left:0;
+	bottom:50px;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center bottom;
+	transform-origin: center bottom
+}
+.add_schedule_ul:before{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left:0;
+	top:0;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center bottom;
+	transform-origin: center bottom;
+}
+
+.add_schedule_ul li{
+	width: 100%;
+	height: 45px;
+	position:relative;
+	background: white;
+	overflow: hidden;
+}
+.add_schedule_ul li:first-child:before{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left:0;
+	top:0;
+	background-color:#e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center bottom;
+	transform-origin: center bottom
+}
+.add_schedule_ul li:after{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	left:45px;
+	bottom:0;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center bottom;
+	transform-origin: center bottom
+}
+#match_ul.add_schedule_ul li:last-child:after{
+	height: 0;
+}
+#active_ul.add_schedule_ul li:last-child:after{
+	height: 0;
+}
+.add_schedule_ul li:last-child .middle{
+	border-bottom:none;
+}
+.add_schedule_ul li .left{
+	position:absolute;
+	height: 100%;
+	width: 45px;
+}
+
+.add_schedule_ul li .middle{
+	position:absolute;
+
+	height: 100%;
+	left: 50px;
+	right: 30px;
+	top:1px;
+	/*border: solid 0.5px #e0e0e0;*/
+	/*border-top-width: 0px;*/
+	/*border-left-width: 0px;*/
+	/*border-right-width: 0px;*/
+}
+
+.add_schedule_ul li .right{
+	position:absolute;
+	height: 100%;
+	width: 30px;
+
+	right: 0px;
+	/*border: solid 0.5px #e0e0e0;*/
+	/*border-top-width: 0px;*/
+	/*border-left-width: 0px;*/
+	/*border-right-width: 0px;*/
+}
+.add_schedule_ul li:last-child .right{
+	border:none;
+}
+.add_schedule_ul li .right span{
+	line-height: 45px;
+	font-size:0.875em;
+	color:#919499;
+	margin-right: 15px;
+}
+
+.add_schedule_ul li div .right{
+	background-image: url(../../../images/right-arrow.png);
+	background-size:25px 25px;
+	width: 25px;
+	height: 25px;
+	margin-right: 15px;
+	border-style:none;
+	border-width:0;
+	margin-top: 14px;
+}
+
+.add_schedule_ul li .icon{
+	height: 25px;
+	width: 25px;
+	display: block;
+	margin:11px auto 0 auto;
+}
+
+
+.add_schedule_ul li .content{
+	display: block;
+	height: 100%;
+	float: left;
+	border: 0;
+	width: 100%;
+	text-align:left;
+	padding-left:4px;
+
+	color: #333333;
+	font-size: 0.875em;
+	margin-bottom:0;
+
+}
+.add_schedule_ul li:last-child{
+	height: 65px;
+}
+.add_schedule_ul li:last-child .content{
+	height: 45px;
+}
+.add_schedule_ul li  .w-num{
+	position:absolute;
+	color:#afb3bf;
+	bottom:0;
+	right: 15px;
+	font-size:0.875em;
+	height: 20px;
+}
+.add_schedule_ul li  .w-num em{
+	font-style: normal;
+}
+
+
+
+
+
+
+
+

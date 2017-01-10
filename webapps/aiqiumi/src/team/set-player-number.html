@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+    <link rel="stylesheet" type="text/css" href="css/player.css" />
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+
+</head>
+
+<body>
+
+<!--选择号码和位置-->
+
+<div id="data" class="mui-content set_num">
+    <ul>
+        <!-- 场上位置-->
+        <li class="clearfix player_wz">
+            <span class="base_left player_wz_icon"></span>
+            <div class="base_middle">
+                <span class="wz_h">场上位置</span>
+                <div class="bifen_wx_xq">
+                    <span @tap="onClickPosition('前锋')" v-bind:class="showClass('前锋')">前锋</span>
+                    <span @tap="onClickPosition('中场')" v-bind:class="showClass('中场')">中场</span>
+                    <span @tap="onClickPosition('后卫')" v-bind:class="showClass('后卫')">后卫</span>
+                    <span @tap="onClickPosition('门将')" v-bind:class="showClass('门将')">门将</span>
+                </div>
+            </div>
+        </li>
+        <!-- 球衣号码-->
+        <li class="clearfix cloth_num">
+            <span class="base_left cloth_num_icon"></span>
+            <div class="base_middle">
+                <input  @keyup="onChangeNumber($event.target.value)" type="text" placeholder="球衣号码" v-bind:value="info.number" />
+            </div>
+            <span class="cloth_num_right">号</span>
+        </li>
+    </ul>
+
+</div>
+
+
+<!--工具-->
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+
+<!--用户设置-->
+
+<!--###########################-->
+
+<script src="../../libs/handlebars/handlebars.min.js"></script>
+<script src="../../libs/vue/vue.js"></script>
+<script src="../../libs/vue/vue-resource.js"></script>
+<script src="../../libs/jquery/jquery.min.js"></script>
+
+<script src="../../config/config.js"></script>
+<script src="../../libs/crypto/base64.js"></script>
+
+
+<script src="../controller/viewController.js"></script>
+<script src="controller/setPlayerNumberController.js"></script>
+
+<script src="../../libs/mui/js/mui.min.js"></script>
+<script type="text/javascript">
+    var setNumberController=new SetPlayerNumberController();
+    setNumberController.init();
+
+    setNumberController.getNumberInfo();
+
+</script>
+
+</body>
+</html>

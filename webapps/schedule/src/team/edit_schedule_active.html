@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi.css" />
+
+
+    <script src="../../js/jquery.min.js"></script>
+
+    <script src="../../libs/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../libs/mui/css/mui.picker.min.css">
+    <script src="../../libs/mui/js/mui.picker.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <link rel="stylesheet" type="text/css" href="css/team_schedule_detail.css" />
+
+    <script src="js/teamScheduleHttp.js"></script>
+    <script src="js/add_active_schedule.js"></script>
+    <script src="js/edit_schedule_com.js"></script>
+
+
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title"></h1>
+    <a href="#" onclick="done();" style="float: right; margin-top: 10px;">确定</a>
+</header>
+<div class="mui-content">
+    <div class="schedule_content">
+        <ul id="active_ul" class="add_schedule_ul">
+            <li>
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_event.png" >
+                </div>
+                <div class="middle">
+                    <input class="content" oninput="setData(this);" id="active_title" type="text" placeholder="活动名称" />
+                </div>
+                <div class="right">
+
+                </div>
+            </li>
+            <li>
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_time.png" >
+                </div>
+                <div class="middle">
+                    <input class="content" readonly="readonly" id="btnActiveStartTime" onclick="setActiveStartTime();" type="text" placeholder="开始时间*" />
+                </div>
+                <div class="right">
+                    <div />
+                </div>
+            </li>
+            <li>
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_end.png" >
+                </div>
+                <div class="middle">
+                    <input class="content" readonly="readonly" id="btnActiveEndTime" onclick="setActiveEndTime();" type="text" placeholder="报名截止" />
+                </div>
+                <div class="right">
+                    <div />
+                </div>
+            </li>
+            <li>
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_place.png" >
+                </div>
+                <div class="middle">
+                    <input class="content" readonly="readonly" id="btnActivePlace" onclick="addSelectPlace();" type="text" placeholder="地点" />
+                </div>
+                <div class="right">
+                    <div />
+                </div>
+            </li>
+
+            <li>
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_toplimit.png" >
+                </div>
+                <div class="middle">
+                    <input class="content"  id="active_maxPlayer" type="text" placeholder="人数上限" />
+                </div>
+                <div class="right">
+
+                </div>
+            </li>
+
+            <li>
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_text.png" >
+                </div>
+                <div class="middle">
+                    <textarea class="content" oninput="setData(this);" id="active_desc" placeholder="备注"></textarea>
+                </div>
+                <div class="right">
+
+                </div>
+                <span class="w-num" id="active_count"><em class="wordCheck">1000</em>/1000</span>
+            </li>
+        </ul>
+
+        <div class="detail_bottom" onclick="deleteActive();" hidden>
+            <span style="color: #00a8ef;display: block;font-size: 0.9375em; height: 49px; line-height: 49px; text-align: center;">删除活动</span>
+        </div>
+    </div>
+</div>
+
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+<script>
+    var view=new View();
+    view.init();
+
+    var com=new Com();
+    var userStore=new UserStore();
+    var token=view.data.token;
+    var id=view.data.id;
+    var team_id=view.data.team_id;
+    var active_id = view.data.active_id;
+    if(token) 
+        userStore.save({token:token});
+    var teamScheduleHttp=new TeamScheduleHttp();
+    var cacheData={};
+    if(view.data.showDeleteBtn){
+        cacheData["showDeleteBtn"] = view.data.showDeleteBtn;
+    }
+    view.title="";
+    if(!view.data.data){
+        initData();
+    }else{
+        cacheData=JSON.parse(decodeURIComponent(view.data.data));
+        console.log(cacheData);
+        active_id = cacheData.active_id;
+        refreshData();
+    }
+
+    function refreshData(){
+
+        //活动名称
+        $("#active_title").val(cacheData.active_title);
+
+        //活动开始
+        if(cacheData.btnActiveStartTime){
+            $("#btnActiveStartTime").val(cacheData.btnActiveStartTime);
+        }
+
+        //活动结束
+        if(cacheData.btnActiveEndTime){
+            $("#btnActiveEndTime").val(cacheData.btnActiveEndTime);
+        }
+
+        //活动位置
+        if(cacheData.active_place && cacheData.active_place.name){
+            $("#btnActivePlace").val(cacheData.active_place.name);
+        }
+
+        //人数上限
+        if(cacheData.active_maxPlayer && cacheData.active_maxPlayer > 0){
+            $("#active_maxPlayer").val(cacheData.active_maxPlayer);
+        }
+
+        //活动备注
+        if(cacheData.active_desc){
+            $("#active_desc").val(cacheData.active_desc);
+        }
+
+        //是否隐藏删除按钮
+        if(cacheData.showDeleteBtn && cacheData.showDeleteBtn == "true"){
+            $(".detail_bottom").show();
+        }
+        initNum();
+        checkContent();
+    }
+
+    //从网络初始化数据
+    function initData(){
+        teamScheduleHttp.getEventByID(active_id,team_id,3,function(code,message,info){
+            console.log(info);
+            cacheData={
+                active_title:info.title,
+                active_desc:info.desc,
+                btnActiveStartTime:info.start_time,
+                btnActiveEndTime:info.enroll_time,
+                active_id:info.id,
+                active_maxPlayer:info.max_player,
+                active_place:{
+                    name:info.place,
+                    location:{
+                        lat:info.place_lat,
+                        lng:info.place_lng,
+                    }
+                },
+            };
+
+            if(view.data.showDeleteBtn){
+                cacheData["showDeleteBtn"] = view.data.showDeleteBtn;
+            }
+            refreshData();
+        });
+    }
+
+
+    //设置是否有右上角按钮
+    function setRightButton(){
+        var rightBtnArray = [{title:"确定",action:"done()",type:"done"}];
+        var data=JSON.stringify(rightBtnArray);
+        return data;
+    }
+    
+    
+    function addSelectPlace() {
+        cacheData["type"] = 2;
+        selectPlace("edit_schedule_active");
+    }
+
+
+    //保存
+    function done(){
+        var place="";
+        var place_lat=0;
+        var place_lng=0;
+        if(cacheData.active_place && cacheData.active_place.name){
+            place=cacheData.active_place.name;
+            if(cacheData.active_place.location){
+                place_lat=parseFloat(cacheData.active_place.location.lat);
+                place_lng=parseFloat(cacheData.active_place.location.lng);
+            }
+        }
+
+        //活动
+        if(!cacheData.btnActiveStartTime) {
+            mui.toast("请填写比赛开始时间");
+        };
+
+        if(parseInt(cacheData.active_maxPlayer) > 999){
+            mui.toast("最多允许999人参与活动");
+            return;
+        }
+
+
+        $("#loading").show();
+        teamScheduleHttp.editActive(active_id,cacheData.active_title,cacheData.btnActiveStartTime,cacheData.btnActiveEndTime,place,place_lat,place_lng,cacheData.active_maxPlayer,cacheData.active_desc,team_id,function(code,message,info){
+            if(code!=200){
+                $("#loading").hide();
+                mui.toast(message);
+                return;
+            }
+            com.refreshTargetView(view.device, "team_schedule.html");
+            $("#loading").hide();
+            mui.toast("修改活动日程成功");
+            setTimeout(function () {
+                com.gobackAndRefresh(view.device);
+            }, 500);
+        });
+    }
+
+    //删除
+    function deleteActive(){
+        var btnArray = ['是', '否'];
+        mui.confirm('确认删除这个活动？', '删除活动', btnArray, function(e) {
+            if (e.index == 0) {
+                console.log(e.index);
+                $("#loading").show();
+                teamScheduleHttp.deleteActive(active_id ,function(code,message,info){
+                    if(code!=200){
+                        $("#loading").h();
+                        mui.toast(message);
+                        return;
+                    }
+                    mui.toast("删除活动成功");
+                    setTimeout(function () {
+                        com.gobackToTargetWebView(view.device, "team_schedule.html");
+                    },500);
+                });
+            }
+        })
+    }
+
+    //人数上限只能输入数字
+    function initNum(){
+        $("#active_maxPlayer").keyup(checkNum);
+    }
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+        window.schedulecontent.setRightButton(setRightButton());
+    };
+
+
+    //    活动备注字数控制
+    function checkContent(){
+        //活动
+        var textArea_Active=$("#active_desc"),
+                word_Active=$("#active_count").find(".wordCheck");
+        statInputNum(textArea_Active,word_Active);
+    }
+
+    function statInputNum(textArea,numItem) {
+        var max = numItem.text(),
+                curLength;
+        textArea[0].setAttribute("maxlength", max);
+        curLength = textArea.val().length;
+        numItem.text(max - curLength);
+        textArea.on('input propertychange', function () {
+            var surplus = max - $(this).val().length;
+            if(surplus <= 0){
+                var tmpString =  $(this).val().substr(0, $(this).val().length-1);
+                $(this).val(tmpString);
+            }
+            numItem.text(surplus);
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>爱球迷雷达数据管理后台</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="../../images/favicon.png">
+
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="../../libs/handlebars/handlebars.min.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/com.js"></script>
+  <script src="../../config/config.js"></script>
+  <script src="../../js/userStore.js"></script>
+  <script src="../../js/http.js"></script>
+
+  <script src="js/UTHttp.js"></script>
+
+  <link href="../home.css" rel="stylesheet">
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap-switch.min.css" rel="stylesheet">
+  <script src="../../libs/bootstrap/dist/js/bootstrap-switch.min.js"></script>
+
+  
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">爱球迷雷达数据管理后台</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <!--左边栏-->
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a>赛事精选 <span class="sr-only">(current)</span></a></li>
+                <li><a href="tournament.html?page=1">子赛事</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../match/match.html?page=1&type=-1">比赛</a></li>
+                <li><a href="../match/recommend_match.html?page=1&type=-1">推荐比赛</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../team/team.html?page=1&type=-1">球队</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../rank/rank.html?type=-1">榜单</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--主数据-->
+    <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div style="height: 40px;">
+            <h2 style="float: left;">所有赛事</h2>
+            <div class="input-group" style="width: 250px;float: right;margin-top: 16px;">
+                <input id="txtSearch" type="text" class="form-control input-lg"><span onclick="onSearch();" class="input-group-addon btn btn-primary glyphicon glyphicon-search"> </span>
+            </div>
+        </div>
+        <div class="span12">
+            <h2 class="sub-header"></h2>
+        </div>
+        <div id="data_content" class="table-responsive">
+            <script id="content_template" type="text/x-handlebars-template">
+            <!--数据-->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>懂id</th>
+                        <th>图标</th>
+                        <th>名字</th>
+                        <th>是否显示</th>
+                        <th>是否有淘汰赛</th>
+                        <th>排序</th>
+                        <th>积分榜</th>
+                        <th>射手榜</th>
+                        <th>助攻榜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each list}}
+                    <tr>
+                        <td>
+                          <div style="margin-top: 8px;">
+                          {{id}}
+                          </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 120px; margin-top: 8px;">
+                                <input id="dqdID_{{id}}" type="text" class="form-control" value="{{dqdid}}" />
+                                <span id="{{id}}" onclick="setDQDID(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <form id= "uploadForm_upload_{{id}}">
+                                <input type="file" accept="image/*" id="upload_{{id}}" name="image" onchange="uploadImage(this);" style="display:none"> <!-- -->
+                                <img onclick="clickImage({{id}});" style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{logo}}" alt=""/>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 260px; margin-top: 8px;">
+                                <input id="name_{{id}}" type="text" class="form-control" value="{{name}}" />
+                                <span id="{{id}}" onclick="setName(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="margin-top: 8px;">
+                            <input  id="{{id}}" name="switch-show" type="checkbox" {{{isShow is_show}}} data-size="small" data-on-text="显示" data-off-text="不显示">
+                            </div>
+                        </td>
+                        <td>
+                            <div style="margin-top: 8px;">
+                            <input  id="{{id}}" name="switch-cup" type="checkbox" {{{isCup is_cup}}} data-size="small" data-on-text="显示" data-off-text="不显示">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 120px;margin-top: 8px;">
+                                <input id="ord_{{id}}" type="number" class="form-control" value="{{ord}}" />
+                                <span id="{{id}}" onclick="setOrd(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+
+                        <td>
+                          <div style="margin-top: 8px;">
+                          {{{isExist rank_data.leaguetable_count}}}
+                          </div>
+                        </td>
+                        <td>
+                          <div style="margin-top: 8px;">
+                          {{{isExist rank_data.goal_count}}}
+                          </div>
+                        </td>
+                        <td>
+                          <div style="margin-top: 8px;">
+                          {{{isExist rank_data.assists_count}}}
+                          </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+              </tbody>
+            </table>
+            <!--页码-->
+            <h3 class="pull-left"><small>共{{total_count}}条数据</small></h3>
+            <ul class="pagination pagination-lg pull-right">
+                <li><a href="#" onclick="clickPage(1);">&laquo;</a></li>
+                <li {{{setPageActive page 1}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 1}}}</a></li>
+                <li {{{setPageActive page 2}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 2}}}</a></li>
+                <li {{{setPageActive page 3}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 3}}}</a></li>
+                <li {{{setPageActive page 4}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 4}}}</a></li>
+                <li {{{setPageActive page 5}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 5}}}</a></li>
+                <li><a href="#" onclick="clickPage({{last_page}});">&raquo;</a></li>
+                <li><input onkeypress="if(event.keyCode==13) {goPage(this.value);}" style="width: 60px;height: 46px;text-align: center;" type="number" placeholder="页码" /></li>
+            </ul>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+    var Com=new Com();
+    var params=Com.getParams();
+    var currentPage=params.page;
+    var searchKey=params.searchKey;
+
+    var last_page;
+
+    if(searchKey=='undefined') searchKey='';
+
+    $("#txtSearch").val(searchKey);
+
+    var UTHttp=new UTHttp();
+    UTHttp.getUniqueTournament(currentPage,searchKey,function(code,message,info){
+        console.log(info);
+        last_page=info.last_page;
+        var html = template(info);
+        $("#data_content").html(html);
+
+        refreshView();
+    });
+
+
+    function refreshView(){
+        $("[name='switch-show']").bootstrapSwitch();
+
+        $("[name='switch-show']").on({
+            'switchChange.bootstrapSwitch': function(event, state) {
+                var is_show=1;
+                if (state==false) is_show=0;
+
+                
+                UTHttp.setShow(this.id,is_show,function(code,message,info){
+                    window.location.reload(); 
+                });
+            }
+        });
+
+        $("[name='switch-cup']").bootstrapSwitch();
+
+        $("[name='switch-cup']").on({
+            'switchChange.bootstrapSwitch': function(event, state) {
+                var is_cup=1;
+                if (state==false) is_cup=0;
+
+                
+                UTHttp.setCup(this.id,is_cup,function(code,message,info){
+                    window.location.reload(); 
+                });
+            }
+        });
+    }
+    
+
+    function goPage(page){
+        console.log(page);
+        if(page>last_page) page=last_page;
+
+        window.location.href="unique_tournament.html?page="+page+"&searchKey="+searchKey;
+    }
+
+    function clickPage(page){
+        window.location.href="unique_tournament.html?page="+page+"&searchKey="+searchKey;
+    }
+
+    function onSearch(){
+        searchKey=$("#txtSearch").val();
+
+        window.location.href="unique_tournament.html?page="+1+"&searchKey="+searchKey;
+    }
+    //设置排序
+    function setOrd(id){
+        var value=$("#ord_"+id).val();
+        
+        UTHttp.setOrd(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+
+    //设置名字
+    function setName(id){
+        var value=$("#name_"+id).val();
+        
+        UTHttp.setName(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+
+    function setDQDID(id){
+        var value=$("#dqdID_"+id).val();
+        
+        UTHttp.setDQDID(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+
+    function clickImage(id){
+        document.getElementById("upload_"+id).click();
+    }
+
+    //上传照片
+    function uploadImage(obj){
+        var http=new Http();
+        http.uploadFile($( "#uploadForm_"+obj.id )[0],function(data){
+            var id=obj.id.substr(7);
+            console.log(id);
+            console.log(data.info.url);
+
+            UTHttp.setLogo(id,data.info.url,function(code,message,info){
+                window.location.reload(); 
+            });
+        });
+    }
+
+    Handlebars.registerHelper('isShow', function(is_show) {
+        if(is_show==1)
+          return "checked";
+        else 
+          return "";
+    });
+
+    Handlebars.registerHelper('isCup', function(is_show) {
+        if(is_show==1)
+          return "checked";
+        else 
+          return "";
+    });
+
+    Handlebars.registerHelper('isExist', function(count) {
+        if(count>0)
+          return "是";
+        else 
+          return "否";
+    });
+    
+
+    Handlebars.registerHelper('getPageNumber', function(current_page,index) {
+        if(current_page<=3) return index;
+
+        current_page=parseInt(current_page);
+        if(current_page+2<=last_page){
+            console.log("last_page:"+last_page);
+            if(index==3) return current_page;
+            if(index<3) return parseInt(current_page)-parseInt((3-index));
+            if(index>3) return parseInt(current_page)+parseInt((index-3));
+        }else{
+            return current_page-(5-index);
+        }
+        
+    });
+
+     Handlebars.registerHelper('setPageActive', function(current_page,index) {
+        if(current_page<=3){
+            if(current_page==index) return 'class="active"';
+            else return "";
+        }
+
+        current_page=parseInt(current_page);
+        if(current_page+2<=last_page){
+            if(3==index) return 'class="active"';
+            else return '';
+        }else{
+            if(5==index) return 'class="active"';
+            else return '';
+        }
+    });
+</script>
+</body>
+</html>

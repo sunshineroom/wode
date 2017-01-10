@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>录入战报</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+    <link rel="stylesheet" type="text/css" href="./css/team_schedule_detail.css" />
+
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+</head>
+<body>
+
+    <div id="score_content" class="mui-content">
+        <!-- 球队-->
+        <div class="detail_base_info enter_score">
+            <div class="home-team">
+                <img :src="home_team_logo" alt="" />
+            </div>
+            <div class="team-vs">
+                <span class="vs">vs</span>
+            </div>
+            <div class="away-team">
+                <img :src="away_team_logo" alt="" />
+            </div>
+        </div>
+        <div class="score_box_z">
+            <div class="finish_score">
+                <span class="home_score"><input  type="text" @input="enter_home_score($event)"  :value="home_team_score" /></span>
+                <span class="score_vs">完赛比分</span>
+                <span class="away_score"><input  type="text" @input="enter_home_point_score($event)" :value="home_team_point_score" /></span>
+            </div>
+            <div class="finish_score dq_score">
+                <span class="home_score"><input  type="text" @input="enter_away_score($event)" :value="away_team_score" /></span>
+                <span class="score_vs">点球大战</span>
+                <span class="away_score"><input  type="text" @input="enter_away_point_score($event)" :value="away_team_point_score"/></span>
+            </div>
+        </div>
+
+        <div class="detail_player_list enter_score_box ">
+            <!-- 进球-->
+            <a href="#" class="detail_player_div"  name="进球"  @tap="editNumber(1)">
+                <span >进球 （{{ goal_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ goal_detail }}
+            </div>
+            <!-- 点球大战进球-->
+            <a href="#" class="detail_player_div"  name="点球大战进球" @tap="editNumber(2)">
+                <span  >点球大战进球 （{{ point_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ point_detail }}
+            </div>
+            <!-- 乌龙球-->
+            <a href="#" class="detail_player_div"   name="乌龙球" @tap="editNumber(3)">
+                <span >乌龙球 （{{ ownGoal_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ ownGoal_detail }}
+            </div>
+            <!-- 助攻-->
+            <a href="#" class="detail_player_div"  name="助攻" @tap="editNumber(4)">
+                <span  >助攻 （{{ assist_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ assist_detail }}
+            </div>
+            <!-- 红牌-->
+            <a href="#" class="detail_player_div"   name="红牌" @tap="editNumber(6)">
+                <span >红牌 （{{ redCard_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ redCard_detail }}
+            </div>
+            <!-- 黄牌-->
+            <a href="#" class="detail_player_div"  name="黄牌"  @tap="editNumber(5)">
+                <span  >黄牌 （{{ yellowCard_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ yellowCard_detail }}
+            </div>
+            <!-- 阵容-->
+            <a href="#" class="detail_player_div"  @tap="editTeamScale(7)" >
+                <span >阵容 （{{ teamScale_number }}）</span>
+                <img src="../../images/right-arrow.png">
+            </a>
+            <div class="score_players" >
+                {{ teamScare_detail }}
+            </div>
+        </div>
+
+        <button type="button" class="tj_btn" @tap="submitAction">提交</button>
+    </div>
+
+    <!--loading-->
+    <div id="loading">
+        <div class="loading_img">
+            <img src="../../images/loading.gif" />
+        </div>
+    </div>
+
+
+    <script src="../../libs/vue/vue.js"></script>
+    <script src="../../libs/vue/vue-resource.js"></script>
+    <script src="../../libs/jquery/jquery.min.js"></script>
+
+    <script src="../../config/config.js"></script>
+    <script src="../../libs/crypto/base64.js"></script>
+    <script src="../controller/viewController.js"></script>
+    <script src="../../libs/mui/js/mui.min.js"></script>
+    <script src="./controller/matchEnterScoreController.js"> </script>
+
+    <script>
+        var matchEnterScoreController = new MatchEnterScoreController();
+        matchEnterScoreController.init();
+
+        var reloadHttp = function () {
+            matchEnterScoreController.reloadHttp();
+        };
+
+        //eyJodHRwX3VybCI6Imh0dHA6Ly9uai5haXFpdW1pLmNuL2FwaS92MSIsInRlYW1faWQiOjMwNDEsInRva2VuIjoiempxSWJGSFdMWXBRWHlEZ1Zpa1NNSUxwS1dsQ29kaG1yandIQk1OaSIsImlkIjoxNH0=
+        //{http_url: "http://nj.aiqiumi.cn/api/v1", team_id: 3041, token: "zjqIbFHWLYpQXyDgVikSMILpKWlCodhmrjwHBMNi",id:14}
+    </script>
+
+</body>
+</html>

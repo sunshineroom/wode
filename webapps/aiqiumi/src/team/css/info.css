@@ -1,0 +1,219 @@
+.button-quit{
+	margin-top: 14px;
+	width: 90px;
+	height: 30px;
+
+	border: solid 0.5px #00a7f2;
+	border-radius:24px; 
+
+	font-size: 14px;
+}
+
+.info-item{
+	width: 100%;
+	height: 33%;
+	position: relative;
+}
+.info-item:after{
+	content:"";
+	position:absolute;
+	bottom: 0;
+	left:50px;
+	width: 100%;
+	height: 1px;
+	transform:scale(1,.5);
+	-webkit-transform:scale(1,.5);
+	background: #e0e0e0;
+	transform-origin: center bottom;
+	-webkit-transform-origin: center bottom;
+}
+#info_div .info-item:last-child:after{
+	height: 0;
+}
+.info-item-icon{
+	width: 50px;
+	height: 100%;
+	float: left;
+	text-align:center;
+}
+
+.info-item-text{
+	height: 100%;
+	width: 89px;
+	
+	float: left;
+	
+	/*border: solid 0.5px #e0e0e0;*/
+	/*border-left-width: 0px;*/
+	/*border-right-width:0px;*/
+	/*border-top-width:0px;*/
+}
+
+.info-item-flag{
+	float: right;
+	width: 25px;
+	height: 100%; 
+
+	/*border: solid 0.5px #e0e0e0;*/
+	/*border-left-width: 0px;*/
+	/*border-right-width:0px;*/
+	/*border-top-width:0px;*/
+}
+
+.info-item-text input{
+	height: 100%;
+	width: 100%;
+	
+	color: #354052;
+	font-size: 15px;
+
+	border-style: solid; 
+	border-width: 0;
+
+}
+
+.info-intro{
+	width: 100%;
+	color: #354052;
+	font-size: 15px;
+	display:block; 
+	word-wrap: break-word;
+	float: left;
+	padding:11px 0;
+	text-align:left;
+}
+
+.info-item-span{
+	height: 45px;
+	line-height: 45px;
+
+	color: #354052;
+	font-size: 15px;
+	margin-left: 3px;
+	float: left;
+}
+
+.info-item-color{
+	float: left;
+
+	width: 35px;
+	height:15px;
+	margin-top: 15px;
+	margin-left: 20px;
+}
+
+/*Ñ¡ÔñÇòÒÂÑÕÉ«*/
+.color-box{
+	width: 100%;
+	height: 14rem;
+	background: #fff;
+}
+.color-box .team-title{
+	display: block;
+	width:100%;
+	height: 2.05rem;
+	line-height: 2.05rem;
+	position:relative;
+	padding:0 4%;
+	color:#333;
+	font-size:0.7rem;
+}
+.away-color-box{margin-top:10px;}
+.color-box .team-title:after{
+	position:absolute;
+	right:0;
+	bottom:0;
+	left:0;
+	height:1px;
+	content:'';
+	-webkit-transform:scaleY(.5);
+	transform:scaleY(.5);
+	background-color:#f5f5f5;
+}
+/*ÇòÒÂÑÕÉ«*/
+.color-list{
+	width: 100%;
+	padding:5px 1%;
+}
+.color-list li{
+	width: 33.33%;
+	float: left;
+	height: 2.25rem;
+	line-height: 2.25rem;
+	border:1px solid #fff;
+	border-radius: 2px;
+}
+.color-list li span.color{
+	width:1.25rem;
+	height:0.75rem;;
+	display: inline-block;
+	float: left;
+	border-radius: 2px;
+	background: #ff0000;
+	margin-top:0.8rem;
+	margin-left: 1.1rem;
+	margin-right: 0.875rem;
+}
+.color-list li span.color-ft{
+	font-size:0.6rem;
+}
+
+.bg-color  .mui-poppicker-header{
+	height: 2rem;
+	position:relative;
+}
+.bg-color  .mui-poppicker-header button{
+	border:none;
+	color:#00a7f2;
+	font-size:0.75rem;
+}
+.bg-color  .mui-poppicker-header .mui-btn-blue{
+	background: #fff;
+}
+.bg-color.mui-poppicker{
+	box-shadow: none;
+}
+.bg-color .mui-poppicker-body{
+	border-top:none;
+}
+.bg-color  .mui-poppicker-header:after{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height:1px;
+	left:0;
+	bottom:0;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center top;
+	transform-origin: center top;
+}
+.color-list li.color0 .color{background:url(../images/color0.png) no-repeat; background-size:1.275rem 0.75rem;}
+/*ÑÕÉ«*/
+.color-list li.color1 .color{background: rgb(235,58,55);}
+.color-list li.color2 .color{background: rgb(255,150,31);}
+.color-list li.color3 .color{background: rgb(233,231,49)}
+.color-list li.color4 .color{background: rgb(42,183,64)}
+.color-list li.color5 .color{background: rgb(51,184,195)}
+.color-list li.color6 .color{background: rgb(42,92,225)}
+.color-list li.color7 .color{background: rgb(108,29,208)}
+.color-list li.color8 .color{background: rgb(191,70,187)}
+.color-list li.color9 .color{background: rgb(255,255,255);border:1px solid #d4d4d4;}
+.color-list li.color10 .color{background: rgb(225,225,225)}
+.color-list li.color11 .color{background: rgb(0,0,0)}
+.color-list li.color12 .color{background: rgb(104,54,14)}
+
+/*×ÖÌåÑÕÉ«*/
+.color-list li.color1 .color-ft{ color: rgb(235,58,55);}
+.color-list li.color2 .color-ft{ color: rgb(255,150,31);}
+.color-list li.color3 .color-ft{ color: rgb(233,231,49)}
+.color-list li.color4 .color-ft{ color: rgb(42,183,64)}
+.color-list li.color5 .color-ft{ color: rgb(51,184,195)}
+.color-list li.color6 .color-ft{ color: rgb(42,92,225)}
+.color-list li.color7 .color-ft{ color: rgb(108,29,208)}
+.color-list li.color8 .color-ft{ color: rgb(191,70,187)}
+.color-list li.color9 .color-ft{ color: rgb(125,125,125);}
+.color-list li.color10 .color-ft{ color: rgb(182,181,181)}
+.color-list li.color11 .color-ft{ color: rgb(0,0,0)}
+.color-list li.color12 .color-ft{ color: rgb(104,54,14)}

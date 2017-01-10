@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi_team.css" />
+
+    <script src="../../js/jquery.min.js"></script>
+    
+    <script src="../../libs/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../libs/mui/css/mui.picker.min.css">
+    <script src="../../libs/mui/js/mui.picker.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <script src="js/schedule_tab.js"></script>
+    <script src="js/add_match_schedule.js"></script>
+    <script src="js/teamScheduleHttp.js"></script>
+    <script src="js/teamHttp.js"></script>
+
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 id="title" class="mui-title"></h1>
+</header>
+<div class="mui-content">
+    <div class="search_box">
+        <input style="font-size: 0.875em; height: 31px;" type="text" placeholder="搜索球队"  oninput="search(this.value)"/>
+    </div>
+    <div style="width: 100%;height: 41px;">
+        <span onclick="clickValue();" id="search_value" style="padding-left: 10px;height: 41px;display: block;line-height: 41px;color: #00a8ef;font-size: 0.875em;"></span>
+    </div>
+    <div id="list" style="overflow:auto;">
+        <script id="content_template" type="text/x-handlebars-template">
+            <ul class="aiqiumi_team_ul">
+                {{#each list}}
+                <li class="aiqiumi_team_li" onclick="clickSelectTeam({{index}});">
+                    <img src="{{team_logo}}" />
+                    <span class="aiqiumi_li_team_name"> {{team_name}}</span>
+                    <span class="aiqiumi_li_team_city"> {{team_city}}</span>
+                </li>
+                 {{/each}}
+            </ul>
+        </script>
+    </div>
+</div>
+
+<script>
+    var view=new View();
+    view.init();
+
+    var teamHttp=new TeamHttp();
+    var com=new Com();
+    
+    var cacheData=decodeURIComponent(view.data.data);
+
+    var token=view.data.token;
+    var team_id=view.data.team_id;
+
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+    var team_list=new Array();
+    var search_key="";
+
+    var height=$(window).height()-$("#list").offset().top;
+    $("#list").height(height);
+
+    function search(key){
+        search_key=key;
+        if(key.length>0){
+            $("#search_value").text("添加对手:"+key);
+            teamHttp.searchTeam(key,function(code,message,info){
+                console.log(info.list);
+                team_list.length=0;
+                for (var i = 0; i < info.list.length; i++) {
+                    var obj=info.list[i];
+                    obj.index=i;
+                    team_list.push(obj);
+                }
+
+                var html = template({list:team_list});
+                $("#list").html(html);
+            });
+        }else{
+            $("#search_value").text("");
+            team_list.length=0;
+            var html = template({list:team_list});
+            $("#list").html(html);
+        }
+        
+    }
+
+    function clickSelectTeam(index){
+        var obj=team_list[index];
+        console.log(obj);
+
+        var data=JSON.parse(cacheData);
+        data.team=obj;
+
+        var  tmpTitle = "";
+        var lastPage = view.data.last_page && view.data.last_page;
+
+        if(lastPage == "add_schedule"){
+            tmpTitle = "新建日程";
+        }else{
+            tmpTitle = "";
+        }
+        com.gobackByData(view.device,lastPage+".html","title="+tmpTitle+"&team_id="+team_id+"&data="+encodeURIComponent(JSON.stringify(data)));
+    }
+
+    function clickValue(){
+        var obj={team_id:-1,team_name:search_key};
+        console.log(obj);
+
+        var data=JSON.parse(cacheData);
+        data.team=obj;
+
+        var lastPage = view.data.last_page && view.data.last_page;
+        var  tmpTitle = "";
+        if( lastPage == "add_schedule"){
+            tmpTitle = "新建日程";
+        }else{
+            tmpTitle = "";
+        }
+        com.gobackByData(view.device,lastPage+".html","title="+tmpTitle+"&team_id="+team_id+"&data="+encodeURIComponent(JSON.stringify(data)));
+    }
+
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+    };
+</script>
+</body>
+</html>

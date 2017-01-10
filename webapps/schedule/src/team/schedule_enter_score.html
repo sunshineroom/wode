@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi_schedule.css" />
+
+    <script src="../../js/jquery.min.js"></script>
+
+    <script src="../../libs/mui/js/mui.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <link rel="stylesheet" type="text/css" href="css/team_schedule_detail.css" />
+    <script src="js/schedule_tab.js"></script>
+    <script src="js/teamScheduleHttp.js"></script>
+
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 id="title" class="mui-title">录入战报</h1>
+    <a class="mui-icon mui-icon-plus mui-pull-right" onclick="done();"></a>
+</header>
+<div id="content" class="mui-content">
+    <!-- 球队-->
+    <div class="detail_base_info enter_score">
+        <div class="home-team">
+            <img src="images/team-logo-default.png" alt="" id="homeTeamLogo" />
+        </div>
+        <div class="team-vs">
+            <span class="vs">vs</span>
+        </div>
+        <div class="away-team">
+            <img src="images/team-logo-default.png" alt="" id="awayTeamLogo"/>
+        </div>
+    </div>
+    <div class="score_box_z">
+        <div class="finish_score">
+            <span class="home_score"><input id="team_score" type="text" value=""  /></span>
+            <span class="score_vs">完赛比分</span>
+            <span class="away_score"><input id="target_team_score" type="text" value="" /></span>
+        </div>
+        <div class="finish_score dq_score">
+            <span class="home_score"><input id="team_point_score" type="text" value=""  /></span>
+            <span class="score_vs">点球大战</span>
+            <span class="away_score"><input id="target_team_point_score" type="text" value="" /></span>
+        </div>
+    </div>
+
+    <div class="detail_player_list enter_score_box ">
+        <!-- 进球-->
+        <a href="#" class="detail_player_div" id="goal" name="进球"  onclick="editNumber(this);">
+            <span >进球 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="goal_div">
+            暂无
+        </div>
+        <!-- 点球大战进球-->
+        <a href="#" class="detail_player_div" id="penalty" name="点球大战进球" onclick="editNumber(this);">
+            <span  >点球大战进球 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="penalty_div">
+            暂无
+        </div>
+        <!-- 乌龙球-->
+        <a href="#" class="detail_player_div" id="ownGoal"  name="乌龙球" onclick="editNumber(this);">
+            <span >乌龙球 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="ownGoal_div">
+            暂无
+        </div>
+        <!-- 助攻-->
+        <a href="#" class="detail_player_div" id="assist" name="助攻" onclick="editNumber(this);">
+            <span  >助攻 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="assist_div">
+            暂无
+        </div>
+        <!-- 红牌-->
+        <a href="#" class="detail_player_div" id="redCard"  name="红牌" onclick="editNumber(this);">
+            <span >红牌 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="redCard_div">
+            暂无
+        </div>
+        <!-- 黄牌-->
+        <a href="#" class="detail_player_div" id="yelllowCard" name="黄牌"  onclick="editNumber(this);">
+            <span  >黄牌 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="yelllowCard_div">
+            暂无
+        </div>
+        <!-- 阵容-->
+        <a href="#" class="detail_player_div" id="teamScale" onclick="editTeamScale(this);" >
+            <span >阵容 （0）</span>
+            <img src="../../images/list_bottom_arrow.png">
+        </a>
+        <div class="score_players" id="teamScale_div">
+            暂无
+        </div>
+    </div>
+    <button type="button" class="tj_btn" onclick="submitAction();">提交</button>
+</div>
+
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+
+<script>
+    var view=new View();
+    view.init();
+
+    var com=new Com();
+    var userStore=new UserStore();
+    var token=view.data.token;
+    if(token)
+        userStore.save({token:view.data.token});
+
+    var teamScheduleHttp=new TeamScheduleHttp();
+
+    var team_id=view.data.team_id;
+    var match_id=view.data.match_id;
+
+    var scoreData={};
+
+    var cacheData;
+
+    if(view.data.data){
+        cacheData = JSON.parse(decodeURIComponent(view.data.data));
+    }
+
+    initData();
+
+    initNum();
+
+    function initNum() {
+        $("#team_score , #target_team_score, #team_point_score, #target_team_point_score").keyup(chanageScoreData);
+    }
+
+    //改变数据
+    function chanageScoreData(){
+        var e =$(this);
+        if(isNaN(e.val())){
+            e.val(e.val().match(/[0-9]*/));
+
+        }
+        var obj = e[0];
+        scoreData[obj.id]=obj.value;
+    };
+
+    //刷新界面
+    function refreshData() {
+
+        $("#homeTeamLogo").attr({src:scoreData.team_logo});
+        $("#awayTeamLogo").attr({src:scoreData.target_team_logo});
+
+        if(cacheData){
+            $("#team_score").val(cacheData.team_score);
+            $("#target_team_score").val(cacheData.target_team_score);
+
+            $("#team_point_score").val(cacheData.team_point_score);
+            $("#target_team_point_score").val(cacheData.target_team_point_score);
+        }else{
+            $("#team_score").val(scoreData.team_score);
+            $("#target_team_score").val(scoreData.target_team_score);
+
+            $("#team_point_score").val(scoreData.team_point_score);
+            $("#target_team_point_score").val(scoreData.target_team_point_score);
+        }
+
+
+
+        $("#goal").find("span").text("进球 ("+scoreData.goal_total_count + ")");
+        $("#penalty").find("span").text("点球 ("+scoreData.point_goal_total_count + ")");
+        $("#ownGoal").find("span").text("乌龙球 ("+scoreData.owner_goal_total_count + ")");
+        $("#assist").find("span").text("助攻 ("+scoreData.assists_total_count + ")");
+        $("#redCard").find("span").text("红牌 ("+scoreData.red_card_total_count + ")");
+        $("#yelllowCard").find("span").text("黄牌 ("+scoreData.yellow_card_total_count + ")");
+        $("#teamScale").find("span").text("阵容 ("+scoreData.lineup_total_count + ")");
+
+        var tmpGoalAray = new Array();
+        for(var index = 0, end = scoreData.goal_list.length; index<end; index ++){
+            var userNode =  scoreData.goal_list[index];
+            tmpGoalAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+
+        if(tmpGoalAray.length > 0){
+            $("#goal_div").text(tmpGoalAray.join(","));
+        }
+
+         tmpAray = new Array();
+        for(var index = 0, end = scoreData.point_goal_list.length; index<end; index ++){
+            var userNode =  scoreData.point_goal_list[index];
+            tmpAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+
+        if(tmpAray.length > 0) {
+            $("#penalty_div").text(tmpAray.join(","));
+        }
+
+        tmpAray = new Array();
+        for(var index = 0, end = scoreData.owner_goal_list.length; index<end; index ++){
+            var userNode =  scoreData.owner_goal_list[index];
+            tmpAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+
+        if(tmpAray.length > 0) {
+            $("#ownGoal_div").text(tmpAray.join(","));
+        }
+
+        tmpAray = new Array();
+        for(var index = 0, end = scoreData.assists_list.length; index<end; index ++){
+            var userNode =  scoreData.assists_list[index];
+            tmpAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+
+        if(tmpAray.length > 0) {
+            $("#assist_div").text(tmpAray.join(","));
+        }
+
+        tmpAray = new Array();
+        for(var index = 0, end = scoreData.red_card_list.length; index<end; index ++){
+            var userNode =  scoreData.red_card_list[index];
+            tmpAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+
+
+        if(tmpAray.length > 0) {
+            $("#redCard_div").text(tmpAray.join(","));
+        }
+
+        tmpAray = new Array();
+        for(var index = 0, end = scoreData.yellow_card_list.length; index<end; index ++){
+            var userNode =  scoreData.yellow_card_list[index];
+            tmpAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+        if(tmpAray.length > 0) {
+            $("#yelllowCard_div").text(tmpAray.join(","));
+        }
+
+        tmpAray = new Array();
+        for(var index = 0, end = scoreData.lineup_list.length; index<end; index ++){
+            var userNode =  scoreData.lineup_list[index];
+            tmpAray.push(userNode.nickname + "(" + userNode.num + ")");
+        }
+        if(tmpAray.length > 0) {
+            $("#teamScale_div").text(tmpAray.join(","));
+        }
+
+    }
+
+    //初始化
+    function initData() {
+
+        teamScheduleHttp.getMatchEventByID(match_id, team_id, function (code, message, info) {
+            if(code != 200){
+                return;
+            }
+            console.log(info);
+            scoreData = info;
+            if(cacheData){
+                scoreData["team_score"] = cacheData.team_score;
+                scoreData["target_team_score"] = cacheData.target_team_score;
+                scoreData["team_point_score"] = cacheData.team_point_score;
+                scoreData["target_team_point_score"] =cacheData.target_team_point_score;
+            }
+            refreshData();
+        }) ;
+    };
+    
+
+
+    //提交按钮
+    function submitAction(){
+        console.log(scoreData);
+
+        scoreData.team_score = parseInt( $("#team_score").val());
+        scoreData.target_team_score = parseInt($("#target_team_score").val());
+
+        scoreData.team_point_score = parseInt($("#team_point_score").val());
+        scoreData.target_team_point_score = parseInt($("#target_team_point_score").val());
+
+
+        $("#loading").show();
+        teamScheduleHttp.setMatchResult(match_id,team_id,{score:scoreData},function(code,message,info){
+            if(code != 200){
+                $("#loading").hide();
+                mui.toast(message);
+                return;
+            }
+            com.refreshTargetView(view.device, "team_schedule.html");
+            $("#loading").hide();
+            mui.toast("提交成功");
+            setTimeout(function () {
+                com.gobackAndRefresh(view.device);
+            }, 500);
+        });
+    }
+
+
+
+    function editNumber(obj) {
+        var objName = $(obj).attr("name");
+        var jsonData = JSON.stringify({team_score:scoreData.team_score ,target_team_score: scoreData.target_team_score, team_point_score:scoreData.team_point_score,target_team_point_score:scoreData.target_team_point_score});
+        com.openNewHtml(view.device, "edit_score.html", "title="+objName+"&type="+obj.id+"&team_id="+team_id+"&match_id="+match_id+"&data="+jsonData);
+    }
+
+    function editTeamScale() {
+        var jsonData = JSON.stringify({team_score:scoreData.team_score ,target_team_score: scoreData.target_team_score, team_point_score:scoreData.team_point_score,target_team_point_score:scoreData.target_team_point_score});
+        com.openNewHtml(view.device, "select_players.html", "title="+"阵容"+"&team_id="+team_id+"&match_id="+match_id+ "&data="+jsonData);
+    }
+
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+    };
+</script>
+
+</body>
+</html>

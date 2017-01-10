@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+    <link rel="stylesheet" type="text/css" href="css/info.css" />
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+
+</head>
+
+<body>
+
+<!--数据-->
+<!--头像-->
+<div id="top_div" class="a-space" style="text-align:center;">
+    <img v-on:click="onClickLogo()" class="a-big-photo" style="margin-top: 14px;vertical-align:middle;" v-bind:src=info.team_logo></img>
+    <br />
+    <button v-on:click="onClickQuit()" v-if="info.is_member==1" class="a-blue-color button-quit" >退出球队</button>
+    <div style="height: 14px;"></div>
+</div>
+
+<!--球队信息-->
+<div id="info_div" class="a-space" style="height: 135px;margin-top: 10px;">
+    <!--球队名称-->
+    <div class="info-item" v-on:click="onSetTeamName()">
+        <div class="info-item-icon">
+            <img style="margin-top: 10px;" src="images/icon-people.png" />
+        </div>
+        <div class="info-item-text">
+            <input :value="info.team_name" readonly="readonly"></input>
+        </div>
+        <dir class="info-item-flag">
+            <img v-if="ifAdmin(user_info)" style="margin-top: 10px;" src="../../images/right-arrow.png" />
+        </dir>
+    </div>
+    <!--所在城市-->
+    <div class="info-item" v-on:click="onSetTeamCity()">
+        <div class="info-item-icon">
+            <img style="margin-top: 10px;" src="images/icon-place.png" />
+        </div>
+        <div class="info-item-text">
+            <input :value="info.team_city" readonly="readonly"></input>
+        </div>
+        <dir class="info-item-flag">
+            <img v-if="ifAdmin(user_info)" style="margin-top: 10px;" src="../../images/right-arrow.png" />
+        </dir>
+    </div>
+    <!--球衣颜色-->
+    <div class="info-item"  v-on:click="onSetTeamColor()">
+        <div class="info-item-icon">
+            <img style="margin-top: 10px;" src="images/icon-clothes.png" />
+        </div>
+        <div class="info-item-text">
+            <div style="float: left;width: 50%;height:100%;">
+                <span class="info-item-span">主队</span>
+                <div class="info-item-color" v-bind:class=" 'a-team-color-' +  info.team_home_color"></div>
+            </div>
+            <div style="float: left;width: 50%;height:100%;">
+                <span class="info-item-span">客队</span>
+                <div class="info-item-color " v-bind:class = "'a-team-color-' +  info.team_away_color "></div>
+            </div>
+        </div>
+        <dir class="info-item-flag">
+            <img v-if="ifAdmin(user_info)" style="margin-top: 10px;" src="../../images/right-arrow.png" />
+        </dir>
+    </div>
+</div>
+
+<!--数据信息-->
+<div id="data_div" class="a-space" style="height: 135px;margin-top: 10px;">
+    <!--图片-->
+    <div style="float: left;margin-top: 13px;margin-left: 30px;" class="prg-cont rad-prg" id="indicatorContainer">
+    </div>
+    <!--详细-->
+    <div style="height: 40px;float: left;width: 20px;" id="match_data_div">
+        <div style="width: 100%;height: 50%;">
+            <div style="width: 33%;float: left;height: 100%;text-align: center;vertical-align: middle;">
+                <span class="a-blue-color" style="margin-top: 5px;display: inline-block;">{{info.win}}</span>
+                <br/>
+                <span class="a-gray-color">胜</span>
+            </div>
+
+            <div style="width: 33%;float: left;height: 100%;text-align: center;vertical-align: middle;">
+                <span class="a-blue-color" style="margin-top: 5px;display: inline-block;">{{info.draw}}</span>
+                <br/>
+                <span class="a-gray-color">平</span>
+            </div>
+
+            <div style="width: 33%;float: left;height: 100%;text-align: center;vertical-align: middle;">
+                <span class="a-blue-color" style="margin-top: 5px;display: inline-block;">{{info.lose}}</span>
+                <br/>
+                <span class="a-gray-color">负</span>
+            </div>
+        </div>
+        <div style="width: 100%;height: 50%;">
+            <div style="width: 33%;float: left;height: 100%;text-align: center;vertical-align: middle;">
+                <span class="a-blue-color" style="margin-top: 5px;display: inline-block;">{{info.goals}}</span>
+                <br/>
+                <span class="a-gray-color">进球</span>
+            </div>
+
+            <div style="width: 33%;float: left;height: 100%;text-align: center;vertical-align: middle;">
+                <span class="a-blue-color" style="margin-top: 5px;display: inline-block;">{{info.goals_against}}</span>
+                <br/>
+                <span class="a-gray-color">失球</span>
+            </div>
+
+            <div style="width: 33%;float: left;height: 100%;text-align: center;vertical-align: middle;">
+                <span class="a-blue-color" style="margin-top: 5px;display: inline-block;">{{info.goals-info.goals_against}}</span>
+                <br/>
+                <span class="a-gray-color">净胜球</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="text_div" class="a-space" style="text-align:center;margin-top: 10px;height: 100%;overflow:hidden">
+    <div class="info-item" v-on:click="onSetTeamIntro()">
+        <div class="info-item-icon">
+            <img style="margin-top: 10px;" src="images/icon-text.png" />
+        </div>
+        <div class="info-item-intro" style="float: left">
+            <span class="info-intro">{{info.intro}}</span>
+            <br />
+        </div>
+        <dir class="info-item-flag">
+            <img v-if="ifAdmin()" style="margin-top: 10px;" src="../../images/right-arrow.png" />
+        </dir>
+    </div>
+</div>
+
+<!--工具-->
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+
+<!--用户设置-->
+<!--###########################-->
+
+<script src="../../libs/handlebars/handlebars.min.js"></script>
+<script src="../../libs/vue/vue.js"></script>
+<script src="../../libs/vue/vue-resource.js"></script>
+<script src="../../libs/jquery/jquery.min.js"></script>
+
+<script src="../../config/config.js"></script>
+<script src="../../libs/crypto/base64.js"></script>
+
+
+<script src="../controller/viewController.js"></script>
+<script src="controller/infoController.js"></script>
+
+<script src="../../libs/mui/js/mui.min.js"></script>
+
+<script src="../../libs/radialIndicator/radialIndicator.js"></script>
+
+
+<script>
+    //action:界面功能,1-设置队员，2-选择队员
+    //{http_url: "http://nj.aiqiumi.cn/api/v2", team_id: 3344, token: "MfPHRetoksWYMUXmwNudrfqhKtLMMQQxHixdUGYv",action:2}
+    //eyJ0b2tlbiI6Ik52eFlRQk9mZnlHb2NZaXNoc0d0SXFZSndlZmx1Um9aT0lsY09yVlgiLCJodHRwX3VybCI6Imh0dHA6XC9cL25qLmFpcWl1bWkuY25cL2FwaVwvdjIiLCJ0ZWFtX2lkIjoiMjEwMyIsImFjdGlvbiI6IjEifQ==
+    var infoController=new InfoController();
+    infoController.init();
+
+    reloadHttp(); 
+    
+
+    //重新读取数据
+    function reloadHttp(){
+        infoController.getTeamInfo();
+    }
+
+</script>
+
+</body>
+</html>

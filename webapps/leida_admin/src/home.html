@@ -1,0 +1,97 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>爱球迷雷达数据管理后台</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="../images/favicon.png">
+  
+
+  <link href="../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="../libs/handlebars/handlebars.min.js"></script>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../config/config.js"></script>
+  <script src="../js/userStore.js"></script>
+  <script src="../js/http.js"></script>
+
+
+  <link href="home.css" rel="stylesheet">
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">爱球迷雷达数据管理后台</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <!--左边栏-->
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="unique_tournament/unique_tournament.html?page=1">赛事精选</a></li>
+                <li><a href="unique_tournament/tournament.html?page=1">子赛事</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="match/match.html?page=1&type=-1">比赛</a></li>
+                <li><a href="match/recommend_match.html?page=1&type=-1">推荐比赛</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="team/team.html?page=1&type=-1">球队</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="rank/rank.html?type=-1">榜单</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--主数据-->
+    <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <script id="content_template" type="text/x-handlebars-template">
+        <h1 class="page-header">统计数据</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                <h4>所有赛事</h4>
+                <span class="text-muted">{{total_count}}</span>
+            </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>展示赛事</h4>
+            <span class="text-muted">{{show_count}}</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>所有比赛</h4>
+            <span class="text-muted">{{match_count}}</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+            <h4>推荐比赛</h4>
+            <span class="text-muted">{{recommend_match_count}}</span>
+        </div>
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+    var http=new Http();
+    http.sendRequest("/leida/total",{},function(data){
+        console.log(data.info);     
+        var html = template(data.info);
+        $("#content").html(html); 
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,603 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>爱球迷雷达数据管理后台</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="../../images/favicon.png">
+
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="../../libs/handlebars/handlebars.min.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/com.js"></script>
+  <script src="../../config/config.js"></script>
+  <script src="../../js/userStore.js"></script>
+  <script src="../../js/http.js"></script>
+
+  <script src="js/rankHttp.js"></script>
+
+  <link href="../home.css" rel="stylesheet">
+
+  <script src="../../libs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap-switch.min.css" rel="stylesheet">
+  <script src="../../libs/bootstrap/dist/js/bootstrap-switch.min.js"></script>
+
+  
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">爱球迷雷达数据管理后台</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <!--左边栏-->
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="../unique_tournament/unique_tournament.html?page=1">赛事精选</a></li>
+                <li><a href="../unique_tournament/tournament.html?page=1">子赛事</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../match/match.html?page=1&type=-1">比赛</a></li>
+                <li><a href="../match/recommend_match.html?page=1&type=-1">推荐比赛</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../team/team.html?page=1&type=-1">球队</a></li>
+                <li><a href="../team/team_player.html?page=1&type=-1">球员</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="../rank/rank.html?type=-1">榜单</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--主数据-->
+    <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div style="height: 40px;">
+            <h2 id="match_title" style="float: left;"></h2>
+            <div id="tournament_menu" class="dropdown" style="margin-left: 50px; float: left;margin-top: 20px;">
+                <button class="btn btn-default toggle-dropdown" data-toggle="dropdown">下拉菜单<i class="caret"></i>
+                </button>
+                <ul id="menu" class="dropdown-menu" role="menu">
+                    <script id="menu_template" type="text/x-handlebars-template">
+                    {{#each list}}
+                    <li><a href="#" onclick="clickmenu({{id}},'{{name}}');">{{name}}</a>
+                    </li>
+                    {{/each}}
+                    </script>
+                </ul>
+            </div>
+            <!-- 
+            <div class="input-group" style="width: 250px;float: right;margin-top: 16px;">
+                <input id="txtSearch" type="text" class="form-control input-lg"><span onclick="onSearch();" class="input-group-addon btn btn-primary glyphicon glyphicon-search"> </span>
+            </div>
+             -->
+        </div>
+        <div class="span12">
+            <h2 class="sub-header"></h2>
+        </div>
+        <div id="data_content" class="table-responsive">
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active">
+                    <a href="#score" data-toggle="tab">
+                        积分榜
+                    </a>
+                </li>
+                <li><a href="#goal" data-toggle="tab">射手榜</a></li>
+                <li><a href="#assists" data-toggle="tab">助攻榜</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="score">
+                <div id="score_data_content">
+                <script id="score_content_template" type="text/x-handlebars-template">
+            <!--数据-->
+            {{#each pklist}}
+            {{title}}
+            <table class="table table-striped"> 
+             {{#each list}}              
+                <thead>
+                    <tr bgcolor="#eeeeee">
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                                                                    总分
+                            </div>
+                        </td>
+                         <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{total.home_team_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{total.home_team_logo}}" alt=""/>
+                        </td>                       
+                        <td>
+                           <div class="input-group" style="width: 80px; margin-top: 8px;font-size:15px;text-align:center;">
+                                {{total.home_team_score}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;font-size:20px;font-weight:bold;text-align:center;">
+                               :
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;font-size:15px;text-align:center;">
+                                {{total.away_team_score}}
+                            </div>
+                        </td> 
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{total.away_team_logo}}" alt=""/>
+                        </td>                 
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{total.away_team_name}}
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    {{#each match}}
+                    <tr>
+                        <td>
+                            <div class="input-group" style="width: 100px; margin-top: 8px;">
+                                {{match_time}}
+                            </div>
+                        </td>
+                         <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{home_team_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{home_team_logo}}" alt=""/>
+                        </td>                       
+                        <td>
+                           <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="hometeamscore_{{id}}" type="text" class="form-control" value="{{home_team_score}}" />
+                                <span id="{{id}}" onclick="setHomeTeamScore(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;font-size:20px;font-weight:bold;text-align:center;">
+                               :
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="awayteamscore_{{id}}" type="text" class="form-control" value="{{away_team_score}}" />
+                                <span id="{{id}}" onclick="setAwayTeamScore(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td> 
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{away_team_logo}}" alt=""/>
+                        </td>                 
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{away_team_name}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}                    
+              </tbody>
+              {{/each}}
+            </table>
+            {{/each}}
+            {{#each grouplist}}
+                    {{title}}
+            <table class="table table-striped">               
+                <thead>
+                    <tr>
+                        <th>排行</th>
+                        <th>图标</th>
+                        <th>球队名</th>
+                        <th>总场数</th>
+                        <th>赢场数</th>
+                        <th>平场数</th>
+                        <th>负场数</th>
+                        <th>总进球数</th>
+                        <th>总失球数</th>
+                        <th>总积分</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    {{#each list}}
+                    <tr>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="positiontotal_{{id}}" type="text" class="form-control" value="{{positiontotal}}" />
+                                <span id="{{id}}" onclick="setPositionTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{team_logo}}" alt=""/>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{team_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="matchestotal_{{id}}" type="text" class="form-control" value="{{matchestotal}}" />
+                                <span id="{{id}}" onclick="setMatchesTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="wintotal_{{id}}" type="text" class="form-control" value="{{wintotal}}" />
+                                <span id="{{id}}" onclick="setWinTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="drawtotal_{{id}}" type="text" class="form-control" value="{{drawtotal}}" />
+                                <span id="{{id}}" onclick="setDrawTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>                  
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="losstotal_{{id}}" type="text" class="form-control" value="{{losstotal}}" />
+                                <span id="{{id}}" onclick="setLossTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="goalsfortotal_{{id}}" type="text" class="form-control" value="{{goalsfortotal}}" />
+                                <span id="{{id}}" onclick="setGoalsforTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="goalsagainsttotal_{{id}}" type="text" class="form-control" value="{{goalsagainsttotal}}" />
+                                <span id="{{id}}" onclick="setGoalsagainstTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="pointstotal_{{id}}" type="text" class="form-control" value="{{pointstotal}}" />
+                                <span id="{{id}}" onclick="setPointsTotal(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}                    
+              </tbody>
+            </table>
+            {{/each}}           
+            </script>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="goal">
+                <div id="goal_data_content">
+               <script id="goal_content_template" type="text/x-handlebars-template">
+               <table class="table table-striped">               
+                <thead>
+                    <tr>
+                        <th>排行</th>
+                        <th>球员</th>
+                        <th>球队logo</th>
+                        <th>球队名</th>
+                        <th>进球数</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    {{#each list}}
+                    <tr>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="goalranking_{{id}}" type="text" class="form-control" value="{{goal_tournament_ranking}}" />
+                                <span id="{{id}}" onclick="setGoalRanking(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{player_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{team_logo}}" alt=""/>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{team_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="goalnumber_{{id}}" type="text" class="form-control" value="{{goal_number}}" />
+                                <span id="{{id}}" onclick="setGoalNumber(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}                    
+              </tbody>
+            </table>
+            </script>
+            </div>
+                </div>
+                <div class="tab-pane fade" id="assists">
+               <div id="assist_data_content">
+               <script id="assist_content_template" type="text/x-handlebars-template">
+               <table class="table table-striped">               
+                <thead>
+                    <tr>
+                        <th>排行</th>
+                        <th>球员</th>
+                        <th>球队logo</th>
+                        <th>球队名</th>
+                        <th>助攻数</th>
+                    </tr>
+                </thead>
+                <tbody>                    
+                    {{#each list}}
+                    <tr>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="assistsranking_{{id}}" type="text" class="form-control" value="{{assists_tournament_ranking}}" />
+                                <span id="{{id}}" onclick="setAssistsRanking(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{player_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <img style="width: 50px;height: 50px;" class="am-img-circle am-img-thumbnail" src="{{team_logo}}" alt=""/>
+                        </td>
+                        <td>
+                            <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                {{team_name}}
+                            </div>
+                        </td>
+                        <td>
+                           <div class="input-group" style="width: 80px; margin-top: 8px;">
+                                <input id="assistsnumber_{{id}}" type="text" class="form-control" value="{{assists_number}}" />
+                                <span id="{{id}}" onclick="setAssistsNumber(this.id);" class="input-group-addon btn btn-primary glyphicon glyphicon-save"> </span>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}                    
+              </tbody>
+            </table>
+            </script>
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var Com=new Com();
+    var params=Com.getParams();
+    var current_page=params.page;
+    var search_key=params.search_key;
+    var unique_tournament_id=params.unique_tournament_id;
+    var unique_tournament_name=params.unique_tournament_name;
+
+    var menu_template = $("#menu_template").html();
+    var menu_t = Handlebars.compile(menu_template);
+
+    var score_content_template = $("#score_content_template").html();
+    var score_template = Handlebars.compile(score_content_template);
+    
+    var goal_content_template = $("#goal_content_template").html();
+    var goal_template = Handlebars.compile(goal_content_template);
+    
+    var assist_content_template = $("#assist_content_template").html();
+    var assist_template = Handlebars.compile(assist_content_template);
+
+    var http=new RankHttp();
+
+    var last_page;
+    var match_list;
+
+    $("#match_title").html(unique_tournament_name);
+    if(search_key=='undefined') search_key='';
+    if(unique_tournament_id=='undefined') unique_tournament_id='-1';
+    
+    loadData();
+
+    function loadMenuData(){
+        http.getShowUniqueTournament(function(code,message,info){
+            var html = menu_t({list:info});
+            $("#menu").html(html);
+        });
+    }
+
+    function loadScoreData(){
+    	console.log(unique_tournament_id);
+    	http.getScoreRank(unique_tournament_id,function(code,message,info){   		
+    		console.log(info);
+            var html = score_template(info);
+            $("#score_data_content").html(html);
+            refreshView();
+        });
+    }
+    
+    function loadGoalData(){
+        console.log(unique_tournament_id);
+        http.getGoalRank(unique_tournament_id,function(code,message,info){         
+            console.log(info);
+            var html = goal_template(info);
+            $("#goal_data_content").html(html);
+            refreshView();
+        });
+    }
+    
+    function loadAssistData(){
+        console.log(unique_tournament_id);
+        http.getAssistRank(unique_tournament_id,function(code,message,info){         
+            console.log(info);
+            var html = assist_template(info);
+            $("#assist_data_content").html(html);
+            refreshView();
+        });
+    }
+
+    function refreshView(){
+        $("[name='switch-show']").bootstrapSwitch();
+
+        $("[name='switch-show']").on({
+            'switchChange.bootstrapSwitch': function(event, state) {
+                var is_show=1;
+                if (state==false) is_show=0;
+
+                
+                UTHttp.setShow(this.id,is_show,function(code,message,info){
+                    window.location.reload(); 
+                });
+            }
+        });
+
+        $("[name='switch-cup']").bootstrapSwitch();
+
+        $("[name='switch-cup']").on({
+            'switchChange.bootstrapSwitch': function(event, state) {
+                var is_cup=1;
+                if (state==false) is_cup=0;
+
+                
+                UTHttp.setCup(this.id,is_cup,function(code,message,info){
+                    window.location.reload(); 
+                });
+            }
+        });
+    }
+
+    function loadData(){
+        loadMenuData();
+        loadScoreData();
+        loadGoalData();
+        loadAssistData();
+    }
+
+    function clickmenu(id,name){
+        window.location.href="rank.html?unique_tournament_id="+id+"&unique_tournament_name="+name;
+    }
+    
+    //设置总名次
+    function setPositionTotal(id){
+        var value=$("#positiontotal_"+id).val();       
+        http.setPositionTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置总场数
+    function setMatchesTotal(id){
+        var value=$("#matchestotal_"+id).val();       
+        http.setMatchesTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置赢场数
+    function setWinTotal(id){
+        var value=$("#wintotal_"+id).val();       
+        http.setWinTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置平场数
+    function setDrawTotal(id){
+        var value=$("#drawtotal_"+id).val();       
+        http.setDrawTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置输场数
+    function setLossTotal(id){
+        var value=$("#losstotal_"+id).val();       
+        http.setLossTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置总进球数
+    function setGoalsforTotal(id){
+        var value=$("#goalsfortotal_"+id).val();       
+        http.setGoalsforTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置总失球数
+    function setGoalsagainstTotal(id){
+        var value=$("#goalsagainsttotal_"+id).val();       
+        http.setGoalsagainstTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置总积分
+    function setPointsTotal(id){
+        var value=$("#pointstotal_"+id).val();       
+        http.setPointsTotal(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置主队比分
+    function setHomeTeamScore(id){
+        var value=$("#hometeamscore_"+id).val();       
+        http.setHomeTeamScore(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置客队比分
+    function setAwayTeamScore(id){
+        var value=$("#awayteamscore_"+id).val();       
+        http.setAwayTeamScore(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置进球排行
+    function setGoalRanking(id){
+        var value=$("#goalranking_"+id).val();       
+        http.setGoalRanking(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+  
+    //设置进球数
+    function setGoalNumber(id){
+        var value=$("#goalnumber_"+id).val();       
+        http.setGoalNumber(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+    //设置助攻排行
+    function setAssistsRanking(id){
+        var value=$("#assistsranking_"+id).val();       
+        http.setAssistsRanking(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+  
+    //设置助攻数
+    function setAssistsNumber(id){
+        var value=$("#assistsnumber_"+id).val();       
+        http.setAssistsNumber(id,value,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+</script>
+</body>
+</html>

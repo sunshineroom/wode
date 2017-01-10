@@ -1,0 +1,286 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>爱球迷雷达数据管理后台</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="../../images/favicon.png">
+
+  <script src="../../libs/handlebars/handlebars.min.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/com.js"></script>
+  <script src="../../config/config.js"></script>
+  <script src="../../js/userStore.js"></script>
+  <script src="../../js/http.js"></script>
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="../../libs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <script src="js/UTHttp.js"></script>
+
+  <link href="../home.css" rel="stylesheet">
+
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap-switch.min.css" rel="stylesheet">
+  <script src="../../libs/bootstrap/dist/js/bootstrap-switch.min.js"></script>
+
+  
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">爱球迷雷达数据管理后台</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <!--左边栏-->
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="unique_tournament.html?page=1">赛事精选 <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a>子赛事</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../match/match.html?page=1&type=-1">比赛</a></li>
+                <li><a href="../match/recommend_match.html?page=1&type=-1">推荐比赛</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../team/team.html?page=1&type=-1">球队</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../rank/rank.html?type=-1">榜单</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--主数据-->
+    <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div style="height: 40px;">
+            <h2 style="float: left;">子赛事</h2>
+            <div class="input-group" style="width: 250px;float: right;margin-top: 16px;">
+                <input id="txtSearch" type="text" class="form-control input-lg"><span onclick="onSearch();" class="input-group-addon btn btn-primary glyphicon glyphicon-search"> </span>
+            </div>
+        </div>
+        <div class="span12">
+            <h2 class="sub-header"></h2>
+        </div>
+
+        <div class="panel-group" id="accordion">
+            <script id="content_template" type="text/x-handlebars-template">
+            {{#each list}}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" 
+                           href="#collapse_{{id}}">
+                            {{name}}
+                        </a>
+                        <button onclick="save({{id}});" type="button" class="btn btn-primary" style="float: right;margin-top: -8px;">保存</button>
+                    </h4>
+                </div>
+                <div id="collapse_{{id}}" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>名字</th>
+                                    <th>阶段</th>
+                                    <th>阶段名字</th>
+                                    <th>前几名升级</th>
+                                    <th>后几名降级</th>
+                                    <th>排序</th>
+                                    <th>是否淘汰赛(0是1否)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each tournament_list}}
+                                <tr>
+                                    <td>
+                                      <div style="margin-top: 8px;">
+                                      {{id}}
+                                      </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 300px; margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-name" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{name}}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 100px;margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-stage" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{stage}}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 100px;margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-stage_name" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{stage_name}}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 100px;margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-first_num" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{first_num}}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 100px;margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-last_num" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{last_num}}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 90px;margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-ord" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{ord}}" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 90px;margin-top: 8px;">
+                                            <input id="{{../id}}-{{id}}-is_group" onkeyup="setData(this.id,this.value);" type="text" class="form-control" value="{{is_group}}" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+            <!--页码-->
+            <h3 class="pull-left"><small>共{{total_count}}条数据</small></h3>
+            <ul class="pagination pagination-lg pull-right">
+                <li><a href="#" onclick="clickPage(1);">&laquo;</a></li>
+                <li {{{setPageActive page 1}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 1}}}</a></li>
+                <li {{{setPageActive page 2}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 2}}}</a></li>
+                <li {{{setPageActive page 3}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 3}}}</a></li>
+                <li {{{setPageActive page 4}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 4}}}</a></li>
+                <li {{{setPageActive page 5}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 5}}}</a></li>
+                <li><a href="#" onclick="clickPage({{last_page}});">&raquo;</a></li>
+                <li><input onkeypress="if(event.keyCode==13) {goPage(this.value);}" style="width: 60px;height: 46px;text-align: center;" type="number" placeholder="页码" /></li>
+            </ul>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+    var Com=new Com();
+    var params=Com.getParams();
+    var currentPage=params.page;
+    var searchKey=params.searchKey;
+
+    var last_page;
+    var data_list;
+    
+    if(searchKey=='undefined') searchKey='';
+    $("#txtSearch").val(searchKey);
+
+    var UTHttp=new UTHttp();
+    UTHttp.getTournament(currentPage,searchKey,function(code,message,info){
+        console.log(info);
+        last_page=info.last_page;
+        
+        data_list=info.list;
+
+        var html = template(info);
+        $("#accordion").html(html);
+    });
+
+
+    function goPage(page){
+        console.log(page);
+        if(page>last_page) page=last_page;
+
+        window.location.href="tournament.html?page="+page+"&searchKey="+searchKey;
+    }
+
+    function clickPage(page){
+        window.location.href="tournament.html?page="+page+"&searchKey="+searchKey;
+    }
+
+    function onSearch(){
+        searchKey=$("#txtSearch").val();
+
+        window.location.href="tournament.html?page="+1+"&searchKey="+searchKey;
+    }
+
+    function setData(id,value){
+        var arr=id.split("-");
+        var unique_id=arr[0];
+        var unique_tournament_id=arr[1];
+        var key=arr[2];
+
+        for(var i=0;i<data_list.length;i++){
+            var obj=data_list[i];
+            if(obj.id==unique_id){
+                for (var j = 0; j < obj["tournament_list"].length; j++) {
+                    var o=obj["tournament_list"][j];
+                    if(o.id==unique_tournament_id){
+                        o[key]=value;
+                        obj["tournament_list"][j]=o;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    function save(unique_id){
+        var data;
+        for(var i=0;i<data_list.length;i++){
+            var obj=data_list[i];
+            if(obj.id==unique_id){
+                data=obj["tournament_list"];
+            }
+        }
+
+        UTHttp.setTournamentData(data,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+    
+
+    Handlebars.registerHelper('getPageNumber', function(current_page,index) {
+        if(current_page<=3) return index;
+
+        current_page=parseInt(current_page);
+        if(current_page+2<=last_page){
+            console.log("last_page:"+last_page);
+            if(index==3) return current_page;
+            if(index<3) return parseInt(current_page)-parseInt((3-index));
+            if(index>3) return parseInt(current_page)+parseInt((index-3));
+        }else{
+            return current_page-(5-index);
+        }
+        
+    });
+
+    Handlebars.registerHelper('setPageActive', function(current_page,index) {
+        if(current_page<=3){
+            if(current_page==index) return 'class="active"';
+            else return "";
+        }
+
+        current_page=parseInt(current_page);
+        if(current_page+2<=last_page){
+            if(3==index) return 'class="active"';
+            else return '';
+        }else{
+            if(5==index) return 'class="active"';
+            else return '';
+        }
+    });
+
+</script>
+</body>
+</html>

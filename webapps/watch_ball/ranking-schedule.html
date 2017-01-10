@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="css/ranking.css" />
+    <link href="css/mui.picker.css" rel="stylesheet" />
+    <link href="css/mui.poppicker.css" rel="stylesheet" />
+
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/handlebars/handlebars.min.js"></script>
+
+    <script src="libs/mui.min.js"></script>
+    <script src="libs/mui.picker.js"></script>
+    <script src="libs/mui.poppicker.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/http.js"></script>
+    <script src="js/com.js"></script>
+
+    <script src="js/view.class.js"></script>
+    <script src="js/userStore.class.js"></script>
+
+    <script src="js/ballHttp.js"></script>
+
+	<!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+</head>
+
+<body>
+
+
+<div class="mui-content ranking">
+    <section id="schedule_list_table">
+        <div class="order">
+            <a onclick="preOrder();" class="pre">上一轮</a>
+            <button onclick="showScheduleRound();" id="showOrder" type="button" class="mui-btn  mui-btn-outlined">
+
+            </button>
+            <a onclick="nextOrder();" class="next">下一轮</a>
+        </div>
+        <div id="data_list">
+            <script id="schedule_list_template" type="text/x-handlebars-template">
+            <ul class="aiqiumi_match_ul">
+                {{#if list}}
+                {{#each list}}
+                <li>
+                    <a>
+                        <div class="team_div" onclick="openTeamDetail('{{home_team_name}}')">
+                            <img class="team_logo" onerror="this.src='images/team-logo-default.png'" src="{{home_team_logo}}" alt=""/>
+                            <span>{{home_team_name}}</span>
+                        </div>
+                        <div class="result_div" onclick="openScheduleDetail({{match_id}})">
+                            {{{showVsResult home_team_score away_team_score}}}
+                            <span class="time_span">{{match_time}}</span>
+                        </div>
+                        <div class="team_div" onclick="openTeamDetail('{{away_team_name}}')">
+                            <img class="team_logo" onerror="this.src='images/team-logo-default.png'" src="{{away_team_logo}}" alt=""/>
+                            <span>{{away_team_name}}</span>
+                        </div>
+                    </a>
+
+                </li>
+                {{/each}}
+                {{else}}
+                <div class="none">
+                    <img src="images/processNone.png"/>
+                    <span>还没有数据</span>
+                </div>
+                {{/if}}
+            </ul>
+            </script>
+        </div>
+    </section>
+</div>
+<!--loading-->
+<div class="mui-loading" id="loading">
+    <div class="mui-spinner">
+    </div>
+</div>
+<script>
+    var view = new View();
+    view.init();
+
+    var id = view.data.id;
+
+    var ballHttp = new BallHttp();
+
+    //赛程轮次信息
+    var scheduleRoundList=new Array();
+    //当前显示的轮次
+    var currentRound=-1;
+
+    var schedulePicker = new mui.PopPicker();
+
+    var list_template = $("#schedule_list_template").html();
+    var template =Handlebars.compile(list_template);
+
+    getScheduleRound();
+
+    //获取赛程轮次
+    function getScheduleRound(){
+        $("#loading").show();
+         ballHttp.getScheduleRound(id, function (code, message, info) {
+             if(code==200){
+                 $("#loading").hide();
+                 //console.log(info);
+                 var list=info;
+                 for(var i=0;i<list.length;i++){
+                     var obj=list[i];
+                     if(obj.is_active==1){
+                         currentRound=i;
+                         $("#showOrder").html(obj.round_name);
+                     }
+                     obj.text=obj.round_name;
+                     scheduleRoundList.push(obj);
+
+                 }
+                 initScheduleRound();
+                 getScheduleListByRound();
+             }
+         });
+    }
+
+    //初始化轮次
+    function initScheduleRound(){
+        schedulePicker.setData(scheduleRoundList);
+        schedulePicker.pickers[0].setSelectedIndex(currentRound);
+    }
+
+    //显示轮次
+    function showScheduleRound(){
+        schedulePicker.show(function(items) {
+            //console.log(items[0].round_name);
+            $("#showOrder").html(items[0].round_name);
+
+            for(var i=0;i<scheduleRoundList.length;i++){
+                 var obj=scheduleRoundList[i];
+                 if(obj.round_id == items[0].round_id && obj.ord == items[0].ord){
+                    currentRound=i;
+                    break;
+                 }
+             }
+
+            getScheduleListByRound();
+
+            //返回 false 可以阻止选择框的关闭
+            //return false;
+        });
+    }
+
+    //根据轮次获取赛程
+    function getScheduleListByRound(){
+        var obj=scheduleRoundList[currentRound];
+        console.log(obj);
+        ballHttp.getschedulelist(id,obj.round_id,obj.ord, function (code, message, info) {
+            //console.log(info);
+
+            var data={"list":info};
+            var html = template(data);
+            $("#data_list").html(html);
+         });
+    }
+
+    function preOrder(){
+        if(currentRound==0) return;
+        currentRound--;
+
+        for(var i=0;i<scheduleRoundList.length;i++){
+            if(i==currentRound){
+                var obj=scheduleRoundList[i];
+                $("#showOrder").html(obj.round_name);
+                schedulePicker.pickers[0].setSelectedIndex(currentRound);
+                break;
+            }
+         }
+        getScheduleListByRound();
+    }
+
+    function nextOrder(){
+        if(currentRound>=scheduleRoundList.length-1) return;
+        currentRound++;
+
+        for(var i=0;i<scheduleRoundList.length;i++){
+            if(i==currentRound){
+                var obj=scheduleRoundList[i];
+                $("#showOrder").html(obj.round_name);
+                schedulePicker.pickers[0].setSelectedIndex(currentRound);
+                break;
+            }
+         }
+
+        getScheduleListByRound();
+    }
+
+    Handlebars.registerHelper('showVsResult', function(home_team_score,away_team_score) {
+        home_team_score=home_team_score+'';
+        away_team_score=away_team_score+'';
+
+        var html='<span class="result_span">VS</span>';
+        if(home_team_score !='' && away_team_score!='' && home_team_score !='-1' && away_team_score!='-1'){
+            html='<span class="result_span">'+home_team_score+':'+away_team_score+'</span>';
+        }
+
+        return html;
+    });
+
+    //打开赛程
+    function openScheduleDetail(match_id) {
+        var actionObj = {
+            action:"sys_openScheduleDetail",
+            match_id:match_id
+        };
+        window.location.href = "?"+JSON.stringify(actionObj);
+    };
+    
+    //打开球队主页
+    function openTeamDetail(team_name) {
+        var actionObj = {
+            action:"sys_openTournamentTeamView",
+            team_name:team_name
+        };
+        window.location.href = "?"+JSON.stringify(actionObj);
+    };
+</script>
+
+</body>
+</html>

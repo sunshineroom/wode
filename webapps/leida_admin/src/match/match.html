@@ -1,0 +1,275 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>爱球迷雷达数据管理后台</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="../../images/favicon.png">
+
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="../../libs/handlebars/handlebars.min.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/com.js"></script>
+  <script src="../../config/config.js"></script>
+  <script src="../../js/userStore.js"></script>
+  <script src="../../js/http.js"></script>
+
+  <script src="js/matchHttp.js"></script>
+
+  <link href="../home.css" rel="stylesheet">
+
+  <script src="../../libs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap-switch.min.css" rel="stylesheet">
+  <script src="../../libs/bootstrap/dist/js/bootstrap-switch.min.js"></script>
+
+  
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">爱球迷雷达数据管理后台</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <!--左边栏-->
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="../unique_tournament/unique_tournament.html?page=1">赛事精选</a></li>
+                <li><a href="../unique_tournament/tournament.html?page=1">子赛事</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="active"><a>比赛</a></li>
+                <li><a href="recommend_match.html?page=1&type=-1">推荐比赛</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../team/team.html?page=1&type=-1">球队</a></li>
+                <li><a href="../team/team_player.html?page=1&type=-1">球员</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="../rank/rank.html?type=-1">榜单</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--主数据-->
+    <div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div style="height: 40px;">
+            <h2 id="match_title" style="float: left;"></h2>
+
+            <div id="tournament_menu" class="dropdown" style="margin-left: 50px; float: left;margin-top: 20px;">
+                <button class="btn btn-default toggle-dropdown" data-toggle="dropdown">下拉菜单<i class="caret"></i>
+                </button>
+                <ul id="menu" class="dropdown-menu" role="menu">
+                    <script id="menu_template" type="text/x-handlebars-template">
+                    {{#each list}}
+                    <li><a href="#" onclick="clickmenu({{id}},'{{name}}');">{{name}}</a>
+                    </li>
+                    {{/each}}
+                    </script>
+                </ul>
+            </div>
+
+            <div class="input-group" style="width: 250px;float: right;margin-top: 16px;">
+                <input id="txtSearch" type="text" class="form-control input-lg"><span onclick="onSearch();" class="input-group-addon btn btn-primary glyphicon glyphicon-search"> </span>
+            </div>
+        </div>
+        <div class="span12">
+            <h2 class="sub-header"></h2>
+        </div>
+        <div id="data_content" class="table-responsive">
+            <script id="content_template" type="text/x-handlebars-template">
+            <!--数据-->
+            <ul class="list-group">
+                {{#each list}}
+                <li class="list-group-item" style="float: left;width: 50%;margin-top: 10px;">
+                    <div style="height:140px;">
+                        <span style="float: left;width: 35%;height: 140px;line-height: 140px;text-align: center;">{{home_team_name}}</span>
+                        <div style="float: left;width: 30%;height: 140px;">
+                            <span style="text-align: center;font-size: 0.625em;">{{tournament_name}} 第{{round}}轮</span>
+                            <input onkeyup="setData(this.id,this.value);" id="{{id}}-match_time" style="text-align: center;" type="text" name="" value="{{match_time}}" />
+                            <div style="text-align: center;">
+                                <input onkeyup="setData(this.id,this.value);" id="{{id}}-home_team_score" style="width: 30px;text-align: center;" type="text" name="" value="{{home_team_score}}" />
+                                <span> : </span>
+                                <input onkeyup="setData(this.id,this.value);" id="{{id}}-away_team_score" style="width: 30px;text-align: center;" type="text" name="" value="{{away_team_score}}" />
+                            </div>
+                            <input onkeyup="setData(this.id,this.value);" id="{{id}}-code" style="text-align: center;" type="text" name="" value="{{code}}" />
+                            <span style="text-align: center; font-size: 0.625em;">0-未开始，100-结束</span>
+                        </div>
+                        <span style="float: left;width: 35%;height: 140px;line-height: 140px;text-align: center;">{{away_team_name}}</span>
+                    </div>
+                    <div style="height: 30px;">
+                        <button onclick="save({{id}});" class="btn btn-primary" style="float: left;width: 50%;">保存</button>
+                        <button onclick="removeMatch({{id}});" class="btn btn-danger" style="float: left;width: 50%;">删除</button>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+            <!--页码-->
+            <h3 class="pull-left"><small>共{{total_count}}条数据</small></h3>
+            <ul class="pagination pagination-lg pull-right">
+                <li><a href="#" onclick="clickPage(1);">&laquo;</a></li>
+                <li {{{setPageActive page 1}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 1}}}</a></li>
+                <li {{{setPageActive page 2}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 2}}}</a></li>
+                <li {{{setPageActive page 3}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 3}}}</a></li>
+                <li {{{setPageActive page 4}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 4}}}</a></li>
+                <li {{{setPageActive page 5}}}><a href="#" onclick="clickPage(this.innerText);">{{{getPageNumber page 5}}}</a></li>
+                <li><a href="#" onclick="clickPage({{last_page}});">&raquo;</a></li>
+                <li><input onkeypress="if(event.keyCode==13) {goPage(this.value);}" style="width: 60px;height: 46px;text-align: center;" type="number" placeholder="页码" /></li>
+            </ul>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    var Com=new Com();
+    var params=Com.getParams();
+    var current_page=params.page;
+    var search_key=params.search_key;
+    var unique_tournament_id=params.unique_tournament_id;
+    var unique_tournament_name=params.unique_tournament_name;
+
+    var menu_template = $("#menu_template").html();
+    var menu_t =Handlebars.compile(menu_template);
+
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+    var http=new MatchHttp();
+
+    var last_page;
+    var match_list;
+
+    $("#match_title").html(unique_tournament_name);
+    if(search_key=='undefined') search_key='';
+    if(unique_tournament_id=='undefined') unique_tournament_id='-1';
+    
+    $("#txtSearch").val(search_key);
+    
+    loadData();
+
+    function loadMenuData(){
+        http.getShowUniqueTournament(function(code,message,info){
+
+            var html = menu_t({list:info});
+            $("#menu").html(html);
+        });
+    }
+
+    function loadMatchData(){
+        http.getMatchList(current_page,unique_tournament_id,search_key,function(code,message,info){
+            console.log(info);
+            last_page=info.last_page;
+            match_list=info.list;
+            var html = template(info);
+            $("#data_content").html(html);
+        });
+    }
+
+    function loadData(){
+        loadMenuData();
+        loadMatchData();
+    }
+
+
+    function clickmenu(id,name){
+        window.location.href="match.html?page=1&unique_tournament_id="+id+"&unique_tournament_name="+name;
+    }
+
+    function clickPage(page){
+        if(search_key=='undefined') search_key="";
+        if(unique_tournament_id=='undefined' || unique_tournament_id==undefined) unique_tournament_id='-1';
+        window.location.href="match.html?page="+page+"&unique_tournament_id="+unique_tournament_id+"&unique_tournament_name="+unique_tournament_name+"&search_key="+search_key;
+    }
+
+    function goPage(page){
+        console.log(page);
+        if(page>last_page) page=last_page;
+
+        if(unique_tournament_id=='undefined' || unique_tournament_id==undefined) unique_tournament_id='-1';
+        window.location.href="match.html?page="+page+"&unique_tournament_id="+unique_tournament_id+"&unique_tournament_name="+unique_tournament_name+"&search_key="+search_key;
+    }
+
+    function onSearch(){
+        search_key=$("#txtSearch").val();
+        if(unique_tournament_id=='undefined' || unique_tournament_id==undefined) unique_tournament_id='-1';
+        window.location.href="match.html?page=1&unique_tournament_id="+unique_tournament_id+"&unique_tournament_name="+unique_tournament_name+"&search_key="+search_key;
+    }
+
+    function setData(id,value){
+        var arr=id.split("-");
+        var id=arr[0];
+        var key=arr[1];
+
+        for (var i = 0; i < match_list.length; i++) {
+            var obj=match_list[i];
+            if(obj.id==id){
+                obj[key]=value;
+                console.log(obj);
+                break;
+            }
+        }
+    }
+
+    function save(id){
+        for (var i = 0; i < match_list.length; i++) {
+            var obj=match_list[i];
+            if(obj.id==id){
+                http.saveMatch(obj,function(code,message,info){
+                    window.location.reload(); 
+                });
+            }
+        }
+    }
+
+    function removeMatch(id){
+        console.log("remove");
+        http.removeMatch(id,function(code,message,info){
+            window.location.reload(); 
+        });
+    }
+
+    Handlebars.registerHelper('getPageNumber', function(current_page,index) {
+        if(current_page<=3) return index;
+        current_page=parseInt(current_page);
+        if(current_page+2<=last_page){
+            if(index==3) return current_page;
+            if(index<3) return parseInt(current_page)-parseInt((3-index));
+            if(index>3) return parseInt(current_page)+parseInt((index-3));
+        }else{
+            return current_page-(5-index);
+        }
+        
+    });
+
+     Handlebars.registerHelper('setPageActive', function(current_page,index) {
+        if(current_page<=3){
+            if(current_page==index) return 'class="active"';
+            else return "";
+        }
+
+        current_page=parseInt(current_page);
+        if(current_page+2<=last_page){
+            if(3==index) return 'class="active"';
+            else return '';
+        }else{
+            if(5==index) return 'class="active"';
+            else return '';
+        }
+    });
+
+</script>
+</body>
+</html>

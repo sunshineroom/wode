@@ -1,0 +1,544 @@
+*{
+    padding: 0;
+    margin:0;
+}
+body{background: #fff;}
+/*积分榜单*/
+.group-box{
+    width:100%;
+    height:auto;
+    background: #fff;
+}
+.group-box table tr.group-stitle{
+    background: #f5f9fc !important;
+}
+.group-box table tr.group-scon{
+    background: #fff !important;
+}
+.group-box table{
+    width:100%;
+    height:auto;
+    border:none;
+    border-collapse: collapse;
+    background: #fff
+}
+.group-box table thead{
+    width:100%;
+    height:1.25rem;
+    background:none;
+    float: left;
+    position:relative;
+}
+.group-box table thead:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #f1f3f4;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom
+}
+.group-box table thead tr{
+    width: 100%;
+    display: inline-block;
+}
+.group-box table thead tr th{
+    width:10%;
+    color: #808992;
+    line-height:1.25rem;
+    float: left;
+    font-size: 0.6rem;
+    text-align: center;
+    font-weight: normal;
+}
+.group-box table tbody tr{
+    width: 100%;
+    display: inline-block;
+    color:#333;
+}
+.group-box table tbody tr td{
+    width:10%;
+    float: left;
+    line-height: 2.2rem;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.group-box table tbody tr:nth-child(2n-1){  background: #f5f9fc;  }
+
+/*积分榜-小组赛*/
+.group-box .group-table thead tr th:first-child,.group-box .group-table thead tr th:nth-child(2){ font-size: 0}
+.group-box .group-table thead tr th:nth-child(3){width:20%;text-align: left;}
+.group-box .group-table tbody{width:100%;height:auto; float: left;}
+.group-box .group-table tbody tr{ width: 100%; display: inline-block;color:#333;}
+.group-box .group-table tbody tr td{
+    width:10%;
+    float: left;
+    line-height: 2.2rem;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.group-box .group-table tbody tr td:nth-child(2){text-align: left;}
+.group-box  .group-table tbody tr td em{ font-style:normal;font-size: 0.6rem; margin-right: 0.3rem}
+.group-box  .group-table tbody tr td:nth-child(2) img{ width: 1.1rem; height:1.1rem; vertical-align: middle}
+.group-box  .group-table tbody tr td:nth-child(3){width:20%;text-align: left;}
+.group-box  .group-table tbody tr:nth-child(2n-1){  background: #f5f9fc;  }
+/*.group-box .group-table tbody tr:first-child,.group-box .group-table tbody tr:nth-child(2){  color:#00a8ef;  }*/
+.group-box .group-table tbody tr.blue{  color:#00a8ef;}
+
+/*积分榜-决赛*/
+.group-box table.final-table{width:100%;height:auto;background: #fff}
+.group-box table.final-table tbody tr{background:#fff;}
+.group-box table.final-table tbody tr.goal{background:#f5f9fc;}
+.group-box table.final-table tbody{width:100%;height:auto;}
+.group-box table.final-table tbody tr{ display: inline-block; width: 100%;}
+.group-box table.final-table tbody tr td{
+    text-align: center; 
+    color: #333;
+    line-height: 2.2rem;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    height: 2.2rem;
+}
+.group-box table.final-table tbody tr td:first-child{ width: 20%;}
+.group-box table.final-table tbody tr td:nth-child(2){width:20%;text-align: right;}
+.group-box table.final-table tbody tr td:nth-child(3){width:15%}
+.group-box table.final-table tbody tr td:nth-child(4){width:10%;}
+.group-box table.final-table tbody tr td:nth-child(5){width:15%;text-align: center;}
+.group-box table.final-table tbody tr td:nth-child(6){width:20%;text-align: left;}
+.group-box table.final-table img{ width: 1.1rem;height: 1.1rem;vertical-align:middle;}
+#showOrder{ margin:0 auto; display: inherit;}
+.team-vs { font-size:0.6rem;}
+
+#group_table p{
+    margin:0;
+    padding:0;
+    height: 1.25rem;
+    line-height: 1.25rem;
+    color: #333;
+    font-size:0.6rem;
+    padding-left:0.75rem;
+}
+#group_table p.ui-txt-info:first-child{ margin-top:0;}
+#group_table p.ui-txt-highlight{
+    height:1.25rem;
+    line-height:1.25rem;
+    background: #eceff4;
+    font-size:0.65rem;
+}
+#group_table p.ui-txt-info{
+    background: #fff;
+    position:relative;
+}
+#group_table p.ui-txt-info:before{
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    height: 1px;
+    content: '';
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    background-color: #e0e0e0;
+}
+#group_table p.ui-txt-info:after{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    content: '';
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    background-color: #e0e0e0;
+}
+
+
+/*射手榜*/
+.group-box .score-table thead tr th{
+    width:10%;
+    text-align: left;
+}
+.group-box .score-table thead tr th:nth-child(2){width: 40%;}
+.group-box .score-table thead tr th:nth-child(3){width: 35%;}
+.group-box .score-table thead tr th:last-child{
+    width: 15%;
+    text-align: center;
+}
+.group-box .score-table thead tr th:first-child{font-size:0}
+.group-box .score-table tbody tr td{text-align: center;}
+.group-box .score-table tbody tr td:nth-child(2){width: 40%;text-align: left;}
+.group-box .score-table tbody tr td:nth-child(3){width: 35%;text-align: left;}
+.group-box .score-table tbody tr td:nth-child(4){width: 15%}
+
+
+
+/*榜单延迟效果*/
+.group-box tbody tr{
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: returnToNormal;
+    animation-name: returnToNormal;
+}
+@-webkit-keyframes returnToNormal {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+@keyframes returnToNormal {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+/*积分榜联赛*/
+.group-box.league-box .group-table tbody tr{color:#333;}
+.group-box.league-box .group-table tbody tr{background: #fff;}
+/*#group_table .group-box.league-box:nth-child(2) tr,#group_table .league-box:nth-child(3) tr{ color:#00a8ef}*/
+#group_table .group-box.league-box tr.blue{ color:#00a8ef}
+#group_table .group-box.league-box:nth-child(2n) .group-table tbody tr{background: #f5f9fc}
+/*#group_table .group-box.final-box:nth-child(3n-1) .final-table tbody tr{background: #f5f9fc}*/
+#group_table .group-box.final-box .final-table tbody tr:nth-child(3n-2){background: #f5f9fc}
+/*赛程*/
+
+#showOrder{ margin:0 auto; display: inherit;}
+
+.order{
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 99;
+    width: 100%;
+    height:40px;
+    background: #fff;
+}
+.order:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom
+}
+.order a{ width: 33%;float: left; line-height:40px; font-size:0.6rem; color:#00a7f2;}
+.order a.pre{ padding-left:4%;}
+.order a.next{
+    padding-right: 4%;
+    text-align: right;
+    float: right;
+}
+.order button{ width: 33%; float: left;border:none; line-height: 40px; padding:0; font-size:0.6rem; color:#00a7f2;}
+
+
+.aiqiumi_match_ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    background: #FFFFFF;
+    padding-top:40px;
+}
+
+.aiqiumi_match_ul li{
+    position:relative;
+    width: 100%;
+    height: 100px;
+    float:left;
+    margin-left:0;
+    text-align:center;
+    padding:0 4%;
+}
+.aiqiumi_match_ul li a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.aiqiumi_match_ul li:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #f1f3f4;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom
+}
+.aiqiumi_match_ul li .result_div {
+    width: 34%;
+    height:50px;
+    float:left;
+    margin:25px 0;
+}
+.aiqiumi_match_ul li .result_div .result_span {
+    overflow:hidden;
+    display:block;
+    height:30px;
+    color: #333333;
+    font-size:16px;
+    line-height: 30px;
+    font-weight: bold;
+}
+.aiqiumi_match_ul li .result_div .time_span {
+    overflow:hidden;
+    display:block;
+    height:20px;
+    line-height: 20px;
+    color: #808992;
+    font-size: 0.75em;
+}
+
+.aiqiumi_match_ul li .team_div {width: 33%;height: 100%;float:left;}
+.aiqiumi_match_ul li .team_div .team_logo{
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin:15px auto 0 auto;
+}
+.aiqiumi_match_ul li .team_div span{
+    width: 100%;
+    color: #333333;
+    font-size: 0.725em;
+    display:block;
+    height: 35px;
+    line-height: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/*新闻详情*/
+.clearfix:after {  content: " ";  display: block;  clear: both;  height: 0; }
+.clearfix {zoom: 1;}
+.aiqiumi_news_detail_div{margin-top: 20px;}
+.aiqiumi_news_detail_title{color: #333333;font-size: 0.95em;display:block; margin-left: 10px;margin-right: 10px}
+.aiqiumi_news_detail_time{color: #afb3bf;font-size: 0.75em;display:block;margin-left: 10px;margin-top: 5px}
+.aiqiumi_news_detail_content{font-size: 0.8em;display:block;margin-left: 1em;margin-right: 1.2em;margin-top: 15px}
+.aiqiumi_news_detail_content img{width: 100%}
+.aiqiumi_news_detail_content p{font-size: 1.0em;margin-right: -10px; color: #333333}
+
+.aiqiumi_news_detail_control_div{margin-top: 0.1em;width: 100%;height: 26px;}
+.aiqiumi_news_button_zan{height: 100%;width: 66px;float: right;margin-right:0.5em;background:url(../images/news_icon_good_normal.png);background-size:100% auto;background-repeat: no-repeat; border-style:none}
+.aiqiumi_news_button_zan_sel{height: 100%;width: 66px;float: right;margin-right:0.5em;background:url(../images/news_icon_good_sel.png);background-size:100% auto;background-repeat: no-repeat; border-style:none}
+.aiqiumi_news_button_comment{height: 100%;width: 66px;float: right;margin-right:0.5em;background:url(../images/news_icon_comment_sel.png);background-size:100% auto;background-repeat: no-repeat;border-style:none}
+
+.aiqiumi_news_zan_div{
+    position:relative;
+    width: 100%;
+    margin-top: 5px;
+}
+.aiqiumi_news_zan_div:before{
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    height: 1px;
+    content: '';
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    background-color: #e0e0e0;
+}
+.aiqiumi_news_zan_logo_div{
+    position: absolute;
+    top:16px;
+    left: 0;
+    height: 16px;
+    width: 10%;
+    float: left
+}
+.aiqiumi_news_zan_logo {float: right;margin-right: 1px;height: 16px;width: 16px;background:url(../images/icon_good.png);background-size:100% auto;background-repeat: no-repeat;border-style:none}
+
+.aiqiumi_news_zan_photo_div{margin-top: 0px;margin-left:10%;float: left;width: 90%}
+.aiqiumi_news_zan_photo_div ul{margin-top: 10px;list-style:none;padding-left: 0px}
+.aiqiumi_news_zan_photo_div li{margin-top: 0px;float: left;margin-left: 10px;}
+.aiqiumi_news_zan_photo_div li .aiqiumi_photo{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.csts-pull-con.mui-table-view:before,.csts-pull-con.mui-table-view:after{
+    background: #e0e0e0;
+}
+.csts-pull-con{ float: left; position: relative;width:100%; background: #fff;background-size:0.9rem 0.9rem;}
+.comment-icon{
+    background: url(../images/mess-pl.png) no-repeat 0.75rem 0.75rem #fff;background-size:0.9rem 0.9rem;
+}
+.csts-pull-pl{width:16.5rem; float: right; margin:0; border: none; padding: 0 0.75rem 0 0!important; background: #fff;}
+.csts-pl-listcon{width:100%;height:auto; float: left; padding: 0.5rem 0;position: relative;}
+.csts-pl-listcon  .tspl-contall{width: 100%; float: left; height: 1.25rem;}
+.csts-pl-listcon  .tspl-contall .tspl-usehead{position:relative;float: left; width: 1.25rem; height: 1.25rem; border-radius: 50%;}
+.csts-pl-listcon .tspl-contall .tspl-usehead .tspl-usesex{position:absolute;bottom:0;right:0;float: left;width:.65rem;height:.65rem;  margin: .3rem 0 0 .25rem}
+.csts-pl-listcon .tspl-contall .tspl-usehead .sexBoy{background: url(../images/sex_icon_1.png) no-repeat 0 0;background-size:0.65rem 0.65rem;}
+.csts-pl-listcon .tspl-contall .tspl-usehead .sexGirl{background: url(../images/sex_icon_2.png) no-repeat 0 0;background-size:0.65rem 0.65rem;}
+.csts-pl-listcon  .tspl-contall .tspl-uset-con{margin-left: 1.65rem;height:1.25rem}
+.csts-pl-listcon  .tspl-contall .tspl-uset-con .tspl-usename{float: left; line-height: 1.25rem; font-size: .65rem; color: #333;}
+
+.csts-pl-listcon  .tspl-contall .tspl-uset-con .tspl-usetime{  float: right; font-style: normal; line-height: 1.25rem; font-size: 0.55rem; color: #999;}
+.csts-pl-listcon  p{width: 100%; float: left; line-height: 1.05rem; font-size: .65rem; color: #999; text-align: justify; padding: 2px 0; margin: .25rem 0 0 0 !important;}
+.csts-pl-listcon  p strong{ display: inline-block; font-size: .65rem; font-weight: normal; color: #333; margin: 0 0 0 .25rem}
+/*评论框*/
+.allpl-frame{width:100%;height:2.45rem; position: fixed; left:0;bottom:0; z-index: 9999; background: #fff; text-align: center; font-size: 0}
+.allpl-frame:before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height:1px;
+    left:0;
+    top:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center top;
+    transform-origin: center top
+}
+.allpl-frame .allpl-txtinput{
+    /*padding:.425rem .5rem 0 .5rem;*/
+    padding:0 0 0 2rem;
+    height:1.65rem;
+    line-height: 1.65rem;
+    background: url(../images/dynamic_comment_icon_pen.png) no-repeat 0.65rem center #edf0f3;
+    background-size:0.675rem 0.85rem;
+    width:92%;
+    display: block;
+    margin: 0.4rem 4%;
+    font-size:0.65rem;
+    color: #808992;
+    border:1px solid #e0e0e0;
+    border-radius: 0.8rem/50%;
+    text-align: left;
+}
+.allpl-frame .allpl-txtinput[disabled]{opacity: 1;color:#808992}/*弹框*/
+/*.mui-backdrop{*/
+    /*z-index: 9999;*/
+/*}*/
+#delete{
+    width: 100%;
+    position:fixed;
+    bottom:0;
+    left:0;
+    z-index: 999999;
+
+}
+#delete ul li{
+    height: 2rem;
+    background: #fff;
+    line-height: 2rem;
+    text-align: center;
+    color:#41a1f4;
+    font-size:0.7rem;
+    /*margin-bottom:0.5rem;*/
+    position:relative;
+}
+#delete ul li:first-child:after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left:0;
+    bottom:0;
+    background-color: #e0e0e0;
+    -webkit-transform: scale(1,.5);
+    transform: scale(1,.5);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+}
+
+#delete .delete{
+    color:#f00;
+}
+.csts-pull-pl.mui-table-view-cell:after{
+    left:0;
+    background: #e0e0e0;
+}
+/*.mui-poppicker.mui-active{*/
+    /*z-index: 99999;*/
+/*}*/
+
+/*无数据*/
+/*无数据*/
+.none{
+    background: #fff;
+    margin:0 auto;
+    padding:2rem 0;
+    text-align: center;
+}
+.none img{
+    width: auto;
+    height: 2.5rem;
+    margin:0 auto;
+}
+.none span{
+    color:#999;
+    font-size:0.7rem;
+    line-height: 3rem;
+    display:block;
+}
+/*fifa排名*/
+.group-box table thead tr th:first-child{
+    font-size:0;
+}
+.group-box .fifa-table thead tr th:nth-child(2),.group-box .fifa-table tbody tr td:nth-child(2){
+     width: 40%;
+    text-align: left;
+}
+.group-box .fifa-table thead tr th:nth-child(3),.group-box .fifa-table thead tr th:nth-child(4),.group-box .fifa-table tbody tr td:nth-child(3),.group-box .fifa-table tbody tr td:nth-child(4){
+    width: 25%;
+}
+.group-box .fifa-table tbody tr td img{
+    width: 1.1rem;
+    height:1.1rem;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#loading.mui-loading{
+    margin-top:150px;
+}
+.aiqiumi_news_detail_control_div button.mui-active:enabled, .aiqiumi_news_detail_control_div button:enabled:active{
+    background-color:#fff;
+}
+.disabled{
+    display: none;
+    width: 100%;
+    height: 2.45rem;
+    position: fixed;
+    left:0;
+    bottom:0;
+    z-index: 99999;
+    text-align: center;
+    font-size: 0;
+}

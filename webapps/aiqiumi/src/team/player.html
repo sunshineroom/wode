@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+    <link rel="stylesheet" type="text/css" href="css/player.css" />
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+
+</head>
+
+<body>
+
+<!--数据-->
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+<div id="data-list" class="a-list mui-scroll" >
+  <ol>
+    <li class="a-list-item player-item" v-for="(obj,index) in list">
+        <div class="left">
+            <img class="photo-icon" v-bind:src=obj.photo  @tap="userInfoAction(obj.uid)">
+                <img class="sex-icon" v-bind:src=showSex(obj.sex) />
+            </img>
+            <component v-bind:is="showName(obj)"></component>
+            <span class="position">{{ obj.position }}</span>
+            <component v-bind:is="showIdentity(obj)"></component>
+        </div>
+
+        <div class="right">
+
+            <div v-if="getViewAction() == 1">
+                <img class="shirt-icon" src="images/icon-shirt.png">
+                    <span @tap="onShirt(obj)" class="shirt-number">{{showNumber(obj.number)}}</span>
+                </img>
+            <input type="image" @click="onSetting(obj)" class="setting-icon" v-if="ifSetting(obj)" src="images/icon-setting.png" />
+            <img class="tel-icon" v-if="ifPhone(obj.phone)" src="images/icon-tel.png" />
+            </div>
+
+            <div v-if="getViewAction() == 2" >
+             <input @click="onSelectPlayer(index)"  class="setting-icon" type="image"  v-bind:src="showSelect(obj)" > </input>
+            </div>
+        </div>
+    </li>
+  </ol>
+</div>
+</div>
+
+<div id="bottom-tool" class="a-bottom-tool">
+    <button id="btnInvite" class="tool-button">邀请新队员</button>
+</div>
+
+<!--工具-->
+<!--loading-->
+<div id="loading" style="display: block">
+    <div class="loading_img">
+        <img src="../../images/loading.gif" />
+    </div>
+
+</div>
+
+
+<!--用户设置-->
+<div id="userSetting" class="mui-popover mui-popover-action mui-popover-bottom">
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a v-on:click="onKick()">移出球队</a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a v-if="data.is_admin" v-on:click="onCancelAdmin()">解除管理员</a>
+            <a v-else v-on:click="onSetAdmin()">设为管理员</a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a v-on:click="onChangeCaptain()">移交队长</a>
+        </li>
+    </ul>
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a href=""><b>取消</b></a>
+        </li>
+    </ul>
+</div>
+<!--###########################-->
+
+<script src="../../libs/handlebars/handlebars.min.js"></script>
+<script src="../../libs/vue/vue.js"></script>
+<script src="../../libs/vue/vue-resource.js"></script>
+<script src="../../libs/jquery/jquery.min.js"></script>
+
+<script src="../../config/config.js"></script>
+<script src="../../libs/crypto/base64.js"></script>
+
+
+<script src="../controller/viewController.js"></script>
+<script src="controller/playerController.js"></script>
+
+<script src="../../libs/mui/js/mui.min.js"></script>
+<script>
+    //action:界面功能,1-设置队员，2-选择队员
+    //{http_url: "http://nj.aiqiumi.cn/api/v2", team_id: 3344, token: "MfPHRetoksWYMUXmwNudrfqhKtLMMQQxHixdUGYv",action:2}
+    //e2h0dHBfdXJsOiAiaHR0cDovL25qLmFpcWl1bWkuY24vYXBpL3YyIiwgdGVhbV9pZDogMzM0NCwgdG9rZW46ICJNZlBIUmV0b2tzV1lNVVhtd051ZHJmcWhLdExNTVFReEhpeGRVR1l2IixhY3Rpb246Mn0=
+    var playerController=new PlayerController();
+    playerController.init();
+
+
+    //重新读取数据
+    function reloadHttp(){
+        playerController.getTeamPlayer();
+    }
+    
+
+</script>
+
+</body>
+</html>

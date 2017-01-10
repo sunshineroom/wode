@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+
+</head>
+
+<body>
+
+<div style="text-align: center;">
+    <input id="inValue_i" type="text" style="margin-top: 10px;height: 35px; width: 90%" />
+    <textarea id="inValue_t" style="margin-top: 10px;height: 140px; width: 90%">
+    </textarea>
+    
+</div>
+
+<!--工具-->
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+
+<!--用户设置-->
+<!--###########################-->
+
+<script src="../../libs/handlebars/handlebars.min.js"></script>
+<script src="../../libs/vue/vue.js"></script>
+<script src="../../libs/vue/vue-resource.js"></script>
+<script src="../../libs/jquery/jquery.min.js"></script>
+
+<script src="../../js/utils-string.js"></script>
+<script src="../../config/config.js"></script>
+<script src="../../libs/crypto/base64.js"></script>
+
+
+<script src="../controller/viewController.js"></script>
+<script src="controller/setInfoController.js"></script>
+
+<script src="../../libs/mui/js/mui.min.js"></script>
+
+
+
+<script>
+    //action:界面功能,1-设置队员，2-选择队员
+    //{http_url: "http://nj.aiqiumi.cn/api/v2", team_id: 3344, token: "MfPHRetoksWYMUXmwNudrfqhKtLMMQQxHixdUGYv",action:2}
+    //eyJ0b2tlbiI6Ik5nTlZlamFMbHhVT25rUFFIcGtGeFZha0tZa2FjZmVmRWJwdG9KVk8iLCJ2YWx1ZSI6InZ2dnZ2dnYiLCJodHRwX3VybCI6Imh0dHA6XC9cL25qLmFpcWl1bWkuY25cL2FwaVwvdjIiLCJ0ZWFtX2lkIjoiMjEwMyIsImFjdGlvbiI6IjEifQ==
+    var setInfoController=new SetInfoController();
+    setInfoController.init();
+
+
+</script>
+
+</body>
+</html>

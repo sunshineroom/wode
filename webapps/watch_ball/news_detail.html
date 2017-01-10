@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="css/aiqiumi.css" />
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/ranking.css" />
+
+    <script src="libs/jquery.min.js"></script>
+
+    <script src="libs/handlebars/handlebars.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/http.js"></script>
+    <script src="js/com.js"></script>
+
+    <script src="js/view.class.js"></script>
+    <script src="js/userStore.class.js"></script>
+
+    <script src="libs/mui.min.js"></script>
+    <script src="js/ballNewsHttp.js"></script>
+
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+    <style>
+        .mui-pull-bottom-pocket{bottom:2.4rem !important; display:none!important;}
+    </style>
+
+
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+</head>
+<body>
+<div class="mui-content">
+
+    <a id="btnOpenApp" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.zhengdianfang.AiQiuMi" class="yq_download">
+        <div class="yq_logo">
+            <div class="logo-m"><img src="images/logo-m.png"></div>
+            <span>爱球迷<br/><em>最会踢球的球迷都在这里</em></span>
+        </div>
+
+        <span class="down_aqm" >真球迷 下载APP</span>
+    </a>
+
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="background:#fff">
+        <div class="mui-scroll">
+            <div id="news_div" class="aiqiumi_news_detail_div">
+                <script id="news_content_template" type="text/x-handlebars-template">
+                <div>
+                    <span class="aiqiumi_news_detail_title">{{title}}</span>
+                    <span class="aiqiumi_news_detail_time">{{create_time}}</span>
+                </div>
+                <div class="aiqiumi_news_detail_content">
+                    {{{content}}}
+                </div>
+                </script>
+            </div>
+            <div class="comment-list">
+                <div class="aiqiumi_news_detail_control_div">
+                    <button class ="aiqiumi_news_button_comment" onclick="clickComment();" />
+                    <button id="btnZan" class ="aiqiumi_news_button_zan"  onclick="clickZan();"/>
+                </div>
+                <div class="aiqiumi_news_zan_div clearfix">
+                    <div  class="aiqiumi_news_zan_logo_div">
+                        <span class="aiqiumi_news_zan_logo"></span>
+                    </div>
+                    <div id="zan_ul" class="aiqiumi_news_zan_photo_div">
+                        <script id="zan_template" type="text/x-handlebars-template" >
+                            <ul>
+
+                                {{#each list}}
+                                <li>
+                                <img class="aiqiumi_photo" src="{{photo}}"/>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <ul class="mui-table-view mui-table-view-chevron csts-pull-con comment-icon" data_comment="{$news_info.comment_num}" style=" margin-bottom:2.4rem" id="loading_box">
+                <script id="commentList_template" type="text/x-handlebars-template">
+
+                    {{#each list}}
+
+                    {{#compare comment_id '!=' '0'}}
+
+                    <!--回复样式1-->
+                    <li class="mui-table-view-cell csts-pull-pl"  val-bind-isMyComment = "{{is_my_comment}}"  val-bind-commentId="{{id}}">
+                        <div class="csts-pl-listcon"  >
+                            <div class="tspl-contall">
+                                <a href='#' >
+                                    <div class="tspl-usehead" style="background: url({{user.photo}}) no-repeat center center; background-size:cover">
+                                        {{#compare user.sex '==' '1'}}
+                                        <i class="tspl-usesex sexBoy"></i>
+                                        {{else}}
+                                        <i class="tspl-usesex sexGirl"></i>
+                                        {{/compare}}
+                                    </div>
+                                </a>
+                                <div class="tspl-uset-con">
+                                    <a href='#' ><span class="tspl-usename">{{user.nickname}}</span></a>
+
+                                    <em class="tspl-usetime">{{{dateFormat create_time 4}}}</em>
+                                </div>
+                            </div>
+                            <p class="comment_body">
+                                <span style="display:inline-block">回复 <strong>{{reply_nick}}:</strong> {{content}} </span>
+                            </p>
+                        </div>
+                    </li>
+
+                    {{else}}
+
+                    <!--回复样式2-->
+                    <li class="mui-table-view-cell csts-pull-pl"  val-bind-isMyComment = "{{is_my_comment}}"  val-bind-commentId="{{id}}">
+                        <div class="csts-pl-listcon"  >
+                            <div class="tspl-contall">
+                                <a href='#' ><div class="tspl-usehead" style="background: url({{user.photo}}) no-repeat center center; background-size:cover">
+                                    {{#compare user.sex '==' '1'}}
+                                        <i class="tspl-usesex sexBoy"></i>
+                                    {{else}}
+                                        <i class="tspl-usesex sexGirl"></i>
+                                    {{/compare}}
+                                </div></a>
+                                <div class="tspl-uset-con">
+                                    <a href='#' ><span class="tspl-usename">{{user.nickname}}</span></a>
+
+                                    <em class="tspl-usetime">{{{dateFormat create_time 4}}}</em>
+                                </div>
+                            </div>
+                            <p class="comment_body" ><span>   {{content}}   </span></p>
+                        </div>
+                    </li>
+
+                    {{/compare}}
+                    {{/each}}
+            </ul>
+            </script>
+        </div>
+    </div>
+
+    <div class="allpl-frame" data-params='{$comment_params}' id="comment_input_box" >
+        <span  class="allpl-txtinput" id="comment_input">别憋着，说点啥</span>
+        <!--<input type="text" placeholder="别憋着，说点啥" class="allpl-txtinput" id="comment_input" disabled="disabled">-->
+        <!--<input type="button"  class="allpl-btninput" value="评论" id="comment_input_btn"  onclick="postComment(this);" />-->
+    </div>
+
+</div>
+<div id="delete" style="display: none">
+    <ul>
+        <li class="cancel">取消 </li>
+        <li class="delete">删除</li>
+    </ul>
+</div>
+<div class="mui-backdrop mui-active mui-backdrop-action" style="display: none"></div>
+
+<script>
+    var view=new View();
+    view.init();
+    var owner_zan=false;
+    var com=new Com();
+    var userStore = new UserStore();
+    var ballNews= new BallNewsHttp();
+    var token = null;
+
+    checkLogin();
+//    if(token && token.length > 0){
+//        userStore.save({token:token});
+//    }else{
+//        if(view.data.token){
+//            userStore.save({token:view.data.token});
+//            token = view.data.token;
+//        }else{
+//            userStore.clear();
+//        };
+//    }
+
+    //检查登录
+    function checkLogin() {
+        token = com.getCookie("token");
+        if(token && token.length > 0){
+            userStore.save({token:token});
+            return true;
+        }else{
+            if(view.data.token){
+                userStore.save({token:view.data.token});
+                token = view.data.token;
+                return true;
+            }else{
+                userStore.clear();
+            };
+        }
+         return false;
+    }
+
+    var infoData = null;
+
+    //回复目标评论
+    var replyTargetCommentId = 0;
+
+    var page = 1;
+
+    //检测ID
+    var news_id=view.data.id;
+
+    var news_content_template = $("#news_content_template").html();
+    var news_template =Handlebars.compile(news_content_template);
+    var zan_template =Handlebars.compile($("#zan_template").html());
+    var comment_template  = Handlebars.compile($("#commentList_template").html());
+
+    if(view.data.device){
+        $("#btnOpenApp").hide();
+    }else{
+        $("#btnOpenApp").show();
+        $("#pullrefresh").css("top","49px");
+    }
+
+    //加载数据
+    loadData();
+    reply();
+    loadCommentList();
+    
+    
+    function loadCommentList() {
+        page = 1;
+        ballNews.getCommentList(news_id, page , function (code, messsage, info) {
+           if(code != 200){
+               return;
+           }
+            console.log(info);
+            var html = comment_template({list:info.list});
+            $("#loading_box").html(html);
+            reply();
+        });
+    }
+
+
+
+    function loadData(){
+        ballNews.getNewsDetail(news_id,function(code,message,info){
+            console.log(info);
+            var html = news_template(info.info);
+            $("#news_div").html(html);
+
+            var html = zan_template({list:info.zan_list});
+            $("#zan_ul").html(html);
+
+            infoData = info.info;
+            if(info.info.zan_count==0){
+            	$("#zan_ul").data('zan',0);
+            	$(".aiqiumi_news_zan_div").hide();
+            }
+            if(info.info.comment_count==0){
+            	$("#loading_box").data('comment',0);
+            	$("#loading_box").hide();
+            }
+            if(info.info.comment_count==0){
+            	$("#pullrefresh").css("bottom","3.9rem");
+            }
+            if(info.info.owner_zan){
+                owner_zan=true;
+                $("#btnZan").attr("class","aiqiumi_news_button_zan_sel");
+            }
+            if(!view.device){
+                $("#pullrefresh").css("bottom",0);
+                $(".allpl-frame").hide();
+            }
+
+            setAppNavigaitionBar();
+            setShareInfo();
+            setWebBrowerTitle();
+        });
+    }
+
+    function clickComment() {
+        if(!checkLogin()) {
+            com.openLoginView(view.device);
+            return;
+        }
+        replyTargetCommentId = 0;
+        $("#comment_input").val("");
+        $("#comment_input").text("别憋着，说点啥");
+
+    };
+
+    //点击赞
+    function clickZan(){
+        if(!checkLogin()) {
+        	if(!view.device){
+        		var go_url = "/login?gopage=share";
+                go_url += "&r=" + encodeURIComponent(location.href);
+                location.href = go_url;
+            }	
+            com.openLoginView(view.device);
+            return;
+        }
+        if(owner_zan==false){
+            ballNews.addZan(news_id,function(code,message,info){
+                if(code != 200){
+                    mui.toast(message);
+                    return;
+                }
+                owner_zan=true;
+                $(".aiqiumi_news_zan_div").show();
+                if(info.zan_count==1){
+                	
+                }
+                var html = zan_template({list:info.list});
+                $("#zan_ul").html(html);
+                $("#btnZan").attr("class","aiqiumi_news_button_zan_sel");
+            });
+        }else{
+            ballNews.cancelZan(news_id,function(code,message,info){
+                if(code != 200){
+                    mui.toast(message);
+                    return;
+                }
+                owner_zan=false;
+                if(info.zan_count==0){                   
+                    $(".aiqiumi_news_zan_div").hide();
+                }
+                var html = zan_template({list:info.list});
+                $("#zan_ul").html(html);
+                $("#btnZan").attr("class","aiqiumi_news_button_zan");
+            });
+        }
+        
+    }
+
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            up: {
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }
+        }
+    });
+    
+    var count = 0;
+    /**
+     * 上拉加载具体业务实现-
+     */
+
+    function pullupRefresh() {
+        page++;
+        ballNews.getCommentList(news_id, page , function (code, messsage, info) {
+            if(code != 200){
+                return;
+            }
+            console.log(info);
+            var html = comment_template({list:info.list});
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh(Number(info.is_next) == 0);
+            $("#loading_box").append(html);
+            reply();
+        });
+    };
+
+    function reply(){
+        $(".csts-pull-con").find(".csts-pull-pl").on("tap",function(){
+
+            var isMyComment  = $(this).attr("val-bind-isMyComment");
+            var commentId = $(this).attr("val-bind-commentId");
+
+            var li=$(this);
+            if(isMyComment == "1"){
+                $(".mui-backdrop").show();
+                $('#delete').show();
+                $("#delete ul .cancel").on("tap",function(){
+                    $("#delete,.mui-backdrop").hide();
+                })
+//                删除
+                $("#delete ul .delete").on("click",function(){
+                    $("#delete,.mui-backdrop").hide();
+//                    $("#comment_input").css('pointer-events', 'none');
+                    ballNews.deleteComment(commentId, function (code,message,info) {
+                        if(code != 200){
+                            //mui.toast('');
+                            return;
+                        }else{
+                        	if(info.comment_count==0){
+                        		$('#loading_box').hide();
+                        	}
+                        	mui.toast('删除成功');
+                        }
+                        li.remove();
+
+                    });
+                })
+            }else{
+                replyTargetCommentId = Number(commentId) == 0? 0: Number(commentId);
+                var name = $(this).find(".tspl-usename").text();
+                $("#comment_input").text("回复" + name  + ":");
+                
+                if(!placeholderSupport()){   // 判断浏览器是否支持 placeholder
+                         //默认遍历循环添加placeholder
+                        $('[placeholder]').each(function(){
+                            $(this).parent().append("<span class='placeholder'>"+$(this).attr('placeholder',"回复" + name  + ":")+"</span>");
+                        })
+                        $('[placeholder]').blur(function(){
+                            if($(this).val()!=""){  //如果当前值不为空，隐藏placeholder
+                                $(this).parent().find('span.placeholder').hide();
+                            }
+                            else{
+                                $(this).parent().find('span.placeholder').show();
+                            }
+                        })
+                    }
+//                $("#comment_input").focus();
+            }
+
+        });
+    }
+    function placeholderSupport() {
+        return 'placeholder' in document.createElement('input');
+    }
+    function openUserInfo(uid) {
+        com.openUserInfoView(view.device, uid);
+    }
+
+    function postComment() {
+        if(!checkLogin()){
+            com.openLoginView(view.device);
+            return;
+        }
+
+        var content = $("#comment_input").val();
+        content = content.replace(/(^\s*)|(\s*$)/g,"");
+        ballNews.postComment(news_id, content, replyTargetCommentId, function (code, message, info) {
+            if(code != 200){
+                mui.toast(message);
+                return;
+            }
+            mui.toast("评论成功");
+            $('#loading_box').show();
+            $("#pullrefresh").css("bottom","0");
+            if(info.comment_count==0){
+            	
+            }
+            var tmpHtml = comment_template({list:info.list});
+            $("#loading_box").prepend(tmpHtml);
+            reply();
+            replyTargetCommentId = 0;
+            $("#comment_input").val("");
+            $("#comment_input").text("别憋着，说点啥");
+            
+        });
+    }
+    
+    function get_bar_title() {
+        var titleObj = {
+            title:infoData != null ? infoData.title:"",
+            right_btn_action:"share_action",
+            right_btn_share_url:config.share_url + "/webapps/watch_ball/news_detail.html?id="+news_id,
+            right_btn_share_title:infoData != null ? infoData.title:"",
+            right_btn_share_imageURL:infoData != null ? infoData.image:"",
+            right_btn_share_content:infoData!= null? infoData.sub_title:""
+        };
+        return JSON.stringify(titleObj);
+    }
+
+
+    function setAppNavigaitionBar() {
+        //Android版本需反向调取变量，并赋值
+        if(typeof(barTitle) != "undefined" && typeof(get_bar_title) != "undefined"){
+            barTitle.set_bar_title(get_bar_title());
+        }
+
+        if(typeof (window.webkit) !="undefined" && typeof (get_bar_title) != "undefined"){
+            window.webkit.messageHandlers.setTitle.postMessage(get_bar_title());
+        }
+    }
+
+
+    //微信分享业务
+    var shareInfo;
+    function setShareInfo(){
+        var http=new Http();
+        var surl=location.href.split('#')[0];
+        http.sendRequest("/system/getWxShare",{url:surl},function(data){
+            var info=data.info;
+            shareInfo=data.info;
+            console.log(info);
+
+            wx.config({
+                debug: false,
+                appId: info.appId+"",
+                timestamp: info.timestamp+"",
+                nonceStr: info.nonceStr+"",
+                signature: info.signature+"",
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage']
+            });
+
+            wx.ready(function(){
+                //shareInfo.url=config.share_url+surl;
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+
+                wx.onMenuShareTimeline({
+                    title: infoData.title,
+                    link: shareInfo.url, // 分享链接
+                    imgUrl: infoData.image, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: infoData.title,
+                    link: shareInfo.url, // 分享链接
+                    imgUrl: infoData.image, // 分享图标
+                    desc:"",
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                wx.error(function(res){
+                    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+
+                    alert("errorMSG:"+JSON.stringify(res));
+                });
+            });
+        });
+    }
+
+
+    //非内嵌浏览器
+    function setWebBrowerTitle() {
+        if(view.device)return;
+        var $body = $('body');
+        document.title = infoData != null ? infoData.title:"";
+        // hack在微信等webview中无法修改document.title的情况
+        var $iframe = $('<iframe src="/favicon.ico"></iframe>');
+        $iframe.on('load',function() {
+            setTimeout(function() {
+                $iframe.off('load').remove();
+            }, 0);
+        }).appendTo($body);
+    }
+    
+</script>
+</body>
+</html>

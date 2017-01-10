@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>赛事详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="css/mui.min.css">
+
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/handlebars/handlebars.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/http.js"></script>
+    <script src="js/com.js"></script>
+
+    <script src="js/view.class.js"></script>
+    <script src="js/userStore.class.js"></script>
+
+    <script src="libs/mui.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/match_event.css" />
+    <script src="js/ballHttp.js"></script>
+
+    <!--自适应-->
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+</head>
+
+<body>
+<style>
+    .mui-control-content {
+        background-color: white;
+        min-height: 413px;
+    }
+    .mui-control-content .mui-loading {
+        margin-top: 50px;
+    }
+    .mui-table-view .mui-media, .mui-table-view .mui-media-body{
+        line-height: 42px;
+    }
+</style>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 id="title" class="mui-title"></h1>
+</header>
+
+<div class="mui-content">
+    <!--比赛双方的数据-->
+    <div id="match_content_div" class="head">
+        
+    </div>
+    <!--比赛进球-->
+    <div id="match_goal_div" class="score clearfix">
+        
+    </div>
+
+    <div id="slider" class="mui-slider">
+        <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <a class="mui-control-item mui-active" href="#item1mobile">事件</a>
+            <a class="mui-control-item" href="#item2mobile">阵容</a>
+            <a class="mui-control-item" href="#item3mobile">统计</a>
+        </div>
+        <div class="mui-slider-group">
+            <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+                <div id="scroll1" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <section id="match_event_div">
+                            <div class="mui-loading">
+                                 <div class="mui-spinner">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div id="item2mobile" class="mui-slider-item mui-control-content">
+                <div id="scroll2" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <section id="match_players_div">
+                            <div class="mui-loading">
+                                 <div class="mui-spinner">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div id="item3mobile" class="mui-slider-item mui-control-content">
+                <div id="scroll3" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <section id="match_count_div">
+                            <div class="mui-loading">
+                                 <div class="mui-spinner">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+<script>
+
+    function controlHeight(){
+        var minHeight=$(window).height();
+        var goalHeight=$("#match_goal_div").outerHeight();
+        $(".mui-control-content").css("min-height",(minHeight-168-goalHeight));
+    }
+    var view=new View();
+    view.init();
+    var match_id=view.data.id;
+
+    var ball= new BallHttp();
+    var com=new Com();
+
+    var matchInfo;
+    
+
+    loadMatchInfo();
+
+    function loadMatchInfo(){
+        ball.match(match_id,function(code,message,info){
+            matchInfo=info;
+            var list_template = $("#match_content_template").html();
+            var template =Handlebars.compile(list_template);
+            var html = template(matchInfo);
+            $("#match_content_div").html(html);
+
+
+            loadMatchGoal();
+        });
+    }
+
+    function loadMatchGoal(){
+        ball.matchGoal(match_id,function(code,message,info){
+            var list=info;
+            var home_goal_value="";
+            var away_goal_value="";
+            for (var i = 0; i<list.length; i++) {
+                var obj=list[i];
+                if(obj.team_id==matchInfo.home_team_id){
+                    var str=obj.player_name+"("+obj.event_time+")";
+                    home_goal_value=home_goal_value+str+"<br>";
+                }else{
+                    var str="("+obj.event_time+")"+obj.player_name;
+                    away_goal_value=away_goal_value+str+"<br>";
+                }
+            }
+
+            var template = $("#match_goal_template").html();
+            var template =Handlebars.compile(template);
+            var html = template({"home_goal_data":home_goal_value,"away_goal_data":away_goal_value});
+            $("#match_goal_div").html(html);
+
+            loadMatchEvent();
+            controlHeight();
+        });
+    }
+
+    function loadMatchEvent(){
+        ball.matchEvent(match_id,function(code,message,info){
+            console.log(info);
+        
+            var template = $("#match_event_template").html();
+            var template =Handlebars.compile(template);
+            var html = template({"list":info});
+            $("#match_event_div").html(html);
+        });
+    }
+
+//    阵容
+    function loadMatchPlayers(){
+        ball.matchLineup(match_id,function(code,message,info){
+            var list=info;
+            var zl_home_list=new Array();
+            var zl_away_list=new Array();
+            var tb_home_list=new Array();
+            var tb_away_list=new Array();
+
+            var tb_list=new Array();
+            for(var i=0;i<list.length;i++){
+                var obj=list[i];
+                if(obj.team_id==matchInfo.home_team_id){
+                    obj.is_home=1;
+                    //主
+                    if(obj.pos>0){
+                        zl_home_list.push(obj);
+                    }else{
+                        tb_home_list.push(obj);
+                    }
+                }else{
+                    //客
+                    if(obj.pos>0){
+                        zl_away_list.push(obj);
+                    }else{
+                        tb_away_list.push(obj);
+                    }
+                }
+            }
+
+            var zl_list=new Array();
+            for (var i = 0; i < zl_home_list.length; i++) {
+                zl_list.push(zl_home_list[i]);
+                zl_list.push(zl_away_list[i]);
+            };
+
+            var tb_list=new Array();
+            for (var i = 0; i < tb_home_list.length; i++) {
+                tb_list.push(tb_home_list[i]);
+                tb_list.push(tb_away_list[i]);
+            };
+
+            var template = $("#match_players_template").html();
+            var template =Handlebars.compile(template);
+            var html = template({"zl":zl_list,"tb":tb_list});
+            $("#match_players_div").html(html);
+        });
+        
+    }
+
+
+    //统计
+    function loadMatchCount(){
+        ball.matchStatistics(match_id,function(code,message,info){
+            var list=info;
+
+            var ll=new Array();
+            for (var i = 0; i < list.length; i++) {
+                var obj=list[i];
+                var key=obj.new_title;
+                var value=obj.value;
+                var team_id=obj.team_id;
+
+                var index=0;
+                for (var j = 0; j < ll.length; j++) {
+                    var oo=ll[j];
+                    index=j+1;
+                    if(oo["title"]==key){
+                        index--;
+                        break;
+                    }
+                }
+
+                var oo=ll[index];
+                if(!oo)oo={"title":key};
+
+
+                if(team_id==matchInfo.home_team_id){
+                    oo["home"]=value;
+                }else{
+                    oo["away"]=value;
+                }
+
+                ll[index]=oo;
+            }
+
+            var new_ll=new Array();
+
+            for (var i = 0; i < ll.length; i++) {
+                var obj=ll[i];
+                if(!obj.home || !obj.away) continue;
+                console.log(obj);
+
+                var h_v=parseInt(obj.home);
+                var a_v=parseInt(obj.away);
+                
+                var total=(h_v+a_v);
+
+                obj["home_px"]=((h_v/total)*100)+"%";
+                obj["away_px"]=((a_v/total)*100)+"%";
+                new_ll.push(obj);
+            }
+
+            
+            var template = $("#match_count_template").html();
+            var template =Handlebars.compile(template);
+            var html = template({list:new_ll});
+            $("#match_count_div").html(html);
+        })
+
+        
+    }
+
+    Handlebars.registerHelper('showVsResult', function(home_team_score,away_team_score) {
+        var html='<span class="team-vs f72">vs</span>';
+        if(home_team_score !=-1 && away_team_score!=-1){
+            html='<span class="team-vs">'+home_team_score+':'+away_team_score+'</span>';
+        }
+
+        return html;
+    });
+
+    Handlebars.registerHelper('showVsEvent', function(obj) {
+        var class_html="";
+        if(obj.team_id==matchInfo.home_team_id){
+            //主队
+            class_html='<p class="sj_left fl">';
+        }else{
+            //客队
+            class_html='<p class="sj_right fr">';
+        }
+
+        var html="";
+        if(obj.type==1){
+            //进球
+            html='<li class="clearfix">'+
+                class_html+
+                '    '+obj.player_name+'<br/>'+obj.event_time+'分钟'+
+                '</p>'+
+                '<!--进球-->'+
+                '<b class="sj_icon fl" style="background-position:center -29px "></b>'+
+                '</li>';
+        }else if(obj.type==2){
+            //黄牌
+            html='<li class="clearfix">'+
+                class_html+
+                '    '+obj.player_name+'<br/>'+obj.event_time+'分钟'+
+                '</p>'+
+                '<!--黄牌-->'+
+                '<b class="sj_icon fl" style="background-position:center -114px "></b>'+
+                '</li>';
+        }else if(obj.type==3){
+            //红牌
+            html='<li class="clearfix">'+
+                class_html+
+                '    '+obj.player_name+'<br/>'+obj.event_time+'分钟'+
+                '</p>'+
+                '<!--红牌-->'+
+                '<b class="sj_icon fl" style="background-position:center -80px "></b>'+
+                '</li>';
+        }else if(obj.type==4){
+            //换人
+            html='<li class="clearfix">'+
+                class_html+
+                '    '+obj.in_player_name+'(上)<br/>'+obj.out_player_name+'(下)<br/>'+obj.event_time+'分钟'+
+                '</p>'+
+                '<!--换人-->'+
+                '<b class="sj_icon fl" style="background-position:center -153px "></b>'+
+                '</li>';
+        }
+        return html;
+    });
+
+    (function($) {
+        $('.mui-scroll-wrapper').scroll({
+            indicators: false //是否显示滚动条
+        });
+
+        document.getElementById('slider').addEventListener('slide', function(e) {
+            if (e.detail.slideNumber === 1) {
+                var item2 = document.getElementById('item2mobile');
+                if (item2.querySelector('.mui-loading')) {
+                    loadMatchPlayers();
+                }
+            }else if (e.detail.slideNumber === 2) {
+                var item3 = document.getElementById('item3mobile');
+                if (item3.querySelector('.mui-loading')) {
+                    loadMatchCount();
+                }
+            }
+        });
+    })(mui);
+
+
+    //设置赛事直播详情
+    function get_bar_title() {
+        var titleObj = {
+            title:"赛事详情",
+        };
+        return JSON.stringify(titleObj);
+    }
+
+    function setAppNavigaitionBar() {
+        //Android版本需反向调取变量，并赋值
+        if(typeof(barTitle) != "undefined" && typeof(get_bar_title) != "undefined"){
+            barTitle.set_bar_title(get_bar_title());
+        }
+
+        if(typeof (window.webkit) !="undefined" && typeof (get_bar_title) != "undefined"){
+            window.webkit.messageHandlers.setTitle.postMessage(get_bar_title());
+        }
+    }
+    setAppNavigaitionBar();
+
+    //打开球队详情
+    function openTourTeamInfo(team_name){
+        if(team_name && team_name.length > 0){
+            if(view.device){
+                var obj = {action:"sys_openTournamentTeamView",team_name:team_name};
+                window.location.href = "?"+JSON.stringify(obj);
+            }
+        }
+    };
+
+</script>
+
+<!--赛事信息-->
+<script id="match_content_template" type="text/x-handlebars-template">
+    <p>{{unique_tournament_name}}</p>
+    <div class="t_name clearfix">
+        <div class="t_info fl "  onclick="openTourTeamInfo('{{ home_team_name }}')">
+           <span class="t_logo" style="background: url({{home_team_logo}}) no-repeat center;background-size:50% auto;">
+           </span>
+           <span class="t_tit">{{home_team_name}}</span>
+        </div>
+        
+        <p class="t_score fl">
+            <span class="blue">{{match_time}}</span>
+            {{{showVsResult home_team_score away_team_score}}}
+            <span class="gary">{{code_name}}</span>
+        </p>
+
+        <div class="t_info fl" onclick="openTourTeamInfo('{{away_team_name}}')">
+            <span class="t_logo" style="background: url({{away_team_logo}}) no-repeat center;background-size:50% auto;">
+            </span>
+            <span class="t_tit">{{away_team_name}}</span>
+        </div>
+    </div>
+</script>
+    
+<!--赛事进球-->
+<script id="match_goal_template" type="text/x-handlebars-template">
+    <p class="sj_left fl " >
+        {{{home_goal_data}}}
+    </p>
+    <b class="sj_icon fl" style="background-position:center -29px;top:10px;"></b>
+    <p class="sj_right fr" >
+        {{{away_goal_data}}}
+    </p>
+</script>
+
+<!--赛事事件-->
+<script id="match_event_template" type="text/x-handlebars-template">
+    <div class="content_sj" >
+        <!-- 事件开始蓝点-->
+        <div class="circle_blue icon"></div>
+        <ul>
+            {{#each list}}
+            {{{showVsEvent this}}}
+            {{/each}}
+        </ul>
+        <!-- 事件结束红点-->
+        <div class="circle_r icon"></div>
+    </div>
+</script>
+
+<!--赛事阵容-->
+<script id="match_players_template" type="text/x-handlebars-template">
+    <div class="content_m"  >
+        <!-- 首发阵容-->
+        <div class="team_first">
+            <p class="team_h">首发阵容</p>
+            <ul class="clearfix">
+                {{#each zl}}
+                {{#if is_home}}
+                <li class="fl">
+                    <p>
+                        <span class="teamer_name fl">{{player_name}}</span>
+                        <span class="teamer_score fl">{{number}}</span>
+                        <span class="teamer_ph fl" style="background: url({{player_photo}}) no-repeat center;background-size:25px 25px;"></span>
+                    </p>
+
+                </li>
+                {{else}}
+                <li class="fl">
+                    <p>
+                        <span class="teamer_ph fl"  style="background: url({{player_photo}}) no-repeat center;background-size:25px 25px;"></span>
+                        <span class="teamer_score fl">{{number}}</span>
+                        <span class="teamer_name fl">{{player_name}}</span>
+                    </p>
+
+                </li>
+                {{/if}}
+                {{/each}}
+                
+            </ul>
+        </div>
+        <!-- 替补阵容-->
+        <div class="team_first">
+            <p class="team_h">替补阵容</p>
+            <ul class="clearfix">
+                {{#each tb}}
+                {{#if is_home}}
+                <li class="fl">
+                    <p>
+                        <span class="teamer_name fl">{{player_name}}</span>
+                        <span class="teamer_score fl">{{number}}</span>
+                        <span class="teamer_ph fl" style="background: url({{player_photo}}) no-repeat center;background-size:15px 15px;"></span>
+                    </p>
+
+                </li>
+                {{else}}
+                <li class="fl">
+                    <p>
+                        <span class="teamer_ph fl"  style="background: url({{player_photo}}) no-repeat center;background-size:15px 15px;"></span>
+                        <span class="teamer_score fl">{{number}}</span>
+                        <span class="teamer_name fl">{{player_name}}</span>
+                    </p>
+
+                </li>
+                {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</script>
+<!--赛事统计-->
+<script id="match_count_template" type="text/x-handlebars-template">
+    <div >
+        <ul class="content_tj">
+            {{#each list}}
+            <li>
+                <span class="tj_class">{{title}}</span>
+                <div class="tjsj clearfix">
+                    <div class="tjsj_l fl">
+                        <i class="fl ">{{home}}</i>
+                        <span class="fr">
+                            <em style="width: {{home_px}}"></em>
+                        </span>
+                    </div>
+                    <div class="tjsj_r fl">
+                        <i class="fr ">{{away}}</i>
+                        <span class="fr">
+                            <em style="width: {{away_px}}"></em>
+                        </span>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</script>
+</body>
+</html>

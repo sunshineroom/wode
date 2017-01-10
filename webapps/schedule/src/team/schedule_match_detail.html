@@ -1,0 +1,766 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>比赛详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi_schedule.css" />
+
+    <script src="../../js/jquery.min.js"></script>
+
+    <script src="../../libs/mui/js/mui.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <link rel="stylesheet" type="text/css" href="css/team_schedule_detail.css" />
+    <script src="js/schedule_tab.js"></script>
+    <script src="js/teamScheduleHttp.js"></script>
+    <script src="js/add_match_schedule.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi.css" />
+
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 id="title" class="mui-title">比赛详情</h1>
+    <a class="mui-icon mui-icon-plus mui-pull-right" onclick="enterGrand();"></a>
+</header>
+<div id="content" class="mui-content">
+    <a id="btnOpenApp" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.zhengdianfang.AiQiuMi" class="yq_download">
+        <div class="yq_logo">
+            <div class="logo-m"><img src="../../images/logo-m.png"></div>
+            <span>爱球迷<br/><em>最会踢球的球迷都在这里</em></span>
+        </div>
+
+        <span class="down_aqm" >真球迷 下载APP</span>
+    </a>
+    <script src="https://s.mlinks.cc/scripts/dist/mlink.min.js"></script>
+
+    <!-- 球队-->
+    <div id="base_info" class="detail_base_info">
+        <script id="base_info_template" type="text/x-handlebars-template">
+            <!-- ****************************** 球队战局标题栏 ****************************** -->
+            <div class="home-team" onclick="openTeamHome({{team_id}});" >
+                <img src= "images/team-logo-default.png" id="homeTeamLogo" alt=""/>
+                <span class="team_name">{{team_name}}</span>
+            </div>
+            <div class="team-vs">
+                <span class="weather"></span>
+                <span class="vs">{{{showResult team_score  team_point_score  target_team_score  target_team_point_score}}}</span>
+            </div>
+            <div class="away-team" onclick="openTeamHome({{target_team_id}})">
+                <img src="images/team-logo-default.png" id="targetTeamLogo" alt=""/>
+                <span class="team_name">{{target_team_name}}</span>
+            </div>
+        </script>
+    </div>
+    <!-- ****************************** 切换按钮分布 ****************************** -->
+
+    <div class="detail_base_tap tab_div">
+        <section id="tab_section">
+            <div class="tab_active">
+                <span class="tab_active">基本信息</span>
+            </div>
+            <div class="tab_no_active">
+                <span class= "">比赛战报</span>
+            </div>
+        </section>
+    </div>
+
+    <!-- ++++++++++++++++++++++++++++ 比赛基本信息 ++++++++++++++++++++++++++++ -->
+    <div id="match_detail_info">
+        <div id="match_info">
+            <script id="match_info_template" type="text/x-handlebars-template">
+                <!-- 赛事名称-->
+                {{#compare title '!=' ''}}
+                <div class="detail_base_list" style="margin-top:2px">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_match.png" >
+                    </div>
+                    <div class="right">
+                        <span id="left">{{title}}</span>
+                    </div>
+                </div>
+                {{/compare}}
+                <!--比赛类型-->
+                {{#compare player '>' '0'}}
+                <div class="detail_base_list">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_type.png" >
+                    </div>
+                    <div class="right">
+                        <span id="left">{{player}}人制</span>
+                    </div>
+                </div>
+                {{/compare}}
+                <!--赛事时间 -->
+                <div class="detail_base_list">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_time.png" >
+                    </div>
+                    <div class="right">
+                        <span id="left">{{start_time}}</span>
+                        {{#if enroll_time}}
+                        <span id="right">报名截止:{{enroll_time}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <!-- 地点-->
+                {{#if place}}
+                {{#compare place '!=' ''}}
+                <div class="detail_base_list">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_place.png" >
+                    </div>
+                    <div class="right"  onclick="openNavigation();">
+                        <span id="left">{{place}}</span>
+                        {{#if place_lat }}
+                        {{#compare place_lat '>' '0'}}
+                        <span class="place_right" >导航</span>
+                        {{/compare}}
+                        {{/if}}
+                    </div>
+                </div>
+                {{/compare}}
+                {{/if}}
+                <!--队服颜色-->
+                {{#compare team_color '>' '0'}}
+                <div class="detail_base_list">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_clothes.png">
+                    </div>
+                    <div class="right">
+                        <span id="left" class="color-btn"  style="background: url(images/mr-color.png) no-repeat;background-size:30px 16px;"></span>
+                        <input type="hidden" value="0"/>
+                    </div>
+                </div>
+                {{/compare}}
+                <!--人数上限-->
+                {{#compare max_player '>' '0'}}
+                <div class="detail_base_list">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_toplimit.png" >
+                    </div>
+                    <div class="right">
+                        <span id="left">{{max_player}}人</span>
+                    </div>
+                </div>
+                {{/compare}}
+
+                <!-- 备注-->
+                {{#if desc}}
+                {{#compare desc '!=' ''}}
+                <div class="detail_base_list detail_base_bei mui-clearfix">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_text.png" >
+                    </div>
+                    <div class="right">
+                        <span id="content">{{desc}}</span>
+                    </div>
+                </div>
+                {{/compare}}
+                {{/if}}
+            </script>
+        </div>
+        <!-- ****************************** 参赛人员情况 ****************************** -->
+        <div id="match_player">
+            <script id="match_player_template" type="text/x-handlebars-template">
+                <div class="detail_base_join">
+                    <div id="bottom_left" >
+                        <span id="bottom_number">{{enroll_count}}</span>
+                        <span id="bottom_flag">报名</span>
+                        {{#if max_player}}
+                        <em class="limit">上限{{max_player}}人</em>
+                        {{/if}}
+                    </div>
+                    <div id="bottom_center" >
+                        <span id="bottom_number">{{off_count}}</span>
+                        <span id="bottom_flag">请假</span>
+                    </div>
+                    <div id="bottom_right">
+                        <span id="bottom_number">{{pending_count}}</span>
+                        <span id="bottom_flag">待定</span>
+                    </div>
+                </div>
+
+                {{#if players}}
+                <div>
+                    <ul class="detail_player_list">
+                        <li>
+                            <div class="detail_player_div" style="margin-top: 10px;">
+                                <span>报名    ({{enroll_count}})</span>
+                                <img id="enroll_icon" src="../../images/list_bottom_arrow.png" />
+                            </div>
+                            <div id="enroll_list_div" class="detail_list">
+                                {{#if this.players.enroll_list}}
+                                {{#each this.players.enroll_list}}
+                                <div class="detail_player_info">
+                        <span class="detail_player_img">
+                            <img id="icon" src="{{photo}}" onclick="openUserInfo({{uid}})" />
+                            <img id="sex" src="../../images/sex_icon_{{sex}}.png" />
+                        </span>
+
+                                    <div style="float: left;">
+                                        <span id="name">{{nickname}}</span>
+                                        <br />
+                                        <span id="position">{{position}}</span>
+                                    </div>
+                                    <span id="time">{{time}}</span>
+                                </div>
+                                {{/each}}
+                                {{/if}}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="detail_player_div">
+                                <span>请假    ({{off_count}})</span>
+                                <img id="off_icon" src="../../images/list_bottom_arrow.png" />
+                            </div>
+                            <div id="off_list_div" class="detail_list">
+                                {{#if this.players.off_list}}
+                                {{#each this.players.off_list}}
+                                <div class="detail_player_info">
+                                 <span class="detail_player_img">
+                                        <img id="icon" src="{{photo}}" onclick="openUserInfo({{uid}})" />
+                                         <img id="sex" src="../../images/sex_icon_{{sex}}.png" />
+                                 </span>
+
+                                    <div style="float: left;">
+                                        <span id="name">{{nickname}}</span>
+                                        <br />
+                                        <span id="position">{{position}}</span>
+                                    </div>
+                                    <span id="time">{{time}}</span>
+                                </div>
+                                {{/each}}
+                                {{/if}}
+                            </div>
+                        </li>
+                        <li>
+                            <div class="detail_player_div">
+                                <span>待定    ({{pending_count}})</span>
+                                <img id="pending_icon" src="../../images/list_bottom_arrow.png" />
+                            </div>
+                            <div id="pending_list_div" class="detail_list">
+                                {{#if this.players.pending_list}}
+                                {{#each this.players.pending_list}}
+                                <div class="detail_player_info">
+                        <span class="detail_player_img">
+                            <img id="icon" src="{{photo}}" onclick="openUserInfo({{uid}})" />
+                            <img id="sex" src="../../images/sex_icon_{{sex}}.png" />
+                        </span>
+
+                                    <div style="float: left;">
+                                        <span id="name">{{nickname}}</span>
+                                        <br />
+                                        <span id="position">{{position}}</span>
+                                    </div>
+                                    <span id="time">{{time}}</span>
+                                </div>
+                                {{/each}}
+                                {{/if}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                {{/if}}
+
+
+                <!-- ****************************** 报名 请假 待定 ****************************** -->
+                <div class="detail_bottom">
+                    <div>
+                        <span {{{setOwnerJoin owner_join 3}}}>待定</span>
+                    </div>
+                    <div>
+                        <span {{{setOwnerJoin owner_join 2}}}>请假</span>
+                    </div>
+                    <div>
+                        <span {{{setOwnerJoin owner_join 1}}}>报名</span>
+                    </div>
+                </div>
+            </script>
+        </div>
+
+        <!-- ++++++++++++++++++++++++++++ 比赛战报基本详情 ++++++++++++++++++++++++++++ -->
+    </div>
+    <div id="detail_score_box" style="display:none">
+        <script id="match_result_template" type="text/x-handlebars-template">
+            <div class="detail_score_div">
+                <!-- 进球-->
+                <span class="score-head">进球</span>
+                <ul class="detail_score_list mui-clearfix">
+                    {{#each goal_data}}
+                    <li>
+                        <div class="left">
+                            <img class="player_img" src="{{ photo }}" alt="" onclick="openUserInfo({{uid}})" />
+                            <p class="player_info">
+                                <span class="player_name">{{ nickname }}</span>
+                                <span class="player_wz"> {{position}} </span>
+                            </p>
+                        </div>
+                        <div class="right">
+
+                            {{#if goal_count}}
+                            {{#compare goal_count '>' '0'}}
+                            <span class="detail_score_icon score_num">{{ goal_count }}</span>
+                            {{/compare}}
+                            {{/if}}
+
+                            {{#if point_goal_count}}
+                            {{#compare point_goal_count '>' '0'}}
+                            <span class="detail_score_icon dq_num">{{ point_goal_count }}</span>
+                            {{/compare}}
+                            {{/if}}
+
+                            {{#if owner_goal_count}}
+                            {{#compare owner_goal_count '>' '0'}}
+                            <span class="detail_score_icon wl_num">{{ owner_goal_count }}</span>
+                            {{/compare}}
+                            {{/if}}
+
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+                <!-- 助攻-->
+                <span class="score-head">助攻</span>
+                <ul class="detail_score_list mui-clearfix">
+                    {{#each assists_list}}
+                    <li>
+                        <div class="left">
+                            <img class="player_img" src="{{ photo }}" alt="" onclick="openUserInfo({{uid}})" />
+                            <p class="player_info">
+                                <span class="player_name">{{ nickname }}</span>
+                                <span class="player_wz">{{position}}</span>
+                            </p>
+                        </div>
+                        <div class="right">
+                            <span class="detail_score_icon assist_num">{{ num }}</span>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+                <!-- 红黄牌-->
+                <span class="score-head">红黄牌</span>
+                <ul class="detail_score_list mui-clearfix">
+                    {{#each card_data}}
+                    <li>
+                        <div class="left">
+                            <img class="player_img" src="{{ photo }}" alt="" onclick="openUserInfo({{uid}})" />
+                            <p class="player_info">
+                                <span class="player_name">{{ nickname }}</span>
+                                <span class="player_wz">{{position}}</span>
+                            </p>
+                        </div>
+                        <div class="right">
+                            {{#if red_card_count}}
+                            {{#compare red_card_count '>' '0'}}
+                            <span class="detail_score_icon red_num">{{ red_card_count }}</span>
+                            {{/compare}}
+                            {{/if}}
+
+                            {{#if yellow_card_count}}
+                            {{#compare yellow_card_count '>' '0'}}
+                            <span class="detail_score_icon yellow_num">{{ yellow_card_count }}</span>
+                            {{/compare}}
+                            {{/if}}
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+                <!-- 阵容-->
+                <span class="score-head">阵容</span>
+                <ul class="detail_score_list mui-clearfix">
+                    {{#each lineup_list}}
+                    <li>
+                        <div class="left">
+                            <img class="player_img" src="{{ photo }}" alt="" onclick="openUserInfo({{uid}})" />
+                            <p class="player_info">
+                                <span class="player_name">{{ nickname }}</span>
+                                <span class="player_wz">{{position}}</span>
+                            </p>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="process-icon">
+                <ul>
+                    <li>
+                        <i class="icon jq"></i>
+                        <span>进球</span>
+                    </li>
+                    <li>
+                        <i class="icon dq"></i>
+                        <span>点球大战进球</span>
+                    </li>
+                    <li>
+                        <i class="icon wlq"></i>
+                        <span>乌龙球</span>
+                    </li>
+                    <li>
+                        <i class="icon zg"></i>
+                        <span>助攻</span>
+                    </li>
+                    <li>
+                        <i class="icon yellow"></i>
+                        <span>黄牌</span>
+                    </li>
+                    <li>
+                        <i class="icon red"></i>
+                        <span>红牌</span>
+                    </li>
+                </ul>
+            </div>
+        </script>
+    </div>
+</div>
+
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+<script>
+    var view=new View();
+    view.init();
+
+    if(view.data.is_share==1){
+        $('#btnOpenApp').show();
+    }else{
+        $('#btnOpenApp').hide();
+    }
+
+    var com=new Com();
+
+    var token=view.data.token;
+    var team_id=view.data.team_id;
+    var id=view.data.id;
+    var isCaptain = Number(view.data.isCaptain);
+    var userStore=new UserStore();
+    if(view.data.token)
+        userStore.save({token:view.data.token});
+    var detail_info;
+
+    var base_info_template = $("#base_info_template").html();
+    var bitemplate =Handlebars.compile(base_info_template);
+
+    var match_info_template=$("#match_info_template").html();
+    var mitemplate =Handlebars.compile(match_info_template);
+
+    var match_player_template=$("#match_player_template").html();
+    var mptemplate =Handlebars.compile(match_player_template);
+
+    var match_result_template=$("#match_result_template").html();
+    var mrtemplate =Handlebars.compile(match_result_template);
+
+
+
+    var teamScheduleHttp=new TeamScheduleHttp();
+    var cacheData = {};
+
+    //初始化界面
+    function initData(){
+        teamScheduleHttp.getEventByID(id,team_id,2,function(code,message,info){
+            var players={};
+            if(code != 200) {
+                mui.alert(message, "提示");
+                return;
+            }
+            players.enroll_list=info.players["1"];
+            players.off_list=info.players["2"];
+            players.pending_list=info.players["3"];
+            info.players=players;
+            console.log("=====================================获取比赛详情接口=====================================\n");
+            console.log(info);
+            detail_info=info;
+            refreshView();
+
+
+            setShareInfo();
+        });
+    }
+    //    initTabEvent();
+    initData();
+
+    var shareInfo;
+    function setShareInfo(){
+
+        var http=new Http();
+        //var surl="webapps/schedule/src/team/schedule_match_detail.html?is_share=1&team_id="+team_id+"&id="+id;
+        var surl=location.href.split('#')[0];
+		http.sendRequest("/system/getWxShare",{url:surl},function(data){
+            var info=data.info;
+            shareInfo=data.info;
+            console.log(info);
+
+            wx.config({
+                debug: false,
+                appId: info.appId+"",
+                timestamp: info.timestamp+"",
+                nonceStr: info.nonceStr+"",
+                signature: info.signature+"",
+                jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage']
+            });
+
+            wx.ready(function(){
+                //shareInfo.url=config.share_url+surl;
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+
+                wx.onMenuShareTimeline({
+                    title: detail_info.team_name +" vs "+ detail_info.target_team_name + " "+detail_info.start_time+" "+detail_info.place, // 分享标题
+                    link: shareInfo.url, // 分享链接
+                    imgUrl: shareInfo.image, // 分享图标
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: detail_info.team_name +" vs "+ detail_info.target_team_name + " "+detail_info.start_time+" "+detail_info.place, // 分享标题
+                    link: shareInfo.url, // 分享链接
+                    imgUrl: shareInfo.url, // 分享图标
+                    desc:"",
+                    type: 'link',
+                    dataUrl: '',
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+
+
+                wx.error(function(res){
+                    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+
+                    alert("errorMSG:"+JSON.stringify(res));
+                });
+
+            });
+
+
+        });
+    }
+
+    //刷新界面
+    function refreshView(){
+        var html = bitemplate(detail_info);
+        $("#base_info").html(html);
+
+        setTimeout(function () {
+            var html = mitemplate(detail_info);
+            $("#match_info").html(html);
+        }, 1);
+
+        setTimeout(function () {
+            var html = mptemplate(detail_info);
+            $("#match_player").html(html);
+        }, 4);
+
+        setTimeout(function () {
+            var html = mrtemplate(detail_info);
+            $("#detail_score_box").html(html);
+        }, 7);
+
+        setTimeout(function () {
+//            $("#pending_list_div").hide();
+//            $("#off_list_div").hide();
+//            $("#enroll_list_div").hide();
+
+            $("#homeTeamLogo").attr({src:detail_info.team_logo});
+            $("#targetTeamLogo").attr({src:detail_info.target_team_logo});
+
+            if(detail_info.team_color && detail_info.team_color > 0){
+                setTeamColor(detail_info.team_color);
+            }
+            openListDiv();
+        },10);
+
+
+
+
+
+        heightScroll();
+        initTabEvent();
+    }
+
+    //高度滚动
+    function heightScroll(){
+        $("#enroll_list_div").css("max-height",detail_info["enroll_count"]*67);
+        $("#off_list_div").css("max-height",detail_info["off_count"]*67);
+        $("#pending_list_div").css("max-height",detail_info["pending_count"]*67);
+    }
+
+    function openListDiv(){
+        $(".detail_player_div").on("tap",function(){
+            $(this).next(".detail_list").toggle();
+            $(this).find("img").toggleClass("deg");
+        })
+    }
+
+
+    //报名
+    function join(id,type,sub_type){
+
+        $("#loading").show();
+        teamScheduleHttp.join(id,team_id,type,sub_type,function(code,message,info){
+            console.log(info);
+            if(code!=200){
+                is_send=false;
+                $("#loading").hide();
+                mui.toast(message);
+                return;
+            }
+            $("#loading").hide();
+            detail_info["off_count"]=info["off_count"];
+            detail_info["enroll_count"]=info["enroll_count"];
+            detail_info["pending_count"]=info["pending_count"];
+            initData();
+            com.refreshTargetView(view.device,"team_schedule.html");
+        });
+    }
+
+
+
+
+    Handlebars.registerHelper('setOwnerJoin', function(owner_join,type) {
+        var html="";
+
+        var nowDate = new Date();
+
+        //如果截止时间晚于当前时间置灰
+        if(detail_info.enroll_time){
+            var enrollTime = new Date(detail_info.enroll_time.replace(/-/g, '/'));
+            if(nowDate > enrollTime){
+                html='style="color:#808992"';
+                return html;
+            }
+        }else{
+            //活动开始时间晚于当前时间也要置灰
+            if(detail_info.start_time){
+                var start_time =  new Date(detail_info.start_time.replace(/-/g, '/'));
+                if(nowDate > start_time){
+                    html='style="color:#808992"';
+                    return html;
+                }
+            }
+        }
+
+        //其他状态
+        if(owner_join==type){
+            html='style="color:#808992"';
+        }else{
+            html='style="color:#00a8ef" onclick="join('+id+','+type+',2)"';
+        }
+        return html;
+    });
+
+
+    //tab选择
+    function tabClick(index){
+        cacheData['tab_index']=index;
+        if(index==0){
+            $("#detail_score_box").hide();
+            $("#match_detail_info").show();
+        }else{
+            $("#match_detail_info").hide();
+            $("#detail_score_box").show();
+        }
+    }
+
+
+    //设置右边按钮的事件
+    function setRightButton(){
+        var rightBtnsArray = [];
+        rightBtnsArray.push({title:"分享", action:"shareAction()", type:"share"});
+        if(isCaptain) { //具备队长权限才可以进行操作
+            rightBtnsArray.push({title: "录入战报", action: "enterGrand()", type: "enterGrand"});
+            rightBtnsArray.push({title: "编辑基本信息", action: "editMatch()", type: "edit"});
+        }
+        var data = JSON.stringify(rightBtnsArray);
+        return data;
+    }
+
+    //分享事件
+    function shareAction() {
+        var url=config.share_url+"webapps/schedule/src/team/schedule_match_detail.html?is_share=1&team_id="+team_id+"&id="+id;
+        var content = detail_info.team_name +" vs "+ detail_info.target_team_name + ","+detail_info.start_time;
+        if(detail_info.place && detail_info.place.length>0){
+            content +=  ","+detail_info.place;
+        }
+        content+= ",快来报名!";
+        com.shareAction(view.device, 0, url,content,content);
+    }
+
+    //录入战报事件回调
+    function enterGrand(){
+        com.openNewHtml(view.device,"schedule_enter_score.html","title=录入战报"+"&team_id="+team_id+"&match_id="+id);
+    }
+
+    //编辑比赛信息
+    function editMatch(){
+        com.openNewHtml(view.device,"edit_schedule_match.html","title=编辑比赛信息"+"&team_id="+team_id+"&match_id="+id+"&showDeleteBtn=true");
+    }
+
+    //打开导航数据
+    function openNavigation() {
+        console.log("导航按钮触发");
+        com.startNavigation(view.device,"比赛位置",detail_info["place"], detail_info["place_lat"], detail_info["place_lng"]);
+    };
+
+
+    //打开球队主页
+    function openTeamHome(team_id) {
+        com.openTeamHomeView(view.device, team_id);
+    }
+
+    //打开个人主页
+    function openUserInfo(user_id) {
+        com.openUserInfoView(view.device, user_id);
+    }
+
+
+    Handlebars.registerHelper('showResult', function(home_team_score,home_team_point_score,away_team_score,away_team_point_score) {
+        var html='VS';
+        if((home_team_score && Number(home_team_score) > 0 ) ||  (away_team_score && Number(away_team_score) > 0 ) ){
+            html=home_team_score+' : '+away_team_score;
+
+            if( ( home_team_point_score && Number(home_team_point_score) > 0 ) ||  (away_team_point_score && Number(away_team_point_score) > 0 )  ){
+                html = home_team_score + "("+home_team_point_score+")" + " : "  + away_team_score + "(" + away_team_point_score +")";
+            }
+        }
+        return html;
+    });
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+        window.schedulecontent.setRightButton(setRightButton());
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+/*分享下载*/
+.yq_download{ display:block;width:100%; height:49px; background:url(../images/down_bg.jpg); background-size:100%  2.45rem ;position:fixed; top:0; left:0; z-index:999999;}
+.yq_download .yq_logo{ float:left;height:35px;width: 65%; margin-left:10px;margin-top:7px;}
+.yq_download .yq_logo div.logo-m{ float:left;border-radius:10px;background:#fff;width:30px;height:30px;text-align:center;}
+.yq_download .yq_logo div.logo-m img{width:35px;height:35px; display:block;}
+.yq_download .yq_logo span{ float:left;height:35px; font-size:14px; line-height:18px; color:#333333; margin-left:15px;}
+.yq_download .yq_logo span em{font-size:11px; color:#666666; font-style:normal;}
+.down_aqm{ font-weight:bold;background: url(../images/fx-down.png) no-repeat center;background-size:128px 38px;width:140px;color:#41a1f4; right:1%;height:38px;top: 5px;line-height: 38px;text-align:left;text-indent:20px; font-size:13px; position: absolute; display: block}
+.down_aqm:hover{color:#41a1f4;}

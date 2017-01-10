@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>录入战报</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi-list.css" />
+    <link rel="stylesheet" type="text/css" href="./css/team_schedule_detail.css" />
+
+    <script>
+        //自动适应屏幕
+        !(function(doc, win) {
+            var docEle = doc.documentElement,
+                    evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                    fn = function() {
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                    };
+            win.addEventListener(evt, fn, false);
+            doc.addEventListener("DOMContentLoaded", fn, false);
+        }(document, window));
+    </script>
+
+    <style>
+        html {
+            background:  #ecf1f5;
+        }
+        .mui-content {
+            background: #ecf1f5;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    <div class="mui-content" id="playersDiv">
+        <ul class="player_list" >
+            <li class="detail_player_info detail_list" style="display: block;" v-for="player in player_list">
+                    <span class="detail_player_img">
+                        <img class="icon" :src="player.photo">
+                    </span>
+
+                <div style="float: left;">
+                    <span class="name">{{ player.nickname }}</span>
+                    <br>
+                    <span class="position">{{ player.position }}</span>
+                </div>
+
+                <div class="right">
+                    <span class="minus-score" @tap="score_subtract(player)"> - </span>
+                    <input class="score-value" type="text" :value="player.num" readonly />
+                    <span class="add-score" @tap="score_add(player)"> + </span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="detail_bottom" @tap="submitTeamScale">
+            <span style="color: #00a8ef;display: block;font-size: 0.9375em; height: 49px; line-height: 49px; text-align: center;">确定</span>
+        </div>
+    </div>
+
+
+    <!--loading-->
+    <div id="loading">
+        <div class="loading_img">
+            <img src="../../images/loading.gif" />
+        </div>
+    </div>
+
+    <script src="../../libs/vue/vue.js"></script>
+    <script src="../../libs/vue/vue-resource.js"></script>
+    <script src="../../libs/jquery/jquery.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../libs/crypto/base64.js"></script>
+    <script src="../controller/viewController.js"></script>
+    <script src="../../libs/mui/js/mui.min.js"></script>
+    <script src="./controller/EditMatchScoreController.js"></script>
+
+    <script>
+        var editMatchScoreController = new EditMatchScoreController();
+        editMatchScoreController.init();
+
+        //eyJodHRwX3VybCI6Imh0dHA6Ly9uai5haXFpdW1pLmNuL2FwaS92MSIsInRlYW1faWQiOjMwNDEsInRva2VuIjoiempxSWJGSFdMWXBRWHlEZ1Zpa1NNSUxwS1dsQ29kaG1yandIQk1OaSIsImlkIjoxNCwidHlwZSI6MX0=
+        //{"http_url":"http://nj.aiqiumi.cn/api/v1","team_id":3041,"token":"zjqIbFHWLYpQXyDgVikSMILpKWlCodhmrjwHBMNi","id":14,"type":1}
+    </script>
+
+</body>
+</html>

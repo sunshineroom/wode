@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" class="feedback">
+<head>
+    <meta charset="utf-8">
+    <title>动态详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/editor.css" />
+</head>
+<body>
+<style>
+  /*.mui-pull-bottom-pocket{bottom:2.4rem !important;} */
+</style>
+<div class="mui-content">
+    <!--下拉刷新容器-->
+    <div id="mui-pullrefresh" class="mui-content mui-scroll-wrapper" style="background:#fff">
+        <div class="mui-scroll">
+            <div class="cansTieShi">
+                <div class="zxxqTitle">
+                    <h3>{{info.name}}</h3>
+                    <p>{{info.time}}</p>
+                </div>
+                <div class="cstsCenCon">
+                    <div class="cstsCenImg">
+                        <div v-html="info.content"></div>
+
+                    	    <template  v-for="todo in info.img_list">
+                    	    	         <ol :style="contentPhoto(todo.photo)"><img :src=todo.photo data-preview-src="" data-preview-group="1"></ol>
+                                  <!--<ol style="background: url(images/gameLogo.png) no-repeat center center;background-size: cover"><img src="images/gameLogo.png" data-preview-src="" data-preview-group="1"></ol>-->
+                    	    </template>
+
+                        <!--<ol style="background: url(images/gameLogo.png) no-repeat center center;background-size: cover">
+                            <img src="images/gameLogo.png" data-preview-src="" data-preview-group="1">
+                        </ol>
+                        <ol style="background: url(images/gameLogo.png) no-repeat center center;background-size: cover"><img src="images/gameLogo.png" data-preview-src="" data-preview-group="1"></ol>-->
+
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            <div class="plDianZan">
+                <div class="plDianZanTop">
+                    <em class="plFire">{{info.hot_num}}</em>
+                    <div v-on:tap="comments('来吐槽点什么吧',0)"><span class="plZanbtn"><em style="background: url(images/icon/iconall.png) no-repeat left -2rem"></em>评论</span></div>
+                    <template v-if="info.zan_status > 0">
+                    	    <div v-on:tap="onclickZan(0)"><span class="plPlbtn"><em style="background: url(images/icon/iconall.png) no-repeat right -17rem"></em>已赞</span></div>
+                    </template>
+                    <template v-else>
+                    	    <div v-on:tap="onclickZan(1)"><span class="plPlbtn"><em style="background: url(images/icon/iconall.png) no-repeat right -16rem"></em>赞</span></div>
+                    </template>
+                 </div>
+                <div class="plDianZanBottom">
+                    <em class="plZan"></em>
+                    <div class="dZanList">
+                        <i class="listZan"  v-for="todo in info.zan_list" :style="userPhoto(todo.photo)" v-on:tap="onclickUserPhoto(todo.uid)"></i>
+                    </div>
+                </div>
+            </div>
+            <!--数据列表-->
+            <ul  class="mui-table-view mui-table-view-chevron csts-pull-con comment-icon">
+              <template v-for="todo in info.comments_list">
+              <div >
+                <li class="mui-table-view-cell csts-pull-pl" v-on:tap="comments(todo.user.nickname,todo.comment_id,todo.is_my_comment)">
+                    <div class="csts-pl-listcon" >
+                        <div class="tspl-contall" v-on:tap="onclickUserPhoto(todo.uid)">
+                            <!--<div class="tspl-usehead" style="background: url(images/qy-mr3.png) no-repeat center center; background-size:cover"></div>-->
+                            <div class="tspl-usehead" :style="comment_userPhoto(todo.user.photo)"></div>
+                            <div class="tspl-uset-con">
+                                <span class="tspl-usename">{{todo.user.nickname}}</span>
+                                <i class="tspl-usesex sexBoy"></i>
+                                <em class="tspl-usetime">{{todo.created_time}}</em>
+                            </div>
+                        </div>
+                        <p v-if="todo.comment_id >0">回复{{todo.reply_nick}}:{{todo.content}}</p>
+                        <p v-else>{{todo.content}}</p>
+                    </div>
+                </li>
+                </div>
+              </template>  
+                <!--<li class="mui-table-view-cell csts-pull-pl">
+                    <div class="csts-pl-listcon">
+                        <div class="tspl-contall">
+                            <div class="tspl-usehead" style="background: url(images/qy-mr3.png) no-repeat center center; background-size:cover"></div>
+                            <div class="tspl-uset-con">
+                                <span class="tspl-usename">SQ</span>
+                                <i class="tspl-usesex sexBoy"></i>
+                                <em class="tspl-usetime">昨天</em>
+                            </div>
+                        </div>
+                        <p>回复<strong>邵倩：</strong>你才知道啊，等着吧，有你改的呢！</p>
+                    </div>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+</div>
+<!--/*评论框*/-->
+<div class="allpl-frame" v-on:tap="comments('别憋着，说点啥',0)">
+    <span class="allpl-txtinput"> 别憋着，说点啥</span>
+    <!--<input type="text"  class="allpl-txtinput" placeholder="别憋着，说点啥" disabled="disabled">-->
+    <!--<input type="submit" readonly class="allpl-btninput" value="评论">-->
+</div>
+<div id="blogDelegate" class="mui-popover mui-popover-action mui-popover-bottom" style=" z-index:9999999;">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <div v-on:tap="deleteBlog()">删除</div>
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#picture"><b>取消</b></a>
+                </li>
+            </ul>
+</div>
+<script src="js/jquery.3.1.1.min.js"></script>
+<script src="../../libs/handlebars/handlebars.min.js"></script>
+<script src="../../libs/vue/vue.js"></script>
+<script src="../../libs/vue/vue-resource.js"></script>
+<script src="../../libs/jquery/jquery.min.js"></script>
+<script src="../../config/config.js"></script>
+<script src="../../libs/crypto/base64.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.zoom.js"></script>
+<script src="js/mui.previewimage.js"></script>
+<script src="../controller/viewController.js"></script>
+
+<script src="../../libs/mui/js/mui.pullToRefresh.js"></script>
+
+<script>
+    mui.previewImage();
+    !(function(doc, win) {
+        var docEle = doc.documentElement,
+                evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                fn = function() {
+                    var width = docEle.clientWidth;
+                    width && (docEle.style.fontSize = 40 * (width / 750) + "px");
+                };
+        win.addEventListener(evt, fn, false);
+        doc.addEventListener("DOMContentLoaded", fn, false);
+    }(document, window));
+
+    // mui.init({
+    //     pullRefresh: {
+    //         container: '#pullrefresh',
+    //         up: {
+    //             contentrefresh: '正在加载...',
+    //             callback: pullupRefresh
+    //         }
+    //     }
+    // });
+
+    // var count = 0;
+    // /**
+    //  * 上拉加载具体业务实现-
+    //  */
+    // function pullupRefresh() {
+    //     setTimeout(function() {
+    //         mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+    //         var table = document.body.querySelector('.mui-table-view');
+    //         var cells = document.body.querySelectorAll('.clearfix');
+    //         for (var i = cells.length, len = i + 2; i < len; i++) {
+    //             var li = document.createElement('li');
+    //             li.className = 'mui-table-view-cell csts-pull-pl';
+    //             li.innerHTML =
+    //                     '<div class="csts-pl-listcon">'+
+    //                     '<div class="tspl-contall">'+
+    //                     '<div class="tspl-usehead" style="background: url(images/qy-mr3.png) no-repeat center center; background-size:cover"></div>'+
+    //                     '<div class="tspl-uset-con">'+
+    //                     '<span class="tspl-usename">燕十三</span>'+
+    //                     '<i class="tspl-usesex sexBoy"></i>'+
+    //                     '<em class="tspl-usetime">昨天</em>'+
+    //                     '</div>'+
+    //                     '</div>'+
+    //                     '<p>英格兰本场排出攻击强阵，凯恩首发领衔锋线，斯图里奇和斯特林辅佐。冰岛方面，他们依然保持了小组赛阶段的主力阵容，并没有任何变化。</p>'+
+    //                     '</div>';
+    //             table.appendChild(li);
+    //         }
+    //     }, 1500);
+    // };
+    // if (mui.os.plus) {
+    //     mui.plusReady(function() {
+    //         setTimeout(function() {
+    //             mui('#pullrefresh').pullRefresh().pullupLoading();
+    //         }, 1000);
+    //     });
+    // } else {
+    //     mui.ready(function() {
+    //         mui('#pullrefresh').pullRefresh().pullupLoading();
+    //     });
+    // };
+
+    //判断图片个数
+    var olThis = $(".cstsCenImg ol");
+    var olLength = $(".cstsCenImg ol").length;
+    if(olLength<=1){
+        olThis.addClass("dtOne")
+    }else if(olLength=2){
+        olThis.addClass("dtTwo")
+    };
+</script>
+<script src="controller/DtDetailController.js"></script>
+<!--业务逻辑-->
+<script>
+    var DtDetailController = new DtDetailController();
+    DtDetailController.init();
+    
+    function commentData(content,con_id){	//客户端发起 传递评论内容
+		//向服务期发起评论
+		DtDetailController.initComments(content,con_id);
+    }
+
+    reloadHttp();
+    //重新读取数据
+    function reloadHttp(){
+    	    //获取动态详情页面
+        DtDetailController.getInfo();
+        DtDetailController.getCommentsInfo(1);
+
+
+        
+    }
+</script>
+</body>
+</html>

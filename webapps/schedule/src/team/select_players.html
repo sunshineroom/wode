@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi_team.css" />
+
+    <script src="../../js/jquery.min.js"></script>
+    
+    <script src="../../libs/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../libs/mui/css/mui.picker.min.css">
+    <script src="../../libs/mui/js/mui.picker.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <link rel="stylesheet" type="text/css" href="css/team_schedule_detail.css" />
+    <script src="js/schedule_tab.js"></script>
+    <script src="js/add_match_schedule.js"></script>
+    <script src="js/teamScheduleHttp.js"></script>
+    <script src="js/teamHttp.js"></script>
+
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 id="title" class="mui-title"></h1>
+    <!--<a style="float: right; margin-top: 10px;" onclick="done();">完成</a>-->
+</header>
+<div class="mui-content">
+    <div class="select-players-form">
+        <form class="mui-input-group">
+            <!--模块内容-->
+        </form>
+    </div>
+
+    <div class="detail_bottom" onclick="submitTeamScale();">
+        <span style="color: #00a8ef;display: block;font-size: 0.9375em; height: 49px; line-height: 49px; text-align: center;">确定</span>
+    </div>
+</div>
+
+<!--模板-->
+<script id="content_template" type="text/x-handlebars-template">
+    {{#each list}}
+    <div class="mui-input-row mui-checkbox player_box">
+        <label class="player-ms">
+                <span class="player-logo fl">
+                    <img src="{{ photo }}" alt=""/>
+                </span>
+            <div class="player-info fl">
+                <p class="player-name">{{nickname}}</p>
+                <p class="player-wz">{{position}}</p>
+            </div>
+        </label>
+        <input  class="checkBoxObj" name="players[]" type="checkbox" value="" {{{isChecked num }}}  id="{{ uid }}">
+    </div>
+    {{/each}}
+</script>
+
+
+<!--loading-->
+<div id="loading"  style="position: fixed; top:50%;left:50%;z-index: 999;margin-left:-16px;margin-top:-16px; display: none">
+    <img src="../../images/loading.gif" width="32" height="32"/>
+</div>
+
+
+<script>
+    var view=new View();
+    view.init();
+
+    var com=new Com();
+    var userStore=new UserStore();
+    var token=view.data.token;
+    if(token)
+        userStore.save({token:view.data.token});
+    var teamScheduleHttp=new TeamScheduleHttp();
+    var team_id=view.data.team_id; //球队名称
+    var title  = view.data.title;  //标题
+    var type = view.data.type;   //打开类型
+    var match_id = view.data.match_id;
+    var userList = {};
+
+    var cacheData = {};
+    if(view.data.data){
+        cacheData = JSON.parse(decodeURIComponent(view.data.data));
+    }
+
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+
+    initData();
+
+    //初始化
+    function initData() {
+
+        teamScheduleHttp.getTeamEventPlayer(match_id, "teamScale", team_id, function (code, messsage, info) {
+            if(code != 200) {
+                return;
+            }
+            console.log(info);
+            userList = info;
+            var html = template({list:info});
+            $(".mui-input-group").append(html);
+
+        });
+    }
+
+
+//    //设置是否有右上角按钮
+//    function setRightButton(){
+//        var rightBtnArray = [{title:"完成",action:"done()",type:"done"}];
+//        var data=JSON.stringify(rightBtnArray);
+//        return data;
+//    }
+
+    //提交球队规模
+    function submitTeamScale() {
+        var listArray = new Array();
+        $(".checkBoxObj").each(function(){
+            if(this.checked){
+                listArray.push({uid:this.id, num:1});
+            }
+        });
+
+        $("#loading").show();
+        teamScheduleHttp.addMatchEvent(match_id,team_id,"teamScale",listArray, function (code, message, info) {
+            if(code != 200){
+                $("#loading").hide();
+                mui.toast(message);
+                return;
+            }
+            $("#loading").hide();
+            mui.toast("提交成功");
+            setTimeout(function () {
+                //返回比赛详情页
+                com.gobackByData(view.device, "schedule_enter_score.html", "title=录入战报" + "&team_id=" + team_id + "&match_id=" + match_id +"&data="+encodeURIComponent(JSON.stringify(cacheData)));
+            }, 500);
+        });
+    }
+
+    Handlebars.registerHelper('isChecked', function(num) {
+        if(num>0)
+            return "checked";
+        else
+            return "";
+    });
+
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+//        window.schedulecontent.setRightButton(setRightButton());
+    };
+</script>
+
+</body>
+</html>

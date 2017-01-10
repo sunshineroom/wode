@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>比赛日程</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../libs/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../libs/mui/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aiqiumi.css" />
+
+    <script src="../../js/jquery.min.js"></script>
+    
+    <script src="../../libs/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../libs/mui/css/mui.picker.min.css">
+    <script src="../../libs/mui/js/mui.picker.min.js"></script>
+
+    <script src="../../libs/handlebars/handlebars.min.js"></script>
+    <script src="../../config/config.js"></script>
+    <script src="../../js/http.js"></script>
+    <script src="../../js/com.js"></script>
+
+    <script src="../../class/view.class.js"></script>
+    <script src="../../class/userStore.class.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/team_schedule.css" />
+    <link rel="stylesheet" type="text/css" href="css/team_schedule_detail.css" />
+
+    <script src="js/teamScheduleHttp.js"></script>
+    <script src="js/add_match_schedule.js"></script>
+
+
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 id="title" class="mui-title"></h1>
+    <a href="#" onclick="done();" style="float: right; margin-top: 10px;">完成</a>
+</header>
+<div class="mui-content">
+    <!-- 球队-->
+    <div class="detail_base_info">
+        <div class="home-team">
+            <img src="images/team-logo-default.png" alt="" id="home_team_image" />
+            <span class="team_name" id = "home_team_name">主队</span>
+        </div>
+        <div class="team-vs">
+            <span class="vs" style="line-height: 40px;">VS</span>
+        </div>
+        <div class="away-team">
+            <img src="images/team-logo-default.png" alt="" id="away_team_image" />
+            <span class="team_name" id="away_team_name" >待定</span>
+        </div>
+    </div>
+
+
+        <!-- 信息-->
+        <div class="detail_schedule_info">
+
+            <!--渲染脚本设置-->
+            <script id="content_template" type="text/x-handlebars-template">
+
+            <!-- 名称-->
+                {{#if match_title}}
+                {{#compare match_title '!=' ''}}
+            <div class="detail_base_list">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_match.png">
+                </div>
+                <div class="right" id="match_title" >
+                    <span id="left"></span>
+                </div>
+            </div>
+                {{/compare}}
+                {{/if}}
+
+            <!-- 赛制-->
+
+                {{#compare matchNumberType '>' '0'}}
+            <div class="detail_base_list">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_type.png">
+                </div>
+                <div class="right"  id="match_number_type" >
+                    <span id="left"></span>
+                </div>
+            </div>
+                {{/compare}}
+
+            <!-- 时间-->
+
+            <div class="detail_base_list">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_time.png">
+                </div>
+                <div class="right" id = "match_time" >
+                    <span id="left"></span>
+                    <span id="right"></span>
+                </div>
+            </div>
+
+
+
+            <!-- 地点-->
+                {{#if place.name}}
+                {{#compare place.name '!=' '' }}
+            <div class="detail_base_list">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_place.png">
+                </div>
+                <div class="right" id="match_place">
+                    <span id="left"></span>
+                </div>
+            </div>
+                {{/compare}}
+                {{/if}}
+
+                <!--队服颜色-->
+                {{#compare matchTeamColor '>' '0'}}
+                <div class="detail_base_list">
+                    <div class="left">
+                        <img class="icon" src="images/schedule_icon_clothes.png">
+                    </div>
+                    <div class="right">
+                        <span id="left" class="color-btn"  style="background: url(images/mr-color.png) no-repeat;background-size:30px 16px;"></span>
+                        <input type="hidden" value="0"/>
+                    </div>
+                </div>
+                {{/compare}}
+
+            <!-- 人数上限-->
+                {{#compare match_players '>' '0'}}
+            <div class="detail_base_list">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_toplimit.png">
+                </div>
+                <div class="right" id="match_people_limit">
+                    <span id="left"></span>
+                </div>
+            </div>
+                {{/compare}}
+            <!-- 备注-->
+                {{#if match_desc}}
+                {{#compare match_desc '!=' ''}}
+            <div class="detail_base_list detail_base_bei mui-clearfix">
+                <div class="left">
+                    <img class="icon" src="images/schedule_icon_text.png">
+                </div>
+                <div class="right" id="match_detail">
+                    <span id="content"></span>
+                </div>
+            </div>
+                {{/compare}}
+                {{/if}}
+            </script>
+        </div>
+
+    <!--邀请-->
+    <div class="invite_box">
+          <span class="invite_hd">邀请球友参与</span>
+          <div class="other-app">
+              <a  class="wx-app" onclick="wxShareAction();"></a>
+              <a  class="wb-app" onclick="wbShareAction();"></a>
+          </div>
+    </div>
+    <!-- 返回修改-->
+    <div class="detail_bottom" onclick="EditAction();">
+        <span style="color: #00a8ef;display: block;font-size: 0.9375em; height: 49px; line-height: 49px; text-align: center;">修改</span>
+    </div>
+</div>
+
+<script>
+    var view=new View();
+    view.init();
+
+    var com=new Com();
+    var userStore=new UserStore();
+    var token=view.data.token;    //用户token
+    var team_id=view.data.team_id;  //球队
+    var match_id = view.data.match_id; //比赛的Id
+    if(token && token!=undefined)
+        userStore.save({token:token});
+    var teamScheduleHttp=new TeamScheduleHttp();
+    var cacheData={};
+    var is_send=false;
+
+
+    var content_template = $("#content_template").html();
+    var template =Handlebars.compile(content_template);
+
+    initData();
+
+    function refreshData(){
+
+        var html = template(cacheData);
+        $(".detail_schedule_info").html(html);
+
+        //标题
+//        $("#title").val(cacheData.title);
+
+        //赛事名称
+        $("#match_title").find("span").text(cacheData.match_title);
+
+        //主队logo
+        if(cacheData.homeTeam.team_logo){
+            $("#home_team_image").attr({src: cacheData.homeTeam.team_logo});
+        }
+        //主队名称
+        if(cacheData.homeTeam.team_name){
+            $("#home_team_name").text(cacheData.homeTeam.team_name);
+        }
+
+        //客队logo
+        if(cacheData.team){
+            $("#away_team_image").attr({src: cacheData.team.team_logo});
+        }
+        //客队名称
+        if(cacheData.team){
+            $("#away_team_name").text(cacheData.team.team_name);
+        }
+
+        //比赛类型
+        if(cacheData.matchNumberType && cacheData.matchNumberType > 0){
+            $("#match_number_type").find("span").text(cacheData.matchNumberType + "人制");
+        }
+
+        //开始时间
+        if(cacheData.btnMatchTime){
+            $("#match_time").find("#left").text(cacheData.btnMatchTime);
+        }
+
+        //结束时间
+        if(cacheData.btnEnrollTime){
+            $("#match_time").find("#right").text("报名截止:" + cacheData.btnEnrollTime);
+        }
+
+        //地理位置
+        if(cacheData.place) {
+            $("#match_place").find("span").text(cacheData.place.name);
+        }
+
+        //队服颜色
+        if(cacheData.matchTeamColor && cacheData.matchTeamColor > 0){
+            setTeamColor(cacheData.matchTeamColor);
+        }
+
+        //人数上限
+        if(cacheData.match_players){
+            $("#match_people_limit").find("span").text(cacheData.match_players+"人");
+        }
+
+        if(cacheData.match_desc){
+            $("#match_detail").find("span").text(cacheData.match_desc);
+        }
+    }
+
+
+//    设置是否有右上角按钮
+    function setRightButton(){
+        var rightButtonArray = [{title:"完成",action:"done()",type:"done"}];
+        var data=JSON.stringify(rightButtonArray);
+        return data;
+    }
+
+    function initData() {
+        //暂时还没有接口
+        teamScheduleHttp.getEventByID(match_id,team_id,2,function(code,message,info){
+            if(code != 200){
+                return;
+            }
+            console.log(info);
+            cacheData = {
+                match_title:info.title,
+                homeTeam:{
+                    team_name:info.team_name,
+                    team_logo:info.team_logo
+                },
+                team:{
+                    team_logo:info.target_team_logo,
+                    team_name:info.target_team_name
+                },
+                matchNumberType:info.player,
+                btnMatchTime:info.start_time,
+                btnEnrollTime:info.enroll_time,
+                place:{
+                    name:info.place,
+                    location:{
+                        lat:info.place_lat,
+                        lng:info.place_lng,
+                    }
+                },
+                matchTeamColor:info.team_color,
+                match_players:info.max_player,
+                match_desc:info.desc
+            };
+            refreshData();
+        });
+    }
+
+    //保存
+    function done(){
+        com.gobackToTargetWebView(view.device, "team_schedule.html");
+    }
+
+    //编辑按钮
+    function EditAction() {
+        var com=new Com();
+        com.openNewHtmlAndCloseLastView(view.device, "edit_schedule_match.html","title="+""+"&team_id="+team_id+"&match_id="+match_id+"&showDeleteBtn=false");
+    }
+
+    //微信分享按钮
+    function wxShareAction() {
+        var url=config.share_url+"webapps/schedule/src/team/schedule_match_detail.html?is_share=1&team_id="+team_id+"&id="+match_id;
+        var content = cacheData.homeTeam.team_name +" vs "+ cacheData.team.team_name + ","+cacheData.btnMatchTime;
+        if(cacheData.place.name && cacheData.place.name.length>0){
+            content +=  ","+cacheData.place.name;
+        }
+        content+= ",快来报名!";
+        com.shareAction(view.device,1,url,content,content);
+    }
+
+    //微博分享按钮
+    function wbShareAction() {
+        var url=config.share_url+"webapps/schedule/src/team/schedule_match_detail.html?is_share=1&team_id="+team_id+"&id="+match_id;
+        var content = cacheData.homeTeam.team_name +" vs "+ cacheData.team.team_name + ","+cacheData.btnMatchTime;
+        if(cacheData.place.name && cacheData.place.name.length>0){
+            content +=  ","+cacheData.place.name;
+        }
+        content+= ",快来报名!";
+        com.shareAction(view.device,2,url,content,content);
+    }
+
+
+    // android
+    if(window.schedulecontent){
+        window.schedulecontent.setTitle(view.getTitle());
+        window.schedulecontent.setRightButton(setRightButton());
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>爱球迷雷达数据管理后台</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="../../images/favicon.png">
+  
+
+  <link href="../../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="signin.css" rel="stylesheet">
+
+
+
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../config/config.js"></script>
+  <script src="../../js/userStore.js"></script>
+  <script src="../../js/http.js"></script>
+</head>
+<body>
+<div class="container">
+      <div class="form-signin">
+        <h2 class="form-signin-heading">登录</h2>
+        <label for="inputEmail" class="sr-only">手机号</label>
+        <input type="phone" id="phone" class="form-control" placeholder="手机号" required autofocus>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" id="password" class="form-control" placeholder="密码" required>
+        <button id="login" class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+      </div>
+
+    </div>
+
+
+<script>
+  $("#login").click( function() { 
+    var phone=$("#phone").val();
+    var password=$("#password").val();
+
+    if(phone.length==0) return;
+    if(password.length==0) return;
+
+    console.log("phone:"+phone);
+    console.log("password:"+password);
+
+    var http=new Http();
+    http.sendRequest("/user/login",{account:phone,password:password},function(data){
+      console.log(data);
+      if(data.code==200){
+        console.log(data.info);
+        var token=data.info.token;
+        var phone=data.info.phone;
+        if(phone=="18602501966"){
+          console.log(token);
+
+          var userStore=new UserStore();
+          userStore.save(data.info);
+
+          window.location.href="../home.html"; 
+          
+        }
+        
+      }
+      
+    });
+  });
+</script>
+
+</body>
+</html>

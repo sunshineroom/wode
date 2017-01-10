@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>雷达管理后台</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="image/png" href="images/favicon.png">
+
+  <script src="js/jquery.min.js"></script>
+  <script src="config/config.js"></script>
+  <script src="js/userStore.js"></script>
+  <script src="js/http.js"></script>
+
+
+</head>
+<body>
+
+
+
+<script>
+    var userStore=new UserStore();
+    var token=userStore.token();
+    console.log(token);
+    if(token && token !='undefined' && token.length>0){
+        window.location.href='src/home.html';
+    }else{
+        window.location.href='src/signin/login.html';
+    }
+</script>
+
+</body>
+</html>

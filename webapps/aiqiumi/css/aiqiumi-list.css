@@ -1,0 +1,50 @@
+ul,li{list-style:none;padding:0;margin:0}
+
+/*列表*/
+.a-list{
+	width: 100%;
+
+	list-style:none;
+	margin:0;
+	padding:0;
+	padding-top: 1px;
+	background: #FFFFFF;
+
+	overflow:hidden;
+}
+
+.a-list-item{
+	width: 100%;
+	
+	/*border: solid 0.5px #e0e0e0;*/
+	/*border-left-width: 0px;*/
+	/*border-right-width:0px;*/
+	/*border-top-width: 0px;*/
+
+	position:relative;
+}
+.a-list-item:after{
+	content: '';
+	position:absolute;
+	bottom:0;
+	left:0;
+	width: 100%;
+	height:1px;
+	background-color: #e0e0e0;
+	-webkit-transform: scale(1,.5);
+	transform: scale(1,.5);
+	-webkit-transform-origin: center top;
+	transform-origin: center top;
+}
+.a-list-item .left{
+	height: 100%;
+	float: left;
+	overflow:hidden;
+}
+
+.a-list-item .right{
+	height:100%; 
+	float: right;
+	margin-right: 0px;
+}
+
